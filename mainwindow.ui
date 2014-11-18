@@ -20,7 +20,7 @@
    <enum>Qt::StrongFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>WD_version1</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="minimumSize">
