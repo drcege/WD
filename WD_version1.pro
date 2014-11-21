@@ -10,27 +10,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = WD_version1
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     user.cpp \
-    buyer.cpp \
-    member.cpp \
-    seller.cpp \
-    food.cpp \
-    electronics.cpp \
-    goods.cpp \
-    dailynecessities.cpp
+    goods.cpp
 
 HEADERS  += mainwindow.h \
     user.h \
-    buyer.h \
-    member.h \
-    seller.h \
-    food.h \
-    electronics.h \
-    goods.h \
-    dailynecessities.h
+    goods.h
 
 FORMS    += mainwindow.ui
