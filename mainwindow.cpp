@@ -103,13 +103,13 @@ void MainWindow::on_pushButton_login_clicked()
 {
     QString user = ui->lineEdit_user_login->text();
     QString pwd = ui->lineEdit_pwd_login->text();
-    ui->lineEdit_user_login->clear();
-    ui->lineEdit_pwd_login->clear();
 
     curUser = findUser(user);
     if(curUser == Q_NULLPTR)
     {
         QMessageBox::warning(this,tr("登陆失败！"),tr("用户名不存在！"),QMessageBox::Ok);
+        ui->lineEdit_user_login->clear();
+        ui->lineEdit_pwd_login->clear();
         ui->lineEdit_user_login->setFocus();
         return;
     }
@@ -139,7 +139,8 @@ void MainWindow::on_pushButton_login_clicked()
         else
         {
             QMessageBox::warning(this,tr("登陆失败！"),tr("密码错误！"),QMessageBox::Ok);
-            ui->lineEdit_user_login->setFocus();
+            ui->lineEdit_pwd_login->clear();
+            ui->lineEdit_pwd_login->setFocus();
         }
     }
 }
@@ -268,15 +269,18 @@ void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
         ui->pushButton_buy->setDisabled(true);
         return;
     }
+
     int amount = ui->spinBox_buyer->value();
     double price = current->text(4).toDouble();
     ui->lineEdit_price->setText(QString::number(price*amount,'f',2));
+
     if(MEMBER_Y == curUser->getClass())
     {
         QString discount = ui->lineEdit_discount->text();
         ui->lineEdit_token->setText(QString::number(int(price)));
         price *= discount.toDouble();
     }
+
     ui->lineEdit_real->setText(QString::number(price*amount,'f',2));
     if(amount > 0)
         ui->pushButton_buy->setEnabled(true);
@@ -286,16 +290,18 @@ void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
 
 void MainWindow::on_spinBox_seller_valueChanged(int arg1)
 {
-    QTreeWidgetItem* current = ui->treeWidget->currentItem();
-    if(current->parent() == Q_NULLPTR)
-    {
-        ui->pushButton_in->setDisabled(true);
-        return;
-    }
-    if(arg1 > 0)
+    if(arg1 > 0 && !(ui->lineEdit_name->text().isEmpty()))
         ui->pushButton_in->setEnabled(true);
     else
         ui->pushButton_in->setDisabled(true);
+}
+
+void MainWindow::on_lineEdit_name_textChanged(const QString &arg1)
+{
+    if(arg1.isEmpty() || ui->spinBox_seller->value() <= 0)
+        ui->pushButton_in->setDisabled(true);
+    else
+        ui->pushButton_in->setEnabled(true);
 }
 
 
@@ -304,9 +310,6 @@ void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTre
 
     if(BUYER_Y == curUser->getClass() || MEMBER_Y == curUser->getClass())
         emit ui->spinBox_buyer->valueChanged(-1);
-    else
-        emit ui->spinBox_seller->valueChanged(-1);
-
 }
 
 void MainWindow::on_pushButton_buy_clicked()
@@ -325,37 +328,68 @@ void MainWindow::on_pushButton_buy_clicked()
 
 void MainWindow::on_pushButton_in_clicked()
 {
-    QTreeWidgetItem* current = ui->treeWidget->currentItem();
-    QString name = current->text(1);
-    QString owner = current->text(5);
+    QString name = ui->lineEdit_name->text();
+    QString owner = curUser->getUserName();
     int amount = ui->spinBox_seller->value();
-    double price = ui->lineEdit_unit->text().toDouble();
+    double price = ui->doubleSpinBox_price->value();
     QDate produceDate = ui->dateEdit_produce->date();
     QDate validityDate = ui->dateEdit_validity->date();
     QDate reduceDate = ui->dateEdit_reduce->date();
     double rate = ui->doubleSpinBox->value();
-    QString goodsClass = current->parent()->text(0);
+
+    QString goodsClass = ui->comboBox->currentText();
+
     if("食品" == goodsClass)
     {
+        QTreeWidgetItem* current = ui->treeWidget->topLevelItem(0);
         Food* food = new Food(++GOODSID, name, amount, price, owner, produceDate, validityDate, reduceDate, rate);
         vecFood.push_back(*food);
-        addTreeNode(current->parent(), food);
+        addTreeNode(current, food);
         delete food;
     }
     else if("电子产品" == goodsClass)
     {
+        QTreeWidgetItem* current = ui->treeWidget->topLevelItem(1);
         Electronics* elect = new Electronics(++GOODSID, name, amount, price, owner, produceDate, validityDate, rate);
         vecElectronics.push_back(*elect);
-        addTreeNode(current->parent(), elect);
+        addTreeNode(current, elect);
         delete elect;
     }
     else
     {
+        QTreeWidgetItem* current = ui->treeWidget->topLevelItem(2);
         DailyNecessities* daily = new DailyNecessities(++GOODSID, name, amount, price, owner, produceDate, validityDate);
         vecDailyNecessities.push_back(*daily);
-        addTreeNode(current->parent(), daily);
+        addTreeNode(current, daily);
         delete daily;
     }
     QMessageBox::information(this, "进货成功", "进货成功！");
+    ui->lineEdit_name->clear();
+    ui->lineEdit_name->setFocus();
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)
+{
+    if("请选择商品类别" == arg1)
+    {
+        ui->lineEdit_name->setDisabled(true);
+        ui->spinBox_seller->setDisabled(true);
+        ui->doubleSpinBox_price->setDisabled(true);
+        ui->dateEdit_produce->setDisabled(true);
+        ui->dateEdit_validity->setDisabled(true);
+        ui->dateEdit_reduce->setDisabled(true);
+        ui->doubleSpinBox->setDisabled(true);
+    }
+    else
+    {
+        ui->lineEdit_name->setEnabled(true);
+        ui->spinBox_seller->setEnabled(true);
+        ui->doubleSpinBox_price->setEnabled(true);
+        ui->dateEdit_produce->setEnabled(true);
+        ui->dateEdit_validity->setEnabled(true);
+        ui->dateEdit_reduce->setEnabled(true);
+        ui->doubleSpinBox->setEnabled(true);
+        ui->lineEdit_name->setFocus();
+    }
 }
 

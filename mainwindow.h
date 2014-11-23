@@ -75,6 +75,8 @@ private slots:
 
     void on_pushButton_buy_clicked();
     void on_spinBox_seller_valueChanged(int arg1);
+    void on_comboBox_currentIndexChanged(const QString &arg1);
+    void on_lineEdit_name_textChanged(const QString &arg1);
 };
 
 #endif // MAINWINDOW_H
