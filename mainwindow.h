@@ -33,7 +33,7 @@ private:
     QVector<DailyNecessities> vecDailyNecessities;
 
     bool loadData();
-    int checkUser(QString userName, QString password = "");
+    User* findUser(QString userName);
     void addTreeNode(QTreeWidgetItem* parent, Food *food);
     void addTreeNode(QTreeWidgetItem* parent, Electronics *elect);
     void addTreeNode(QTreeWidgetItem* parent, DailyNecessities *daily);
@@ -67,6 +67,14 @@ private slots:
 
     void on_pushButton_register_clicked();
 
+    void on_spinBox_buyer_valueChanged(int arg1);
+
+    void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    void on_pushButton_in_clicked();
+
+    void on_pushButton_buy_clicked();
+    void on_spinBox_seller_valueChanged(int arg1);
 };
 
 #endif // MAINWINDOW_H

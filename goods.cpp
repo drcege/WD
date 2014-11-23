@@ -19,17 +19,18 @@ Food::Food()
 {
 }
 
-Food::Food(int id, QString foodName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, QDate reduceDate)
+Food::Food(int id, QString foodName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, QDate reduceDate, double reduceRate)
     :Goods(id, foodName, amount, price, owner)
 {
     this->produceDate = produceDate;
     this->validityDate = validityDate;
     this->reduceDate = reduceDate;
+    this->reduceRate = reduceRate;
 }
 
-double Food::calcPrice()
+double Food::reducedPrice()
 {
-    return 0.0;
+    return price;
 }
 
 /******************************************************************************/
@@ -38,9 +39,17 @@ Electronics::Electronics()
 {
 }
 
-double Electronics::calcPrice()
+Electronics::Electronics(int id, QString electName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, double reduceRate)
+    :Goods(id, electName, amount, price, owner)
 {
-    return 0.0;
+    this->produceDate = produceDate;
+    this->validityDate = validityDate;
+    this->reduceRate = reduceRate;
+}
+
+double Electronics::reducedPrice()
+{
+    return price;
 }
 
 /******************************************************************************/
@@ -49,7 +58,14 @@ DailyNecessities::DailyNecessities()
 {
 }
 
-double DailyNecessities::calcPrice()
+DailyNecessities::DailyNecessities(int id, QString dailyName, int amount, double price, QString owner, QDate produceDate, QDate validityDate)
+    :Goods(id, dailyName, amount, price, owner)
 {
-    return 0.0;
+    this->produceDate = produceDate;
+    this->validityDate = validityDate;
+}
+
+double DailyNecessities::reducedPrice()
+{
+    return price;
 }

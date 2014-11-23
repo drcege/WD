@@ -40,12 +40,7 @@ Buyer::Buyer()
 Buyer::Buyer(int id, QString userName, QString password, double balance)
     :User(id, userName, password, balance)
 {
-
-}
-
-userClass Buyer::getClass()
-{
-    return BUYER_Y;
+    curClass = BUYER_Y;
 }
 
 void Buyer::viewUserInfo()
@@ -69,11 +64,7 @@ Member::Member(int id, QString userName, QString password, double balance, int l
 {
     this->level = level;
     this->token = token;
-}
-
-userClass Member::getClass()
-{
-    return MEMBER_Y;
+    curClass = MEMBER_Y;
 }
 
 void Member::viewUserInfo()
@@ -90,13 +81,9 @@ Seller::Seller()
 Seller::Seller(int id, QString userName, QString password, double balance)
     :User(id, userName, password, balance)
 {
-
+    curClass = SELLER_Y;
 }
 
-userClass Seller::getClass()
-{
-    return SELLER_Y;
-}
 
 void Seller::viewUserInfo()
 {

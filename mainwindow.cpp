@@ -16,13 +16,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->action_logout->setDisabled(true);
     ui->treeWidget->expandAll();
     loadData();
-
     QTreeWidgetItem* treeParent = ui->treeWidget->topLevelItem(0);
     for(int p = 0; p < vecFood.count(); ++p)
     {
         addTreeNode(treeParent, &(vecFood[p]));
     }
-
+    treeParent = ui->treeWidget->topLevelItem(1);
+    for(int p = 0; p < vecElectronics.count(); ++p)
+    {
+        addTreeNode(treeParent, &(vecElectronics[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(2);
+    for(int p = 0; p < vecDailyNecessities.count(); ++p)
+    {
+        addTreeNode(treeParent, &(vecDailyNecessities[p]));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -32,63 +40,63 @@ MainWindow::~MainWindow()
 
 bool MainWindow::loadData()
 {
-    vecFood.push_back(Food(1, "蛋糕", 20, 3.5, "戈策", QDate::fromString("2014/11/1", "yyyy/M/d"), QDate::fromString("2014/11/20", "yyyy/M/d"), QDate::fromString("2014/11/15", "yyyy/M/d")));
-    vecFood.push_back(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014/11/5", "yyyy/M/d"), QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2014/11/28", "yyyy/M/d")));
+    vecFood.push_back(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014/11/1", "yyyy/M/d"), QDate::fromString("2014/11/20", "yyyy/M/d"), QDate::fromString("2014/11/15", "yyyy/M/d"), 0.2));
+    vecFood.push_back(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014/11/5", "yyyy/M/d"), QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2014/11/28", "yyyy/M/d"), 0.2));
+    vecFood.push_back(Food(3, "面包", 10, 3.5, "戈策", QDate::fromString("2014/11/20", "yyyy/M/d"), QDate::fromString("2014/11/28", "yyyy/M/d"), QDate::fromString("2014/11/25", "yyyy/M/d"), 0.2));
+    vecFood.push_back(Food(4, "火腿", 30, 2.0, "戈策", QDate::fromString("2014/11/1", "yyyy/M/d"), QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2014/11/20", "yyyy/M/d"), 0.2));
+
+    vecElectronics.push_back(Electronics(5, "iphone4s", 50, 2060.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
+    vecElectronics.push_back(Electronics(6, "iphone5c", 50, 2788.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
+    vecElectronics.push_back(Electronics(7, "iphone6", 50, 5288.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
+    vecElectronics.push_back(Electronics(8, "iphone6 plus", 50, 5600.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
+
+    vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 3.5, "戈策", QDate::fromString("2014/10/1", "yyyy/M/d"), QDate::fromString("2014/12/31", "yyyy/M/d")));
+
     return true;
 }
 
-int MainWindow::checkUser(QString userName, QString password)
+User* MainWindow::findUser(QString userName)
 {
-    //QString valuePwd = allAccount.value(userName);
-    for(QVector<Buyer>::iterator iter = vecBuyer.begin(); iter != vecBuyer.end(); ++iter)
+    for(int i = 0; i < vecBuyer.size(); ++i)
     {
-        if(userName == iter->getUserName())
-        {
-            if(password == iter->getPassword())
-                return BUYER_Y;
-            else
-                return BUYER_N;
-        }
+        if(userName == vecBuyer[i].getUserName())
+            return &vecBuyer[i];
     }
-    for(QVector<Member>::iterator iter = vecMember.begin(); iter != vecMember.end(); ++iter)
+    for(int i = 0; i < vecMember.size(); ++i)
     {
-        if(userName == iter->getUserName())
-        {
-            if(password == iter->getPassword())
-                return MEMBER_Y;
-            else
-                return MEMBER_N;
-        }
+        if(userName == vecMember[i].getUserName())
+            return &vecMember[i];
     }
-    for(QVector<Seller>::iterator iter = vecSeller.begin(); iter != vecSeller.end(); ++iter)
+    for(int i = 0; i < vecSeller.size(); ++i)
     {
-        if(userName == iter->getUserName())
-        {
-            if(password == iter->getPassword())
-                return SELLER_Y;
-            else
-                return SELLER_N;
-        }
+        if(userName == vecSeller[i].getUserName())
+            return &vecSeller[i];
     }
-    return NO_EXIST;
+    return Q_NULLPTR;
 }
 
 void MainWindow::addTreeNode(QTreeWidgetItem *parent, Food* food)
 {
-    QTreeWidgetItem * item = new QTreeWidgetItem(QStringList() << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice()) << food->getOwner() << food->getProduceDate().toString("yyyy/MM/dd") << food->getValidityDate().toString("yyyy/MM/dd") << food->getReduceDate().toString("yyyy/MM/dd"));
+    QStringList sl;
+    sl << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice(),'f',1) << QString::number(food->reducedPrice(),'f',1) << food->getOwner() << food->getProduceDate().toString("yyyy/MM/dd") << food->getValidityDate().toString("yyyy/MM/dd") << food->getReduceDate().toString("yyyy/MM/dd") << QString::number(food->getReduceRate(),'f',1);
+    QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
 
 void MainWindow::addTreeNode(QTreeWidgetItem *parent, Electronics * elect)
 {
-//    QTreeWidgetItem * item = new QTreeWidgetItem(QStringList() << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice()) << elect->getOwner() << elect->getProduceDate());
-//    parent->addChild(item);
+    QStringList sl;
+    sl << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(),'f',1) << QString::number(elect->reducedPrice(),'f',1) << elect->getOwner() << elect->getProduceDate().toString("yyyy/MM/dd") << elect->getValidityDate().toString("yyyy/MM/dd") << "-" << QString::number(elect->getRuduceRate(),'f',1);
+    QTreeWidgetItem * item = new QTreeWidgetItem(sl);
+    parent->addChild(item);
 }
 
 void MainWindow::addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily)
 {
-//    QTreeWidgetItem * item = new QTreeWidgetItem(QStringList() << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice()) << daily->getOwner() << daily->getProduceDate());
-//    parent->addChild(item);
+    QStringList sl;
+    sl << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(),'f',1) << QString::number(daily->reducedPrice(),'f',1) << daily->getOwner() << daily->getProduceDate().toString("yyyy/MM/dd") << daily->getValidityDate().toString("yyyy/MM/dd") << "-" << "-";
+    QTreeWidgetItem * item = new QTreeWidgetItem(sl);
+    parent->addChild(item);
 }
 
 void MainWindow::on_pushButton_login_clicked()
@@ -97,42 +105,42 @@ void MainWindow::on_pushButton_login_clicked()
     QString pwd = ui->lineEdit_pwd_login->text();
     ui->lineEdit_user_login->clear();
     ui->lineEdit_pwd_login->clear();
-    switch (checkUser(user, pwd))
+
+    curUser = findUser(user);
+    if(curUser == Q_NULLPTR)
     {
-    case BUYER_Y:
-        curUser = new Buyer(++USERID, user, pwd);
-        ui->stackedWidget_2->setCurrentWidget(ui->page_buyer);
-        ui->action_user->setEnabled(true);
-        ui->action_logout->setEnabled(true);
-        ui->stackedWidget->setCurrentWidget(ui->mainPage);
-        MainWindow::setWindowState(Qt::WindowMaximized);
-        break;
-    case MEMBER_Y:
-        curUser = new Member(++USERID, user, pwd);
-        ui->stackedWidget_2->setCurrentWidget(ui->page_buyer);
-        ui->action_user->setEnabled(true);
-        ui->action_logout->setEnabled(true);
-        ui->stackedWidget->setCurrentWidget(ui->mainPage);
-        MainWindow::setWindowState(Qt::WindowMaximized);
-        break;
-    case SELLER_Y:
-        curUser = new Seller(++USERID, user, pwd); //登陆成功
-        ui->stackedWidget_2->setCurrentWidget(ui->page_seller);
-        ui->action_user->setEnabled(true);
-        ui->action_logout->setEnabled(true);
-        ui->stackedWidget->setCurrentWidget(ui->mainPage);
-        MainWindow::setWindowState(Qt::WindowMaximized);
-        break;
-    case NO_EXIST:
         QMessageBox::warning(this,tr("登陆失败！"),tr("用户名不存在！"),QMessageBox::Ok);
         ui->lineEdit_user_login->setFocus();
-        break;
-    case BUYER_N: case MEMBER_N: case SELLER_N:
-        QMessageBox::warning(this,tr("登陆失败！"),tr("密码错误！"),QMessageBox::Ok);
-        ui->lineEdit_user_login->setFocus();
-        break;
-    default:
-        break;
+        return;
+    }
+    else
+    {
+        if(pwd == curUser->getPassword())    // 登陆成功
+        {
+            MainWindow::setWindowState(Qt::WindowMaximized);
+            ui->action_user->setEnabled(true);
+            ui->action_logout->setEnabled(true);
+            ui->stackedWidget->setCurrentWidget(ui->mainPage);
+
+            if(BUYER_Y == curUser->getClass())
+            {
+                ui->stackedWidget_2->setCurrentWidget(ui->page_buyer);
+            }
+            else if(MEMBER_Y == curUser->getClass())
+            {
+                ui->lineEdit_discount->setText(QString::number(10 - (dynamic_cast<Member*>(curUser))->getLevel()/10.0));
+                ui->stackedWidget_2->setCurrentWidget(ui->page_buyer);
+            }
+            else    //卖家
+            {
+                ui->stackedWidget_2->setCurrentWidget(ui->page_seller);
+            }
+        }
+        else
+        {
+            QMessageBox::warning(this,tr("登陆失败！"),tr("密码错误！"),QMessageBox::Ok);
+            ui->lineEdit_user_login->setFocus();
+        }
     }
 }
 
@@ -174,7 +182,7 @@ void MainWindow::on_action_exit_triggered()
 void MainWindow::on_pushButton_register_clicked()
 {
     QString user = ui->lineEdit_user_register->text();
-    if(checkUser(user) != NO_EXIST)
+    if(findUser(user) != Q_NULLPTR)
     {
         QMessageBox::information(this,tr("注册失败！"),tr("用户名已存在！"),QMessageBox::Ok);
         ui->lineEdit_user_register->clear();
@@ -201,7 +209,6 @@ void MainWindow::on_pushButton_register_clicked()
                 Seller curSeller(++USERID, user, pwd);
                 vecSeller.push_back(curSeller);
             }
-            //allAccount.insert(user, pwd);
             QMessageBox::information(this,tr("注册成功！"),tr("恭喜你 ^_^ 注册成功！"),QMessageBox::Ok);
             ui->lineEdit_user_register->clear();
             ui->stackedWidget->setCurrentWidget(ui->loginPage);
@@ -224,7 +231,7 @@ void MainWindow::on_action_Qt_triggered()
 
 void MainWindow::on_lineEdit_user_login_textChanged(const QString &arg1)
 {
-    if(arg1.isEmpty() || ui->lineEdit_pwd_login->text().isEmpty())
+    if(ui->lineEdit_user_login->text().isEmpty() || ui->lineEdit_pwd_login->text().isEmpty())
         ui->pushButton_login->setDisabled(true);
     else
         ui->pushButton_login->setEnabled(true);
@@ -232,15 +239,12 @@ void MainWindow::on_lineEdit_user_login_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_pwd_login_textChanged(const QString &arg1)
 {
-    if(arg1.isEmpty() || ui->lineEdit_user_login->text().isEmpty())
-        ui->pushButton_login->setDisabled(true);
-    else
-        ui->pushButton_login->setEnabled(true);
+    emit ui->lineEdit_user_login->textChanged("");
 }
 
 void MainWindow::on_lineEdit_user_register_textChanged(const QString &arg1)
 {
-    if(arg1.isEmpty() || ui->lineEdit_pwd_register->text().isEmpty() || ui->lineEdit_pwd_repeat->text().isEmpty() || (ui->buttonGroup->checkedId() == -1))
+    if(ui->lineEdit_user_register->text().isEmpty() || ui->lineEdit_pwd_register->text().isEmpty() || ui->lineEdit_pwd_repeat->text().isEmpty())
         ui->pushButton_register->setDisabled(true);
     else
         ui->pushButton_register->setEnabled(true);
@@ -248,16 +252,101 @@ void MainWindow::on_lineEdit_user_register_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_pwd_register_textChanged(const QString &arg1)
 {
-    if(arg1.isEmpty() || ui->lineEdit_user_register->text().isEmpty() || ui->lineEdit_pwd_repeat->text().isEmpty() || (ui->buttonGroup->checkedId() == -1))
-        ui->pushButton_register->setDisabled(true);
-    else
-        ui->pushButton_register->setEnabled(true);
+    emit ui->lineEdit_user_register->textChanged("");
 }
 
 void MainWindow::on_lineEdit_pwd_repeat_textChanged(const QString &arg1)
 {
-    if(arg1.isEmpty() || ui->lineEdit_user_register->text().isEmpty() || ui->lineEdit_pwd_register->text().isEmpty() || (ui->buttonGroup->checkedId() == -1))
-        ui->pushButton_register->setDisabled(true);
-    else
-        ui->pushButton_register->setEnabled(true);
+    emit ui->lineEdit_user_register->textChanged("");
 }
+
+void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
+{
+    QTreeWidgetItem* current = ui->treeWidget->currentItem();
+    if(current->parent() == Q_NULLPTR)
+        return;
+    int amount = ui->spinBox_buyer->value();
+    double price = current->text(4).toDouble();
+    ui->lineEdit_price->setText(QString::number(price*amount,'f',2));
+    if(MEMBER_Y == curUser->getClass())
+    {
+        QString discount = ui->lineEdit_discount->text();
+        ui->lineEdit_token->setText(QString::number(int(price)));
+        price *= discount.toDouble();
+    }
+    ui->lineEdit_real->setText(QString::number(price*amount,'f',2));
+}
+
+void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+
+    if(BUYER_Y == curUser->getClass() || MEMBER_Y == curUser->getClass())
+        emit ui->spinBox_buyer->valueChanged(-1);
+    else
+        emit ui->spinBox_seller->valueChanged(-1);
+
+}
+
+void MainWindow::on_pushButton_buy_clicked()
+{
+    double money = ui->lineEdit_real->text().toDouble();
+    if(money > curUser->getBalance())
+    {
+        QMessageBox::warning(this, "余额不足", "余额不足！");
+    }
+    else
+    {
+        dynamic_cast<Buyer*>(curUser)->recharge(-1*money);
+        QMessageBox::information(this, "购买成功", "购买成功！余额："+QString::number(curUser->getBalance()));
+    }
+}
+
+void MainWindow::on_pushButton_in_clicked()
+{
+    QTreeWidgetItem* current = ui->treeWidget->currentItem();
+    QString name = current->text(1);
+    QString owner = current->text(5);
+    int amount = ui->spinBox_seller->value();
+    double price = ui->lineEdit_unit->text().toDouble();
+    QDate produceDate = ui->dateEdit_produce->date();
+    QDate validityDate = ui->dateEdit_validity->date();
+    QDate reduceDate = ui->dateEdit_reduce->date();
+    double rate = ui->doubleSpinBox->value();
+    QString goodsClass = current->parent()->text(0);
+    if("食品" == goodsClass)
+    {
+        Food* food = new Food(++GOODSID, name, amount, price, owner, produceDate, validityDate, reduceDate, rate);
+        vecFood.push_back(*food);
+        addTreeNode(current->parent(), food);
+        delete food;
+    }
+    else if("电子产品" == goodsClass)
+    {
+        Electronics* elect = new Electronics(++GOODSID, name, amount, price, owner, produceDate, validityDate, rate);
+        vecElectronics.push_back(*elect);
+        addTreeNode(current->parent(), elect);
+        delete elect;
+    }
+    else
+    {
+        DailyNecessities* daily = new DailyNecessities(++GOODSID, name, amount, price, owner, produceDate, validityDate);
+        vecDailyNecessities.push_back(*daily);
+        addTreeNode(current->parent(), daily);
+        delete daily;
+    }
+    QMessageBox::information(this, "进货成功", "进货成功！");
+}
+
+void MainWindow::on_spinBox_seller_valueChanged(int arg1)
+{
+    QTreeWidgetItem* current = ui->treeWidget->currentItem();
+    if(current->parent() == Q_NULLPTR)
+    {
+        ui->pushButton_in->setDisabled(true);
+        return;
+    }
+    if(arg1 > 0)
+        ui->pushButton_in->setEnabled(true);
+    else
+        ui->pushButton_in->setDisabled(true);
+    }
