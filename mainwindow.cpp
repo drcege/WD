@@ -264,7 +264,10 @@ void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
 {
     QTreeWidgetItem* current = ui->treeWidget->currentItem();
     if(current->parent() == Q_NULLPTR)
+    {
+        ui->pushButton_buy->setDisabled(true);
         return;
+    }
     int amount = ui->spinBox_buyer->value();
     double price = current->text(4).toDouble();
     ui->lineEdit_price->setText(QString::number(price*amount,'f',2));
@@ -275,7 +278,26 @@ void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
         price *= discount.toDouble();
     }
     ui->lineEdit_real->setText(QString::number(price*amount,'f',2));
+    if(amount > 0)
+        ui->pushButton_buy->setEnabled(true);
+    else
+        ui->pushButton_buy->setDisabled(true);
 }
+
+void MainWindow::on_spinBox_seller_valueChanged(int arg1)
+{
+    QTreeWidgetItem* current = ui->treeWidget->currentItem();
+    if(current->parent() == Q_NULLPTR)
+    {
+        ui->pushButton_in->setDisabled(true);
+        return;
+    }
+    if(arg1 > 0)
+        ui->pushButton_in->setEnabled(true);
+    else
+        ui->pushButton_in->setDisabled(true);
+}
+
 
 void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
@@ -337,16 +359,3 @@ void MainWindow::on_pushButton_in_clicked()
     QMessageBox::information(this, "进货成功", "进货成功！");
 }
 
-void MainWindow::on_spinBox_seller_valueChanged(int arg1)
-{
-    QTreeWidgetItem* current = ui->treeWidget->currentItem();
-    if(current->parent() == Q_NULLPTR)
-    {
-        ui->pushButton_in->setDisabled(true);
-        return;
-    }
-    if(arg1 > 0)
-        ui->pushButton_in->setEnabled(true);
-    else
-        ui->pushButton_in->setDisabled(true);
-    }
