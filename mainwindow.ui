@@ -65,7 +65,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="loginPage">
        <layout class="QGridLayout" name="gridLayout_2" rowstretch="8,1,3,1,1,1,1,8" columnstretch="6,2,2,1,2,8">
@@ -563,39 +563,6 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
-         <widget class="QRadioButton" name="radioButton">
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>全部商品</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
-          </attribute>
-         </widget>
-        </item>
-        <item row="1" column="4">
-         <widget class="QRadioButton" name="radioButton_2">
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>我的商品</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
-          </attribute>
-         </widget>
-        </item>
         <item row="2" column="1" colspan="2">
          <widget class="QTreeWidget" name="treeWidget">
           <property name="font">
@@ -628,7 +595,7 @@
            <bool>false</bool>
           </property>
           <property name="headerHidden">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <attribute name="headerVisible">
            <bool>false</bool>
@@ -766,6 +733,11 @@
             </font>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
           <item>
            <property name="text">
             <string>食品</string>
@@ -892,10 +864,10 @@
           </item>
          </widget>
         </item>
-        <item row="2" column="3" colspan="2">
+        <item row="1" column="3" rowspan="2" colspan="2">
          <widget class="QStackedWidget" name="stackedWidget_2">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="page_buyer">
            <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1">
@@ -1043,22 +1015,29 @@
           </widget>
           <widget class="QWidget" name="page_seller">
            <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,1">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_class">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_name">
               <property name="font">
                <font>
                 <pointsize>10</pointsize>
                </font>
               </property>
               <property name="text">
-               <string>商品类别：</string>
+               <string>商品名称：</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineEdit_name">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
              <widget class="QComboBox" name="comboBox">
               <property name="currentText">
                <string>请选择商品类别</string>
@@ -1086,28 +1065,21 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_name">
+             <widget class="QLabel" name="label_class">
               <property name="font">
                <font>
                 <pointsize>10</pointsize>
                </font>
               </property>
               <property name="text">
-               <string>商品名称：</string>
+               <string>商品类别：</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="lineEdit_name">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="label_in">
               <property name="font">
                <font>
@@ -1123,7 +1095,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="3" column="1">
              <widget class="QSpinBox" name="spinBox_seller">
               <property name="enabled">
                <bool>false</bool>
@@ -1142,7 +1114,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="label_unit">
               <property name="font">
                <font>
@@ -1158,7 +1130,7 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="label_produce">
               <property name="font">
                <font>
@@ -1174,49 +1146,7 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="QDateEdit" name="dateEdit_produce">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="displayFormat">
-               <string>yyyy/M/d</string>
-              </property>
-              <property name="calendarPopup">
-               <bool>true</bool>
-              </property>
-              <property name="date">
-               <date>
-                <year>2014</year>
-                <month>1</month>
-                <day>1</day>
-               </date>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_validity">
-              <property name="font">
-               <font>
-                <family>微软雅黑</family>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>有效期：</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
+            <item row="6" column="1">
              <widget class="QDateEdit" name="dateEdit_validity">
               <property name="enabled">
                <bool>false</bool>
@@ -1242,7 +1172,7 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="7" column="0">
              <widget class="QLabel" name="label_reduce">
               <property name="font">
                <font>
@@ -1258,7 +1188,56 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_validity">
+              <property name="font">
+               <font>
+                <family>微软雅黑</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>有效期：</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QDateEdit" name="dateEdit_produce">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumDate">
+               <date>
+                <year>1970</year>
+                <month>9</month>
+                <day>14</day>
+               </date>
+              </property>
+              <property name="displayFormat">
+               <string>yyyy/M/d</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+              <property name="date">
+               <date>
+                <year>2014</year>
+                <month>1</month>
+                <day>1</day>
+               </date>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
              <widget class="QDateEdit" name="dateEdit_reduce">
               <property name="enabled">
                <bool>false</bool>
@@ -1284,41 +1263,7 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>降价因子：</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QDoubleSpinBox" name="doubleSpinBox">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximum">
-               <double>0.990000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0" colspan="2">
+            <item row="9" column="0" colspan="2">
              <widget class="QPushButton" name="pushButton_in">
               <property name="enabled">
                <bool>false</bool>
@@ -1337,7 +1282,41 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="8" column="0">
+             <widget class="QLabel" name="label">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>降价因子：</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_rate">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximum">
+               <double>0.990000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_price">
               <property name="enabled">
                <bool>false</bool>
@@ -1350,13 +1329,437 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radioButton_all">
+              <property name="font">
+               <font>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>全部商品</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup_2</string>
+              </attribute>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QRadioButton" name="radioButton_mine">
+              <property name="font">
+               <font>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>我的商品</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup_2</string>
+              </attribute>
+             </widget>
+            </item>
            </layout>
           </widget>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="userPage"/>
+      <widget class="QWidget" name="managePage">
+       <layout class="QGridLayout" name="gridLayout_8" rowstretch="1,1,1,10" columnstretch="0,0,0">
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_head_3">
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+            <pointsize>18</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>个人管理</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <spacer name="verticalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="2" rowspan="3">
+         <spacer name="horizontalSpacer_12">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>89</width>
+            <height>358</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" rowspan="3">
+         <spacer name="horizontalSpacer_11">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>89</width>
+            <height>358</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1">
+         <spacer name="verticalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="1">
+         <widget class="QFrame" name="frame">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_7" columnstretch="2,0,0,0,0,0,0">
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="lineEdit_Username">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="6" rowspan="4">
+            <spacer name="horizontalSpacer_14">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>44</width>
+               <height>292</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="label_Balance">
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>余额：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" rowspan="4">
+            <spacer name="horizontalSpacer_13">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>44</width>
+               <height>292</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_Username">
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>用户名：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3" rowspan="4">
+            <spacer name="horizontalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>67</width>
+               <height>258</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="lineEdit_Level">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="lineEdit_Balance">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="inputMask">
+              <string/>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="label_Level">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>会员等级：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="label_Token">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>代币数量：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLineEdit" name="lineEdit_Token">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QLabel" name="label_2">
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>账户类型：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QPushButton" name="pushButton_Recharge">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>充值</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_Recharge">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="prefix">
+              <string>￥</string>
+             </property>
+             <property name="maximum">
+              <double>9999999.990000000223517</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="4">
+            <widget class="QPushButton" name="pushButton_Upgrade">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>升级会员</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4">
+            <widget class="QPushButton" name="pushButton_Exchange">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>兑换余额 10:1</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QSpinBox" name="spinBox_Token">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="suffix">
+              <string>个</string>
+             </property>
+             <property name="prefix">
+              <string/>
+             </property>
+             <property name="maximum">
+              <number>999999999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QLineEdit" name="lineEdit_userClass">
+             <property name="font">
+              <font>
+               <family>微软雅黑</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QLineEdit" name="lineEdit_note">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>需支付 ￥8888</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -1374,7 +1777,8 @@
     <property name="title">
      <string>菜单(&amp;M)</string>
     </property>
-    <addaction name="action_user"/>
+    <addaction name="action_deal"/>
+    <addaction name="action_manage"/>
     <addaction name="action_logout"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
@@ -1392,12 +1796,21 @@
    <addaction name="help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_user">
+  <action name="action_manage">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>账户管理(&amp;C)</string>
+    <string>个人管理(&amp;M)</string>
    </property>
   </action>
   <action name="action_logout">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>退出登陆(&amp;W)</string>
    </property>
@@ -1420,6 +1833,14 @@
   <action name="action_Qt">
    <property name="text">
     <string>关于Qt</string>
+   </property>
+  </action>
+  <action name="action_deal">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>交易平台(&amp;D)</string>
    </property>
   </action>
  </widget>

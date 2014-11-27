@@ -4,16 +4,20 @@
 #include <QString>
 #include <QDate>
 
+enum goodsClass{GOODS, FOOD, ELECTRONICS, DAILYNECESSITIES};
 class Goods
 {
 public:
     Goods();
     Goods(int id, QString foodName, int amount, double price, QString owner);
-    int getId() {return id;}
+    int getId() const {return id;}
     int getAmount() {return amount;}
     double getPrice() {return price;}
     QString getOwner() {return owner;}
     QString getFoodName() {return foodName;}
+
+    goodsClass getClass() {return curClass;}
+    void changeAmount(int amount);
     virtual double reducedPrice() = 0;
 
 protected:
@@ -22,6 +26,7 @@ protected:
     int amount;
     double price;
     QString owner;
+    goodsClass curClass;
 };
 
 /******************************************************************************/

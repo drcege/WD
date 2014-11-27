@@ -13,6 +13,11 @@ Goods::Goods(int id, QString foodName, int amount, double price, QString owner)
     this->owner = owner;
 }
 
+void Goods::changeAmount(int amount)
+{
+    this->amount += amount;
+}
+
 /******************************************************************************/
 
 Food::Food()
@@ -26,6 +31,7 @@ Food::Food(int id, QString foodName, int amount, double price, QString owner, QD
     this->validityDate = validityDate;
     this->reduceDate = reduceDate;
     this->reduceRate = reduceRate;
+    curClass = FOOD;
 }
 
 double Food::reducedPrice()
@@ -45,6 +51,7 @@ Electronics::Electronics(int id, QString electName, int amount, double price, QS
     this->produceDate = produceDate;
     this->validityDate = validityDate;
     this->reduceRate = reduceRate;
+    curClass = ELECTRONICS;
 }
 
 double Electronics::reducedPrice()
@@ -63,6 +70,7 @@ DailyNecessities::DailyNecessities(int id, QString dailyName, int amount, double
 {
     this->produceDate = produceDate;
     this->validityDate = validityDate;
+    curClass = DAILYNECESSITIES;
 }
 
 double DailyNecessities::reducedPrice()

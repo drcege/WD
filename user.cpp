@@ -14,22 +14,9 @@ User::User(int id, QString userName, QString password, double balance)
     this->userName = userName;
     this->password = password;
     this->balance = balance;
+    this->curClass = USER;
 }
 
-bool User::login()
-{
-    return true;
-}
-
-bool User::logout()
-{
-    return true;
-}
-
-void User::viewUserInfo()
-{
-
-}
 
 /******************************************************************************/
 
@@ -40,12 +27,7 @@ Buyer::Buyer()
 Buyer::Buyer(int id, QString userName, QString password, double balance)
     :User(id, userName, password, balance)
 {
-    curClass = BUYER_Y;
-}
-
-void Buyer::viewUserInfo()
-{
-
+    curClass = BUYER;
 }
 
 void Buyer::recharge(double money)
@@ -64,13 +46,14 @@ Member::Member(int id, QString userName, QString password, double balance, int l
 {
     this->level = level;
     this->token = token;
-    curClass = MEMBER_Y;
+    curClass = MEMBER;
 }
 
-void Member::viewUserInfo()
+void Member::changeToken(int token)
 {
-
+    this->token += token;
 }
+
 
 /******************************************************************************/
 
@@ -81,11 +64,6 @@ Seller::Seller()
 Seller::Seller(int id, QString userName, QString password, double balance)
     :User(id, userName, password, balance)
 {
-    curClass = SELLER_Y;
+    curClass = SELLER;
 }
 
-
-void Seller::viewUserInfo()
-{
-
-}

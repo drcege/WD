@@ -4,17 +4,13 @@
 #include <QString>
 #include <QVector>
 
-enum userClass{NO_EXIST, BUYER_Y, MEMBER_Y, SELLER_Y, BUYER_N, MEMBER_N, SELLER_N};
+enum userClass{USER, BUYER, MEMBER, SELLER};
 
 class User
 {
 public:
     User();
     User(int id, QString userName, QString password, double balance = 0.0);
-    bool login();
-    bool logout();
-    //QVector<QString> viewSaleProductList();
-    virtual void viewUserInfo();
 
 protected:
     int id;
@@ -28,7 +24,7 @@ public:
     QString getUserName() {return userName;}
     QString getPassword() {return password;}
     double getBalance() { return balance;}
-    userClass getClass() {return curClass;}
+    virtual userClass getClass() {return curClass;}
 };
 
 /******************************************************************************/
@@ -38,8 +34,9 @@ class Buyer : public User
 public:
     Buyer();
     Buyer(int id, QString userName, QString password, double balance = 0.0);
-    void viewUserInfo();
     void recharge(double money);
+private:
+    QVector<int> vecOwn;
 };
 
 /******************************************************************************/
@@ -49,7 +46,7 @@ class Member : public Buyer
 public:
     Member();
     Member(int id, QString userName, QString password, double balance = 0.0, int level = 0, int token = 0);
-    void viewUserInfo();
+    void changeToken(int token);
 
 private:
     int level;
@@ -67,7 +64,6 @@ class Seller : public User
 public:
     Seller();
     Seller(int id, QString userName, QString password, double balance = 0.0);
-    void viewUserInfo();
 };
 
 #endif // USER_H
