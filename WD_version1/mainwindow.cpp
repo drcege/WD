@@ -12,6 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // 禁止表头移动，防止按列获取数据错误
+    QHeaderView* head =  ui->treeWidget->header();
+    head->setSectionsMovable(false);
+    head->setVisible(true);
     connect(ui->lineEdit_user_login, SIGNAL(textChanged(QString)),this, SLOT(loginPage_textChanged()));
     connect(ui->lineEdit_pwd_login, SIGNAL(textChanged(QString)), this, SLOT(loginPage_textChanged()));
     connect(ui->lineEdit_user_register, SIGNAL(textChanged(QString)), this, SLOT(registerPage_textChanged()));
@@ -47,10 +51,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/**************************  Custom Functions ********************************/
+
 bool MainWindow::loadData()
 {
-    USERID = 0;
-    GOODSID = 0;
     vecSeller.append(Seller(1, "戈策", "1", 10000000));
     vecFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014/11/1", "yyyy/M/d"), QDate::fromString("2014/11/20", "yyyy/M/d"), QDate::fromString("2014/11/15", "yyyy/M/d"), 0.2));
     vecFood.append(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014/11/5", "yyyy/M/d"), QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2014/11/28", "yyyy/M/d"), 0.2));
@@ -62,8 +66,12 @@ bool MainWindow::loadData()
     vecElectronics.push_back(Electronics(7, "iphone6", 50, 5288.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
     vecElectronics.push_back(Electronics(8, "iphone6 plus", 50, 5600.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
 
-    vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 3.5, "戈策", QDate::fromString("2014/10/1", "yyyy/M/d"), QDate::fromString("2014/12/31", "yyyy/M/d")));
+    vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 10.0, "戈策", QDate::fromString("2014/10/1", "yyyy/M/d"), QDate::fromString("2014/12/31", "yyyy/M/d")));
+    vecDailyNecessities.push_back(DailyNecessities(10, "牙膏", 200, 15.0, "戈策", QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2015/1/1", "yyyy/M/d")));
 
+    // 设置为当前最大值
+    USERID = 1;
+    GOODSID = 10;
     return true;
 }
 

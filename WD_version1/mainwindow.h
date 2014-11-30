@@ -32,6 +32,7 @@ private:
     QList<Electronics> vecElectronics;
     QList<DailyNecessities> vecDailyNecessities;
 
+    /*********************  Custom Functions *****************************/
     bool loadData();
     User* findUser(QString userName, int &pos);
     Goods* findGoods(int id, int& pos);
