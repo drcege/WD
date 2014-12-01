@@ -17,6 +17,11 @@ User::User(int id, QString userName, QString password, double balance)
     this->curClass = USER;
 }
 
+void User::recharge(double money)
+{
+    balance += money;
+}
+
 
 /******************************************************************************/
 
@@ -28,11 +33,6 @@ Buyer::Buyer(int id, QString userName, QString password, double balance)
     :User(id, userName, password, balance)
 {
     curClass = BUYER;
-}
-
-void Buyer::recharge(double money)
-{
-    balance += money;
 }
 
 /******************************************************************************/
@@ -52,6 +52,11 @@ Member::Member(int id, QString userName, QString password, double balance, int l
 void Member::changeToken(int token)
 {
     this->token += token;
+}
+
+void Member::setLevel(int level)
+{
+    this->level = level;
 }
 
 

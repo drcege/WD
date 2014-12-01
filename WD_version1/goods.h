@@ -9,6 +9,7 @@ class Goods
 {
 public:
     Goods();
+    virtual ~Goods();
     Goods(int id, QString foodName, int amount, double price, QString owner);
     int getId() const {return id;}
     int getAmount() {return amount;}

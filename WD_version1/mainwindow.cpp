@@ -4,8 +4,9 @@
 #include <QMessageBox>
 #include <QSizePolicy>
 #include <QtAlgorithms>
+#include <QtMath>
 
-#define UPGRADE 8888
+#define LIMIT 8888
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -119,12 +120,14 @@ Goods* MainWindow::findGoods(int id, int &pos)
             pos = i;
             return &vecDailyNecessities[i];
         }
+    return Q_NULLPTR;
 }
 
 void MainWindow::addTreeNode(QTreeWidgetItem *parent, Food* food)
 {
     QStringList sl;
-    sl << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice(),'f',1) << QString::number(food->reducedPrice(),'f',1) << food->getOwner() << food->getProduceDate().toString("yyyy/MM/dd") << food->getValidityDate().toString("yyyy/MM/dd") << food->getReduceDate().toString("yyyy/MM/dd") << QString::number(food->getReduceRate(),'f',1) << QString::number(food->getId());
+    QString reduced = (food->reducedPrice() < 0 ? "已过期" : QString::number(food->reducedPrice(),'f',1));
+    sl << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice(),'f',1) << reduced << food->getOwner() << food->getProduceDate().toString("yyyy/MM/dd") << food->getValidityDate().toString("yyyy/MM/dd") << food->getReduceDate().toString("yyyy/MM/dd") << QString::number(food->getReduceRate(),'f',1) << QString::number(food->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -132,7 +135,8 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Food* food)
 void MainWindow::addTreeNode(QTreeWidgetItem *parent, Electronics * elect)
 {
     QStringList sl;
-    sl << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(),'f',1) << QString::number(elect->reducedPrice(),'f',1) << elect->getOwner() << elect->getProduceDate().toString("yyyy/MM/dd") << elect->getValidityDate().toString("yyyy/MM/dd") << "-" << QString::number(elect->getRuduceRate(),'f',1) << QString::number(elect->getId());
+    QString reduced = (elect->reducedPrice() < 0 ? "已过期" : QString::number(elect->reducedPrice(), 'f', 1));
+    sl << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(),'f',1) << reduced << elect->getOwner() << elect->getProduceDate().toString("yyyy/MM/dd") << elect->getValidityDate().toString("yyyy/MM/dd") << "-" << QString::number(elect->getRuduceRate(),'f',1) << QString::number(elect->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -140,7 +144,8 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Electronics * elect)
 void MainWindow::addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily)
 {
     QStringList sl;
-    sl << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(),'f',1) << QString::number(daily->reducedPrice(),'f',1) << daily->getOwner() << daily->getProduceDate().toString("yyyy/MM/dd") << daily->getValidityDate().toString("yyyy/MM/dd") << "-" << "-" << QString::number(daily->getId());
+    QString reduced = (daily->reducedPrice() < 0 ? "已过期" : QString::number(daily->reducedPrice(), 'f', 1));
+    sl << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(),'f',1) << reduced << daily->getOwner() << daily->getProduceDate().toString("yyyy/MM/dd") << daily->getValidityDate().toString("yyyy/MM/dd") << "-" << "-" << QString::number(daily->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -179,9 +184,9 @@ void MainWindow::resetMainPage()
     ui->spinBox_seller->setValue(0);
     ui->doubleSpinBox_price->setValue(0.0);
     ui->doubleSpinBox_rate->setValue(0.0);
-    ui->dateEdit_produce->clear();
-    ui->dateEdit_reduce->clear();
-    ui->dateEdit_validity->clear();
+    ui->dateEdit_produce->setDate(QDate::currentDate());
+    ui->dateEdit_reduce->setDate(QDate::currentDate());
+    ui->dateEdit_validity->setDate(QDate::currentDate());
 }
 
 void MainWindow::resetManagePage()
@@ -194,8 +199,9 @@ void MainWindow::resetManagePage()
     ui->pushButton_Recharge->setEnabled(true);
     ui->pushButton_Upgrade->setEnabled(true);
     ui->pushButton_Exchange->setEnabled(true);
-    ui->doubleSpinBox_Recharge->clear();
-    ui->spinBox_Token->clear();
+    ui->doubleSpinBox_Recharge->setValue(0.00);
+    ui->spinBox_Token->setValue(0);
+    ui->pushButton_Recharge->setText("充值");
 }
 
 /********************************  loginPage  ********************************/
@@ -264,27 +270,40 @@ void MainWindow::on_pushButton_login_clicked()
     ui->lineEdit_userClass->setText(classText);
     ui->lineEdit_Balance->setText("￥" + QString::number(curUser->getBalance(), 'f', 2));
 
-    bool isSeller = (SELLER == curUser->getClass());
-    ui->lineEdit_Level->setDisabled(isSeller);
-    ui->lineEdit_Token->setDisabled(isSeller);
-    ui->lineEdit_note->setDisabled(isSeller);
-    ui->pushButton_Recharge->setDisabled(isSeller);
-    ui->pushButton_Upgrade->setDisabled(isSeller);
-    ui->pushButton_Exchange->setDisabled(isSeller);
-    ui->doubleSpinBox_Recharge->setDisabled(isSeller);
-    ui->spinBox_Token->setDisabled(isSeller);
-    bool isBuyer = (BUYER == curUser->getClass());
-    ui->lineEdit_Level->setDisabled(isBuyer);
-    ui->lineEdit_Token->setDisabled(isBuyer);
-    ui->spinBox_Token->setDisabled(isBuyer);
-    ui->pushButton_Exchange->setDisabled(isBuyer);
-    if(MEMBER == curUser->getClass())
+    if(SELLER == curUser->getClass())       // 卖家
     {
-        ui->lineEdit_note->setDisabled(true);
-        ui->pushButton_Upgrade->setDisabled(true);
-        ui->lineEdit_Level->setText(QString::number(dynamic_cast<Member*>(curUser)->getLevel()));
-        ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
-        ui->spinBox_Token->setMaximum(dynamic_cast<Member*>(curUser)->getToken());
+        ui->label_Level->hide();
+        ui->lineEdit_Level->hide();
+        ui->pushButton_Upgrade->hide();
+        ui->lineEdit_note->hide();
+        ui->label_Token->hide();
+        ui->lineEdit_Token->hide();
+        ui->pushButton_Exchange->hide();
+        ui->spinBox_Token->hide();
+        ui->pushButton_Recharge->setText("提现");
+        ui->doubleSpinBox_Recharge->setMaximum(0);
+        ui->doubleSpinBox_Recharge->setMinimum(-1 * curUser->getBalance());
+    }
+    else    // 买家
+    {
+        bool isMember = (MEMBER == curUser->getClass());
+        ui->label_Token->setVisible(isMember);
+        ui->lineEdit_Token->setVisible(isMember);
+        ui->pushButton_Exchange->setVisible(isMember);
+        ui->spinBox_Token->setVisible(isMember);
+        if(isMember)    // 会员
+        {
+            int level = dynamic_cast<Member*>(curUser)->getLevel();
+            ui->lineEdit_Level->setText(QString::number(level));
+            ui->lineEdit_note->setText("需支付 " + QString::number(level * 1000) + " 代币");
+            ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
+            ui->spinBox_Token->setMaximum(dynamic_cast<Member*>(curUser)->getToken());
+        }
+        else    // 普通买家
+        {
+            ui->lineEdit_Level->setText("非会员");
+            ui->lineEdit_note->setText("需支付 ￥8888");
+        }
     }
 }
 
@@ -381,19 +400,25 @@ void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
         ui->pushButton_buy->setDisabled(true);
         return;
     }
-
+    QString strp = current->text(4);
+    if(strp == "已过期")
+    {
+        ui->pushButton_buy->setDisabled(true);
+        return;
+    }
     int amount = ui->spinBox_buyer->value();
-    double price = current->text(4).toDouble();
+    double price = strp.toDouble();
     ui->lineEdit_price->setText(QString::number(price*amount,'f',2));
+    price *= amount;
 
     if(MEMBER == curUser->getClass())
     {
         QString discount = ui->lineEdit_discount->text();
-        ui->lineEdit_token->setText(QString::number(int(price)));
-        price *= discount.toDouble();
+        price = price * discount.toDouble();
+        ui->lineEdit_token->setText(QString::number(qFloor(price/10)));
     }
 
-    ui->lineEdit_real->setText(QString::number(price*amount,'f',2));
+    ui->lineEdit_real->setText(QString::number(price,'f',2));
     if(amount > 0)
         ui->pushButton_buy->setEnabled(true);
     else
@@ -405,16 +430,22 @@ void MainWindow::on_pushButton_buy_clicked()
     double money = ui->lineEdit_real->text().toDouble();
     if(money > curUser->getBalance())
     {
-        QMessageBox::warning(this, "余额不足", "余额不足！");
+        QMessageBox::warning(this, "余额不足", "余额不足！余额：￥"+QString::number(curUser->getBalance(),'f', 2));
     }
     else
     {
         int pos = -1;
-        dynamic_cast<Buyer*>(curUser)->recharge(-1*money);
+        curUser->recharge(-1*money);
         ui->lineEdit_Balance->setText("￥" + QString::number(curUser->getBalance(),'f',2));
+        if(MEMBER == curUser->getClass())
+        {
+            int addtokens = ui->lineEdit_token->text().toInt();
+            dynamic_cast<Member*>(curUser)->changeToken(addtokens);
+            ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
+        }
         Goods* curGoods = findGoods(ui->treeWidget->currentItem()->text(10).toInt(), pos);
         curGoods->changeAmount(-1 * ui->spinBox_buyer->value());
-        QMessageBox::information(this, "购买成功", "购买成功！余额："+QString::number(curUser->getBalance(),'f', 2));
+        QMessageBox::information(this, "购买成功", "购买成功！余额：￥"+QString::number(curUser->getBalance(),'f', 2));
         if(0 == curGoods->getAmount())    // 删除库存为零的商品
         {
             switch (curGoods->getClass()) {
@@ -471,27 +502,15 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 {
     if(Q_NULLPTR == curUser)
         return;
-    if("请选择商品类别" == arg1)
-    {
-        ui->lineEdit_name->setDisabled(true);
-        ui->spinBox_seller->setDisabled(true);
-        ui->doubleSpinBox_price->setDisabled(true);
-        ui->dateEdit_produce->setDisabled(true);
-        ui->dateEdit_validity->setDisabled(true);
-        ui->dateEdit_reduce->setDisabled(true);
-        ui->doubleSpinBox_rate->setDisabled(true);
-    }
-    else
-    {
-        ui->lineEdit_name->setEnabled(true);
-        ui->spinBox_seller->setEnabled(true);
-        ui->doubleSpinBox_price->setEnabled(true);
-        ui->dateEdit_produce->setEnabled(true);
-        ui->dateEdit_validity->setEnabled(true);
-        ui->dateEdit_reduce->setEnabled(true);
-        ui->doubleSpinBox_rate->setEnabled(true);
-        ui->lineEdit_name->setFocus();
-    }
+    bool init = ("请选择商品类别" == arg1);
+    ui->lineEdit_name->setDisabled(init);
+    ui->spinBox_seller->setDisabled(init);
+    ui->doubleSpinBox_price->setDisabled(init);
+    ui->dateEdit_produce->setDisabled(init);
+    ui->dateEdit_validity->setDisabled(init);
+    ui->dateEdit_reduce->setDisabled(init);
+    ui->doubleSpinBox_rate->setDisabled(init);
+    ui->lineEdit_name->setFocus();
 }
 
 void MainWindow::on_lineEdit_name_textChanged(const QString &arg1)
@@ -565,23 +584,49 @@ void MainWindow::on_pushButton_Recharge_clicked()
     double money = ui->doubleSpinBox_Recharge->value();
     if(0.0 == money)
         return;
-    dynamic_cast<Buyer*>(curUser)->recharge(money);
+    curUser->recharge(money);
     ui->lineEdit_Balance->setText("￥" + QString::number(curUser->getBalance(),'f',2));
-    QMessageBox::information(this, "充值成功！", "充值成功！账户余额：" + QString::number(curUser->getBalance(),'f',2));
+    ui->doubleSpinBox_Recharge->setValue(0.00);
+    QString msg = (SELLER == curUser->getClass() ? "提现成功！" : "充值成功！");
+    QMessageBox::information(this, msg, msg);
 }
 
 void MainWindow::on_pushButton_Upgrade_clicked()
 {
-    if(curUser->getBalance() < UPGRADE)
-        QMessageBox::warning(this, "余额不足", "余额不足！无法升级会员");
+    if(BUYER == curUser->getClass())
+    {
+        if(curUser->getBalance() < LIMIT)
+            QMessageBox::warning(this, "余额不足", "余额不足，无法升级会员！");
+        else
+        {
+            QMessageBox::information(this, "升级成功", "升级成功！初始为1级会员，请重新登陆");
+            int pos = -1;
+            User* member = findUser(curUser->getUserName(), pos);
+            vecMember.append(Member(++USERID, member->getUserName(), member->getPassword(), member->getBalance(), 1));
+            vecBuyer.removeAt(pos);
+            emit ui->action_logout->trigger();
+        }
+    }
     else
     {
-        QMessageBox::information(this, "升级成功", "升级成功！初始为1级会员，请重新登陆");
-        int pos = -1;
-        User* member = findUser(curUser->getUserName(), pos);
-        vecMember.append(Member(++USERID, member->getUserName(), member->getPassword(), member->getBalance(), 1));
-        vecBuyer.removeAt(pos);
-        emit ui->action_logout->trigger();
+        int token = dynamic_cast<Member*>(curUser)->getToken();
+        int level = dynamic_cast<Member*>(curUser)->getLevel();
+        if(token < level * 1000)
+            QMessageBox::warning(this, "升级失败", "剩余代币不足，无法升级！");
+        else
+        {
+            dynamic_cast<Member*>(curUser)->changeToken(-1000 * level);
+
+            level += 1;
+            QMessageBox::information(this, "升级成功", "升级成功，升级为" + QString::number(level) + "级会员！");
+            dynamic_cast<Member*>(curUser)->setLevel(level);
+            /*！更改折扣 */
+            ui->lineEdit_discount->setText(QString::number(1 - 0.05 * level));
+            ui->lineEdit_Level->setText(QString::number(level));
+            ui->lineEdit_note->setText("需支付 " + QString::number(level * 1000) + " 代币");
+            ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
+            ui->spinBox_Token->setMaximum(dynamic_cast<Member*>(curUser)->getToken());
+        }
     }
 }
 

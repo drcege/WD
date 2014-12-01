@@ -4,6 +4,11 @@ Goods::Goods()
 {
 }
 
+Goods::~Goods()
+{
+
+}
+
 Goods::Goods(int id, QString foodName, int amount, double price, QString owner)
 {
     this->id = id;
@@ -36,7 +41,11 @@ Food::Food(int id, QString foodName, int amount, double price, QString owner, QD
 
 double Food::reducedPrice()
 {
-    return price;
+    if(QDate::currentDate() < reduceDate)
+        return price;
+    if(QDate::currentDate() > validityDate)
+        return -1;
+    return (price - reduceDate.daysTo(QDate::currentDate()) * reduceRate);
 }
 
 /******************************************************************************/
@@ -56,7 +65,9 @@ Electronics::Electronics(int id, QString electName, int amount, double price, QS
 
 double Electronics::reducedPrice()
 {
-    return price;
+    if(QDate::currentDate() > validityDate)
+        return -1;
+    return (price - produceDate.daysTo(QDate::currentDate()) * reduceRate);
 }
 
 /******************************************************************************/
@@ -75,5 +86,7 @@ DailyNecessities::DailyNecessities(int id, QString dailyName, int amount, double
 
 double DailyNecessities::reducedPrice()
 {
+    if(QDate::currentDate() > validityDate)
+        return -1;
     return price;
 }

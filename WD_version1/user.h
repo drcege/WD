@@ -11,6 +11,7 @@ class User
 public:
     User();
     User(int id, QString userName, QString password, double balance = 0.0);
+    void recharge(double money);
 
 protected:
     int id;
@@ -34,7 +35,6 @@ class Buyer : public User
 public:
     Buyer();
     Buyer(int id, QString userName, QString password, double balance = 0.0);
-    void recharge(double money);
 private:
     QVector<int> vecOwn;
 };
@@ -47,6 +47,7 @@ public:
     Member();
     Member(int id, QString userName, QString password, double balance = 0.0, int level = 0, int token = 0);
     void changeToken(int token);
+    void setLevel(int level);
 
 private:
     int level;
