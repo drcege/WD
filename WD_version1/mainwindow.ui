@@ -306,7 +306,6 @@
          <widget class="QLabel" name="label_head_1">
           <property name="font">
            <font>
-            <family>微软雅黑</family>
             <pointsize>18</pointsize>
             <weight>75</weight>
             <bold>true</bold>
@@ -601,7 +600,7 @@
            <bool>false</bool>
           </property>
           <property name="headerHidden">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <attribute name="headerVisible">
            <bool>false</bool>
@@ -972,6 +971,9 @@
              <widget class="QLineEdit" name="lineEdit_price">
               <property name="readOnly">
                <bool>true</bool>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -1482,7 +1484,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1540,7 +1542,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1556,13 +1558,12 @@
                <property name="minimumSize">
                 <size>
                  <width>80</width>
-                 <height>0</height>
+                 <height>27</height>
                 </size>
                </property>
                <property name="font">
                 <font>
-                 <family>微软雅黑</family>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="alignment">
@@ -1587,7 +1588,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1648,7 +1649,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1664,8 +1665,13 @@
                <property name="minimumSize">
                 <size>
                  <width>80</width>
-                 <height>0</height>
+                 <height>27</height>
                 </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -1674,7 +1680,7 @@
                 <string>￥</string>
                </property>
                <property name="minimum">
-                <double>-11.000000000000000</double>
+                <double>0.000000000000000</double>
                </property>
                <property name="maximum">
                 <double>9999999.990000000223517</double>
@@ -1692,7 +1698,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1762,7 +1768,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1778,12 +1784,12 @@
                <property name="minimumSize">
                 <size>
                  <width>80</width>
-                 <height>0</height>
+                 <height>27</height>
                 </size>
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1808,7 +1814,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1872,7 +1878,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1888,11 +1894,16 @@
                <property name="minimumSize">
                 <size>
                  <width>80</width>
-                 <height>0</height>
+                 <height>27</height>
                 </size>
                </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
                <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                <set>Qt::AlignCenter</set>
                </property>
                <property name="suffix">
                 <string>个</string>

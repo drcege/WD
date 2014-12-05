@@ -25,9 +25,9 @@ private:
     int USERID;
     int GOODSID;
     User* curUser;
-    QVector<Buyer> vecBuyer;
-    QVector<Member> vecMember;
-    QVector<Seller> vecSeller;
+    QList<Buyer> vecBuyer;
+    QList<Member> vecMember;
+    QList<Seller> vecSeller;
     QList<Food> vecFood;
     QList<Electronics> vecElectronics;
     QList<DailyNecessities> vecDailyNecessities;

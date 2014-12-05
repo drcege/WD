@@ -45,7 +45,7 @@ double Food::reducedPrice()
         return price;
     if(QDate::currentDate() > validityDate)
         return -1;
-    return (price - reduceDate.daysTo(QDate::currentDate()) * reduceRate);
+    return price * (1-reduceRate);
 }
 
 /******************************************************************************/
@@ -67,7 +67,8 @@ double Electronics::reducedPrice()
 {
     if(QDate::currentDate() > validityDate)
         return -1;
-    return (price - produceDate.daysTo(QDate::currentDate()) * reduceRate);
+    int days = produceDate.daysTo(QDate::currentDate());
+    return price * (1 - days / 30 * reduceRate);
 }
 
 /******************************************************************************/
