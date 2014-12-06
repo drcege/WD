@@ -25,3 +25,5 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     images.qrc
+
+RC_FILE = myapp.rc
