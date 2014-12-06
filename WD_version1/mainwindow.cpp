@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QHeaderView* head =  ui->treeWidget->header();
     head->setSectionsMovable(false);
     head->setVisible(true);
+    QHeaderView*  headRecord = ui->treeWidget_record->header();
+    head->setSectionsMovable(false);
+    headRecord->setVisible(true);
     connect(ui->lineEdit_user_login, SIGNAL(textChanged(QString)),this, SLOT(loginPage_textChanged()));
     connect(ui->lineEdit_pwd_login, SIGNAL(textChanged(QString)), this, SLOT(loginPage_textChanged()));
     connect(ui->lineEdit_user_register, SIGNAL(textChanged(QString)), this, SLOT(registerPage_textChanged()));
@@ -57,18 +60,18 @@ MainWindow::~MainWindow()
 bool MainWindow::loadData()
 {
     vecSeller.append(Seller(1, "戈策", "1", 10000000));
-    vecFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014/11/1", "yyyy/M/d"), QDate::fromString("2014/11/20", "yyyy/M/d"), QDate::fromString("2014/11/15", "yyyy/M/d"), 0.2));
-    vecFood.append(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014/11/5", "yyyy/M/d"), QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2014/11/28", "yyyy/M/d"), 0.2));
-    vecFood.append(Food(3, "面包", 10, 3.5, "戈策", QDate::fromString("2014/11/20", "yyyy/M/d"), QDate::fromString("2014/11/28", "yyyy/M/d"), QDate::fromString("2014/11/25", "yyyy/M/d"), 0.2));
-    vecFood.append(Food(4, "火腿", 30, 2.0, "戈策", QDate::fromString("2014/11/1", "yyyy/M/d"), QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2014/11/20", "yyyy/M/d"), 0.2));
+    vecFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-15", Qt::ISODate), 0.2));
+    vecFood.append(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014-11-05", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), 0.2));
+    vecFood.append(Food(3, "面包", 10, 3.5, "戈策", QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), QDate::fromString("2014-11-25", Qt::ISODate), 0.2));
+    vecFood.append(Food(4, "火腿", 30, 2.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), 0.2));
 
-    vecElectronics.push_back(Electronics(5, "iphone4s", 50, 2060.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
-    vecElectronics.push_back(Electronics(6, "iphone5c", 50, 2788.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
-    vecElectronics.push_back(Electronics(7, "iphone6", 50, 5288.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
-    vecElectronics.push_back(Electronics(8, "iphone6 plus", 50, 5600.0, "戈策", QDate::fromString("2014/1/1","yyyy/M/d"), QDate::fromString("2016/1/1", "yyyy/M/d"), 0.1));
+    vecElectronics.push_back(Electronics(5, "iphone4s", 50, 2060.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
+    vecElectronics.push_back(Electronics(6, "iphone5c", 50, 2788.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
+    vecElectronics.push_back(Electronics(7, "iphone6", 50, 5288.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
+    vecElectronics.push_back(Electronics(8, "iphone6 plus", 50, 5600.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
 
-    vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 10.0, "戈策", QDate::fromString("2014/10/1", "yyyy/M/d"), QDate::fromString("2014/12/31", "yyyy/M/d")));
-    vecDailyNecessities.push_back(DailyNecessities(10, "牙膏", 200, 15.0, "戈策", QDate::fromString("2014/11/30", "yyyy/M/d"), QDate::fromString("2015/1/1", "yyyy/M/d")));
+    vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 10.0, "戈策", QDate::fromString("2014-10-01", Qt::ISODate), QDate::fromString("2014-12-31", Qt::ISODate)));
+    vecDailyNecessities.push_back(DailyNecessities(10, "牙膏", 200, 15.0, "戈策", QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2015-01-01", Qt::ISODate)));
 
     // 设置为当前最大值
     USERID = 1;
@@ -126,7 +129,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Food* food)
 {
     QStringList sl;
     QString reduced = (food->reducedPrice() < 0 ? "已过期" : QString::number(food->reducedPrice(),'f',2));
-    sl << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice(),'f',2) << reduced << food->getOwner() << food->getProduceDate().toString("yyyy/MM/dd") << food->getValidityDate().toString("yyyy/MM/dd") << food->getReduceDate().toString("yyyy/MM/dd") << QString::number(food->getReduceRate(),'f',2) << QString::number(food->getId());
+    sl << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice(),'f',2) << reduced << food->getOwner() << food->getProduceDate().toString(Qt::ISODate) << food->getValidityDate().toString(Qt::ISODate) << food->getReduceDate().toString(Qt::ISODate) << QString::number(food->getReduceRate(),'f',2) << QString::number(food->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -135,7 +138,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Electronics * elect)
 {
     QStringList sl;
     QString reduced = (elect->reducedPrice() < 0 ? "已过期" : QString::number(elect->reducedPrice(), 'f', 2));
-    sl << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(),'f',2) << reduced << elect->getOwner() << elect->getProduceDate().toString("yyyy/MM/dd") << elect->getValidityDate().toString("yyyy/MM/dd") << "-" << QString::number(elect->getRuduceRate(),'f',2) << QString::number(elect->getId());
+    sl << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(),'f',2) << reduced << elect->getOwner() << elect->getProduceDate().toString(Qt::ISODate) << elect->getValidityDate().toString(Qt::ISODate) << "-" << QString::number(elect->getRuduceRate(),'f',2) << QString::number(elect->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -144,9 +147,15 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily)
 {
     QStringList sl;
     QString reduced = (daily->reducedPrice() < 0 ? "已过期" : QString::number(daily->reducedPrice(), 'f', 2));
-    sl << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(),'f',2) << reduced << daily->getOwner() << daily->getProduceDate().toString("yyyy/MM/dd") << daily->getValidityDate().toString("yyyy/MM/dd") << "-" << "-" << QString::number(daily->getId());
+    sl << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(),'f',2) << reduced << daily->getOwner() << daily->getProduceDate().toString(Qt::ISODate) << daily->getValidityDate().toString(Qt::ISODate) << "-" << "-" << QString::number(daily->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
+}
+
+void MainWindow::addTreeRecord(QStringList rec)
+{
+    QTreeWidgetItem* item = new QTreeWidgetItem(rec);
+    ui->treeWidget_record->addTopLevelItem(item);
 }
 
 /********************************  reset  ************************************/
@@ -190,11 +199,13 @@ void MainWindow::resetMainPage()
 
 void MainWindow::resetManagePage()
 {
+    ui->label_Level->setText("会员等级");
     ui->lineEdit_Username->clear();
     ui->lineEdit_Balance->clear();
     ui->lineEdit_Level->clear();
-    ui->lineEdit_Level->clear();
+    ui->lineEdit_Token->clear();
     ui->lineEdit_userClass->clear();
+    ui->lineEdit_note->clear();
     ui->pushButton_Recharge->setEnabled(true);
     ui->pushButton_Upgrade->setEnabled(true);
     ui->pushButton_Exchange->setEnabled(true);
@@ -203,6 +214,9 @@ void MainWindow::resetManagePage()
     ui->doubleSpinBox_Recharge->setMaximum(9999999.99);
     ui->spinBox_Token->setValue(0);
     ui->pushButton_Recharge->setText("充值");
+    ui->pushButton_record->setVisible(true);
+    // 清空购买记录
+    ui->treeWidget_record->clear();
 }
 
 /********************************  loginPage  ********************************/
@@ -237,11 +251,12 @@ void MainWindow::on_pushButton_login_clicked()
     MainWindow::setWindowState(Qt::WindowMaximized);
     resetLoginPage();
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
-    // 修改菜单栏按钮状态
+
+    /// 修改菜单栏按钮状态
     ui->action_manage->setEnabled(true);
     ui->action_logout->setEnabled(true);
 
-    // 选择个人交易面板 stackedWidget_2
+    /// 选择个人交易面板 stackedWidget_2
     if(BUYER == curUser->getClass())
     {
         ui->stackedWidget_2->setCurrentWidget(ui->page_buyer);
@@ -259,8 +274,8 @@ void MainWindow::on_pushButton_login_clicked()
         ui->stackedWidget_2->setCurrentWidget(ui->page_seller);
     }
 
-    // 初始化个人管理界面
-    QString classText;
+    /// 初始化个人管理界面
+    QString classText;    // 用户类别
     switch(curUser->getClass()) {
     case BUYER:
         classText = "普通买家"; break;
@@ -270,40 +285,50 @@ void MainWindow::on_pushButton_login_clicked()
         classText = "卖家";break;
     default: break;
     }
+    // 用户基本信息
     ui->lineEdit_Username->setText(curUser->getUserName());
     ui->lineEdit_userClass->setText(classText);
     ui->lineEdit_Balance->setText("￥" + QString::number(curUser->getBalance(), 'f', 2));
+    // 后两行显示与否
+    bool isSeller = (SELLER == curUser->getClass());
+    ui->pushButton_record->setVisible(!isSeller);
+    ui->label_Level->setVisible(!isSeller);
+    ui->lineEdit_Level->setVisible(!isSeller);
+    ui->pushButton_Upgrade->setVisible(!isSeller);
+    ui->lineEdit_note->setVisible(!isSeller);
+    ui->label_Token->setVisible(!isSeller);
+    ui->lineEdit_Token->setVisible(!isSeller);
+    ui->pushButton_Exchange->setVisible(!isSeller);
+    ui->spinBox_Token->setVisible(!isSeller);
 
-    if(SELLER == curUser->getClass())       // 卖家
+    if(SELLER == curUser->getClass())    // 卖家信息
     {
-        ui->label_Level->hide();
-        ui->lineEdit_Level->hide();
-        ui->pushButton_Upgrade->hide();
-        ui->lineEdit_note->hide();
-        ui->label_Token->hide();
-        ui->lineEdit_Token->hide();
-        ui->pushButton_Exchange->hide();
-        ui->spinBox_Token->hide();
+        // 充值 or 提现
         ui->pushButton_Recharge->setText("提现");
         ui->doubleSpinBox_Recharge->setMaximum(0);
         ui->doubleSpinBox_Recharge->setMinimum(-1 * curUser->getBalance());
     }
-    else    // 买家
+    else
     {
+        // 第四行显示与否
         bool isMember = (MEMBER == curUser->getClass());
         ui->label_Token->setVisible(isMember);
         ui->lineEdit_Token->setVisible(isMember);
         ui->pushButton_Exchange->setVisible(isMember);
         ui->spinBox_Token->setVisible(isMember);
-        if(isMember)    // 会员
+        // 购买记录
+        Buyer* curBuyer = dynamic_cast<Buyer*>(curUser);
+        for(int r = 0; r < curBuyer->recordCount(); ++r)
+        addTreeRecord(curBuyer->getRecord(r));
+
+        if(isMember)    // 会员信息
         {
             int level = dynamic_cast<Member*>(curUser)->getLevel();
             ui->lineEdit_Level->setText(QString::number(level));
             ui->lineEdit_note->setText("需支付 " + QString::number(level * 1000) + " 代币");
             ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
-            ui->spinBox_Token->setMaximum(dynamic_cast<Member*>(curUser)->getToken());
         }
-        else    // 普通买家
+        else    // 普通买家信息
         {
             ui->lineEdit_Level->setText("非会员");
             ui->lineEdit_note->setText("需支付 ￥8888");
@@ -315,7 +340,6 @@ void MainWindow::on_pushButton_quit_clicked()
 {
     QApplication::quit();
 }
-
 
 void MainWindow::on_pushButton_now_clicked()
 {
@@ -445,11 +469,18 @@ void MainWindow::on_pushButton_buy_clicked()
             dynamic_cast<Member*>(curUser)->changeToken(addtokens);
             ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
         }
-        Goods* curGoods = findGoods(ui->treeWidget->currentItem()->text(10).toInt(), pos);
-        curGoods->changeAmount(-1 * ui->spinBox_buyer->value());
+        QTreeWidgetItem* curItem =  ui->treeWidget->currentItem();
+        Goods* curGoods = findGoods(curItem->text(10).toInt(), pos);
+        int buyAmount = ui->spinBox_buyer->value();
+        curGoods->changeAmount(-1 * buyAmount);
         int amount = curGoods->getAmount();
         ui->treeWidget->currentItem()->setText(2, QString::number(amount));
+        QStringList rec;
+        rec << QDate::currentDate().toString(Qt::ISODate) << QString::number(buyAmount) << "￥"+QString::number(money, 'f', 2) << curItem->text(1);
+        dynamic_cast<Buyer*>(curUser)->appendRecord(rec);
+        addTreeRecord(rec);
         QMessageBox::information(this, "购买成功", "购买成功！余额：￥"+QString::number(curUser->getBalance(),'f', 2));
+
         if(0 == amount)    // 删除库存为零的商品
         {
             switch (curGoods->getClass()) {
@@ -513,6 +544,15 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
     ui->dateEdit_reduce->setDisabled(init);
     ui->doubleSpinBox_rate->setDisabled(init);
     ui->lineEdit_name->setFocus();
+    if("电子产品" == arg1)
+    {
+        ui->dateEdit_reduce->setDisabled(true);
+    }
+    else if("生活用品" == arg1)
+    {
+        ui->dateEdit_reduce->setDisabled(true);
+        ui->doubleSpinBox_rate->setDisabled(true);
+    }
 }
 
 void MainWindow::on_lineEdit_name_textChanged(const QString &arg1)
@@ -606,8 +646,9 @@ void MainWindow::on_pushButton_Upgrade_clicked()
             QMessageBox::information(this, "升级成功", "升级成功！初始为1级会员，请重新登陆");
             emit ui->action_logout->trigger();
             int pos = -1;
-            User* buyer = findUser(curUser->getUserName(), pos);
-            Member newMember(++USERID, buyer->getUserName(), buyer->getPassword(), buyer->getBalance(), 1);
+            findUser(curUser->getUserName(), pos);
+            Member newMember(*(dynamic_cast<Buyer*>(curUser)));
+            //Member newMember(++USERID, buyer->getUserName(), buyer->getPassword(), buyer->getBalance(), 1);
             ///////////////// 需要查找插入位置！！！！！！！！！！！！
             QList<Member>::iterator newPos =  qLowerBound(vecMember.begin(), vecMember.end(), newMember);
             vecMember.insert(newPos, newMember);
@@ -623,16 +664,14 @@ void MainWindow::on_pushButton_Upgrade_clicked()
         else
         {
             dynamic_cast<Member*>(curUser)->changeToken(-1000 * level);
-
             level += 1;
-            QMessageBox::information(this, "升级成功", "升级成功，升级为" + QString::number(level) + "级会员！");
             dynamic_cast<Member*>(curUser)->setLevel(level);
-            /*！更改折扣 */
+            QMessageBox::information(this, "升级成功", "升级成功，升级为" + QString::number(level) + "级会员！");
+            /*！更改会员相关项目 */
             ui->lineEdit_discount->setText(QString::number(1 - 0.05 * level, 'f', 2));
             ui->lineEdit_Level->setText(QString::number(level));
             ui->lineEdit_note->setText("需支付 " + QString::number(level * 1000) + " 代币");
             ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
-            ui->spinBox_Token->setMaximum(dynamic_cast<Member*>(curUser)->getToken());
         }
     }
 }
@@ -646,6 +685,22 @@ void MainWindow::on_pushButton_Exchange_clicked()
     ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
 }
 
+void MainWindow::on_pushButton_record_clicked()
+{
+    ui->menuBar->setVisible(false);
+    ui->stackedWidget->setCurrentWidget(ui->recordPage);
+}
+
+void MainWindow::on_pushButton_back_record_clicked()
+{
+    ui->menuBar->setVisible(true);
+    ui->stackedWidget->setCurrentWidget(ui->managePage);
+}
+
+void MainWindow::on_lineEdit_Token_textChanged(const QString &arg1)
+{
+    ui->spinBox_Token->setMaximum(arg1.toInt());
+}
 
 /*****************************  action  ***********************************/
 
@@ -684,6 +739,7 @@ void MainWindow::on_action_exit_triggered()
 void MainWindow::on_action_about_triggered()
 {
     QMessageBox::about(this, tr("关于"), tr("作者：戈策 ~^_^~\nQQ：1334527295    "));
+
 }
 
 void MainWindow::on_action_Qt_triggered()

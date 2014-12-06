@@ -8,6 +8,11 @@ User::User()
     this->balance = 0.0;
 }
 
+User::~User()
+{
+
+}
+
 User::User(int id, QString userName, QString password, double balance)
 {
     this->id = id;
@@ -35,6 +40,22 @@ Buyer::Buyer(int id, QString userName, QString password, double balance)
     curClass = BUYER;
 }
 
+int Buyer::recordCount()
+{
+    return record.count();
+}
+
+QStringList Buyer::getRecord(int i)
+{
+    return record.at(i);
+}
+
+int Buyer::appendRecord(QStringList rec)
+{
+    record.append(rec);
+    return record.count();
+}
+
 /******************************************************************************/
 
 Member::Member()
@@ -47,6 +68,19 @@ Member::Member(int id, QString userName, QString password, double balance, int l
     this->level = level;
     this->token = token;
     curClass = MEMBER;
+}
+
+Member::Member(Buyer buyer)
+{
+    curClass = MEMBER;
+    this->id = buyer.getId();
+    this->userName = buyer.getUserName();
+    this->password = buyer.getPassword();
+    this->balance = buyer.getBalance();
+    this->level = 1;
+    this->token = 0;
+    for(int r = 0; r < buyer.recordCount(); ++r)
+        this->record.push_back(buyer.getRecord(r));
 }
 
 void Member::changeToken(int token)

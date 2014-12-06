@@ -39,6 +39,7 @@ private:
     void addTreeNode(QTreeWidgetItem* parent, Food *food);
     void addTreeNode(QTreeWidgetItem* parent, Electronics *elect);
     void addTreeNode(QTreeWidgetItem* parent, DailyNecessities *daily);
+    void addTreeRecord(QStringList rec);
 
     /***********************  reset  ************************************/
     void resetLoginPage();
@@ -94,6 +95,12 @@ private slots:
 
     void on_pushButton_Exchange_clicked();
 
+    void on_pushButton_record_clicked();
+
+    void on_pushButton_back_record_clicked();
+
+    void on_lineEdit_Token_textChanged(const QString &arg1);
+
     /**********************  action  ***********************************/
     void on_action_deal_triggered();
 
@@ -106,7 +113,6 @@ private slots:
     void on_action_about_triggered();
 
     void on_action_Qt_triggered();
-
 };
 
 #endif // MAINWINDOW_H

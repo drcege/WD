@@ -68,7 +68,8 @@ double Electronics::reducedPrice()
     if(QDate::currentDate() > validityDate)
         return -1;
     int days = produceDate.daysTo(QDate::currentDate());
-    return price * (1 - days / 30 * reduceRate);
+    double reducedPrice = price * (1 - days / 30 * reduceRate);
+    return (reducedPrice < 0 ? 0 : reducedPrice);
 }
 
 /******************************************************************************/
