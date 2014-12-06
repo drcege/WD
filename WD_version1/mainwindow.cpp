@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QSizePolicy>
 #include <QtAlgorithms>
+#include <QMovie>
 #include <QtMath>
 
 #define LIMIT 8888
@@ -738,8 +739,7 @@ void MainWindow::on_action_exit_triggered()
 
 void MainWindow::on_action_about_triggered()
 {
-    QMessageBox::about(this, tr("关于"), tr("作者：戈策 ~^_^~\nQQ：1334527295    "));
-
+    QMessageBox::about(this, "关于", "作者：戈策 ~^_^~\nQQ：1334527295    ");
 }
 
 void MainWindow::on_action_Qt_triggered()
