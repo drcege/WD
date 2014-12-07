@@ -2226,8 +2226,6 @@
     </property>
     <addaction name="action_help"/>
     <addaction name="action_about"/>
-    <addaction name="separator"/>
-    <addaction name="action_Qt"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="help"/>
@@ -2312,7 +2310,7 @@
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

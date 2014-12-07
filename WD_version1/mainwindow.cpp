@@ -741,8 +741,3 @@ void MainWindow::on_action_about_triggered()
 {
     QMessageBox::about(this, "关于", "作者：戈策 ~^_^~\nQQ：1334527295    ");
 }
-
-void MainWindow::on_action_Qt_triggered()
-{
-    QMessageBox::aboutQt(this);
-}
