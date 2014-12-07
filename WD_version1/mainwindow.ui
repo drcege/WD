@@ -2265,11 +2265,6 @@
     <string>关于(&amp;A)</string>
    </property>
   </action>
-  <action name="action_Qt">
-   <property name="text">
-    <string>关于Qt</string>
-   </property>
-  </action>
   <action name="action_deal">
    <property name="enabled">
     <bool>false</bool>
