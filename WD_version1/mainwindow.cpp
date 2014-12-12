@@ -461,9 +461,10 @@ void MainWindow::on_pushButton_buy_clicked()
     }
     else
     {
-        int pos = -1;
+        // 买家支付
         curUser->recharge(-1*money);
         ui->lineEdit_Balance->setText("￥" + QString::number(curUser->getBalance(),'f',2));
+        // 获得代币
         if(MEMBER == curUser->getClass())
         {
             int addtokens = ui->lineEdit_token->text().toInt();
@@ -471,18 +472,18 @@ void MainWindow::on_pushButton_buy_clicked()
             ui->lineEdit_Token->setText(QString::number(dynamic_cast<Member*>(curUser)->getToken()));
         }
         QTreeWidgetItem* curItem =  ui->treeWidget->currentItem();
+        int pos = -1;
+        // 买家收入
+        User* owner = findUser(curItem->text(5), pos);
+        owner->recharge(money);
+        // 当前商品数量减少
         Goods* curGoods = findGoods(curItem->text(10).toInt(), pos);
         int buyAmount = ui->spinBox_buyer->value();
         curGoods->changeAmount(-1 * buyAmount);
         int amount = curGoods->getAmount();
         ui->treeWidget->currentItem()->setText(2, QString::number(amount));
-        QStringList rec;
-        rec << QDate::currentDate().toString(Qt::ISODate) << QString::number(buyAmount) << "￥"+QString::number(money, 'f', 2) << curItem->text(1);
-        dynamic_cast<Buyer*>(curUser)->appendRecord(rec);
-        addTreeRecord(rec);
-        QMessageBox::information(this, "购买成功", "购买成功！余额：￥"+QString::number(curUser->getBalance(),'f', 2));
-
-        if(0 == amount)    // 删除库存为零的商品
+        // 删除库存为零的商品
+        if(0 == amount)
         {
             switch (curGoods->getClass()) {
             case FOOD:
@@ -500,6 +501,12 @@ void MainWindow::on_pushButton_buy_clicked()
             QTreeWidgetItem* current = ui->treeWidget->currentItem();
             current->parent()->takeChild(current->parent()->indexOfChild(current));
         }
+        // 购买记录
+        QStringList rec;
+        rec << QDate::currentDate().toString(Qt::ISODate) << QString::number(buyAmount) << "￥"+QString::number(money, 'f', 2) << curItem->text(1);
+        dynamic_cast<Buyer*>(curUser)->appendRecord(rec);
+        addTreeRecord(rec);
+        QMessageBox::information(this, "购买成功", "购买成功！余额：￥"+QString::number(curUser->getBalance(),'f', 2));
     }
 }
 
