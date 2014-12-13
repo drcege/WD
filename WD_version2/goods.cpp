@@ -12,7 +12,7 @@ Goods::~Goods()
 Goods::Goods(int id, QString foodName, int amount, double price, QString owner)
 {
     this->id = id;
-    this->foodName = foodName;
+    this->goodsName = foodName;
     this->amount = amount;
     this->price = price;
     this->owner = owner;
@@ -29,8 +29,8 @@ Food::Food()
 {
 }
 
-Food::Food(int id, QString foodName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, QDate reduceDate, double reduceRate)
-    :Goods(id, foodName, amount, price, owner)
+Food::Food(int id, QString goodsName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, QDate reduceDate, double reduceRate)
+    :Goods(id, goodsName, amount, price, owner)
 {
     this->produceDate = produceDate;
     this->validityDate = validityDate;
@@ -46,6 +46,20 @@ double Food::reducedPrice()
     if(QDate::currentDate() > validityDate)
         return -1;
     return price * (1-reduceRate);
+}
+
+QDataStream &operator>>(QDataStream &in, Food &f)
+{
+    in >> f.id >> f.goodsName >> f.amount >> f.price >> f.owner >> f.produceDate >> f.validityDate >> f.reduceDate >> f.reduceRate;
+    f.curClass = FOOD;
+    return in;
+}
+
+
+QDataStream &operator<<(QDataStream &out, Food &f)
+{
+    out << f.id << f.goodsName << f.amount << f.price << f.owner << f.produceDate << f.validityDate << f.reduceDate;
+    return out;
 }
 
 /******************************************************************************/
@@ -72,6 +86,19 @@ double Electronics::reducedPrice()
     return (reducedPrice < 0 ? 0 : reducedPrice);
 }
 
+QDataStream &operator>>(QDataStream& in, Electronics& e)
+{
+    in >> e.id >> e.goodsName >> e.amount >> e.price >> e.owner >> e.produceDate >> e.validityDate >> e.reduceRate;
+    e.curClass = ELECTRONICS;
+    return in;
+}
+
+QDataStream &operator<<(QDataStream& out, Electronics& e)
+{
+    out << e.id << e.goodsName << e.amount << e.price << e.owner << e.produceDate << e.validityDate << e.reduceRate;
+    return out;
+}
+
 /******************************************************************************/
 
 DailyNecessities::DailyNecessities()
@@ -91,4 +118,17 @@ double DailyNecessities::reducedPrice()
     if(QDate::currentDate() > validityDate)
         return -1;
     return price;
+}
+
+QDataStream &operator>>(QDataStream& in, DailyNecessities& d)
+{
+    in >> d.id >> d.goodsName >> d.amount >> d.price >> d.owner >> d.produceDate >> d.validityDate;
+    d.curClass = DAILYNECESSITIES;
+    return in;
+}
+
+QDataStream &operator<<(QDataStream& out, DailyNecessities& d)
+{
+    out << d.id << d.goodsName << d.amount << d.price << d.owner << d.produceDate << d.validityDate;
+    return out;
 }

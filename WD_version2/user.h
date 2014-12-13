@@ -40,6 +40,8 @@ public:
     int recordCount();
     QStringList getRecord(int i);
     int appendRecord(QStringList rec);
+    friend QDataStream &operator>>(QDataStream& in, Buyer& b);
+    friend QDataStream &operator<<(QDataStream& out, Buyer& b);
 
 protected:
     QVector<QStringList> record;
@@ -59,6 +61,8 @@ public:
     {
         return id < rhs.getId();
     }
+    friend QDataStream &operator>>(QDataStream& in, Member& m);
+    friend QDataStream &operator<<(QDataStream& out, Member& m);
 
 
 private:
@@ -77,6 +81,8 @@ class Seller : public User
 public:
     Seller();
     Seller(int id, QString userName, QString password, double balance = 0.0);
+    friend QDataStream &operator>>(QDataStream& in, Seller& s);
+    friend QDataStream &operator<<(QDataStream& in, Seller& s);
 };
 
 #endif // USER_H

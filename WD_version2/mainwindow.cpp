@@ -6,6 +6,7 @@
 #include <QtAlgorithms>
 #include <QMovie>
 #include <QtMath>
+#include <QDataStream>
 
 #define LIMIT 8888
 
@@ -60,23 +61,82 @@ MainWindow::~MainWindow()
 
 bool MainWindow::loadData()
 {
+    USERID = 1;
+    GOODSID = 10;
+
     vecSeller.append(Seller(1, "戈策", "1", 10000000));
-    vecFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-15", Qt::ISODate), 0.2));
+
+    QFile fileFood("data/food.txt");
+    if (fileFood.open(QIODevice::ReadOnly))
+    {
+        QDataStream inFood(&fileFood);
+        quint32 magic;
+        inFood >> magic;
+        if (magic == 0xa0b0c0d0 )
+        {
+            Food food;
+            while(!inFood.atEnd())
+            {
+                inFood >> food;
+                vecFood.append(food);
+            }
+            int lastId = food.getId();
+            GOODSID = (lastId > GOODSID ? lastId : GOODSID);
+        }
+    }
+    /*vecFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-15", Qt::ISODate), 0.2));
     vecFood.append(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014-11-05", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), 0.2));
     vecFood.append(Food(3, "面包", 10, 3.5, "戈策", QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), QDate::fromString("2014-11-25", Qt::ISODate), 0.2));
     vecFood.append(Food(4, "火腿", 30, 2.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), 0.2));
-
+    }
+*/
+    QFile fileElect("data/elec.txt");
+    if (fileElect.open(QIODevice::ReadOnly))
+    {
+        QDataStream inElect(&fileElect);
+        quint32 magic;
+        inElect >> magic;
+        if (magic == 0xa0b0c0d0 )
+        {
+            Electronics elect;
+            while(!inElect.atEnd())
+            {
+                inElect >> elect;
+                vecElectronics.append(elect);
+            }
+            int lastId = elect.getId();
+            GOODSID = (lastId > GOODSID ? lastId : GOODSID);
+        }
+    }
+    /*
     vecElectronics.push_back(Electronics(5, "iphone4s", 50, 2060.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
     vecElectronics.push_back(Electronics(6, "iphone5c", 50, 2788.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
     vecElectronics.push_back(Electronics(7, "iphone6", 50, 5288.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
     vecElectronics.push_back(Electronics(8, "iphone6 plus", 50, 5600.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
-
+*/
+    QFile fileDaily("data/daily.txt");
+    if (fileDaily.open(QIODevice::ReadOnly))
+    {
+        QDataStream inDaily(&fileDaily);
+        quint32 magic;
+        inDaily >> magic;
+        if (magic == 0xa0b0c0d0 )
+        {
+            DailyNecessities daily;
+            while(!inDaily.atEnd())
+            {
+                inDaily >> daily;
+                vecDailyNecessities.append(daily);
+            }
+            int lastId = daily.getId();
+            GOODSID = (lastId > GOODSID ? lastId : GOODSID);
+        }
+    }
+    /*
     vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 10.0, "戈策", QDate::fromString("2014-10-01", Qt::ISODate), QDate::fromString("2014-12-31", Qt::ISODate)));
     vecDailyNecessities.push_back(DailyNecessities(10, "牙膏", 200, 15.0, "戈策", QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2015-01-01", Qt::ISODate)));
+*/
 
-    // 设置为当前最大值
-    USERID = 1;
-    GOODSID = 10;
     return true;
 }
 
@@ -130,7 +190,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Food* food)
 {
     QStringList sl;
     QString reduced = (food->reducedPrice() < 0 ? "已过期" : QString::number(food->reducedPrice(),'f',2));
-    sl << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice(),'f',2) << reduced << food->getOwner() << food->getProduceDate().toString(Qt::ISODate) << food->getValidityDate().toString(Qt::ISODate) << food->getReduceDate().toString(Qt::ISODate) << QString::number(food->getReduceRate(),'f',2) << QString::number(food->getId());
+    sl << "" << food->getGoodsName() << QString::number(food->getAmount()) << QString::number(food->getPrice(),'f',2) << reduced << food->getOwner() << food->getProduceDate().toString(Qt::ISODate) << food->getValidityDate().toString(Qt::ISODate) << food->getReduceDate().toString(Qt::ISODate) << QString::number(food->getReduceRate(),'f',2) << QString::number(food->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -139,7 +199,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Electronics * elect)
 {
     QStringList sl;
     QString reduced = (elect->reducedPrice() < 0 ? "已过期" : QString::number(elect->reducedPrice(), 'f', 2));
-    sl << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(),'f',2) << reduced << elect->getOwner() << elect->getProduceDate().toString(Qt::ISODate) << elect->getValidityDate().toString(Qt::ISODate) << "-" << QString::number(elect->getRuduceRate(),'f',2) << QString::number(elect->getId());
+    sl << "" << elect->getGoodsName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(),'f',2) << reduced << elect->getOwner() << elect->getProduceDate().toString(Qt::ISODate) << elect->getValidityDate().toString(Qt::ISODate) << "-" << QString::number(elect->getRuduceRate(),'f',2) << QString::number(elect->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -148,7 +208,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily)
 {
     QStringList sl;
     QString reduced = (daily->reducedPrice() < 0 ? "已过期" : QString::number(daily->reducedPrice(), 'f', 2));
-    sl << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(),'f',2) << reduced << daily->getOwner() << daily->getProduceDate().toString(Qt::ISODate) << daily->getValidityDate().toString(Qt::ISODate) << "-" << "-" << QString::number(daily->getId());
+    sl << "" << daily->getGoodsName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(),'f',2) << reduced << daily->getOwner() << daily->getProduceDate().toString(Qt::ISODate) << daily->getValidityDate().toString(Qt::ISODate) << "-" << "-" << QString::number(daily->getId());
     QTreeWidgetItem * item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }

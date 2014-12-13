@@ -56,6 +56,19 @@ int Buyer::appendRecord(QStringList rec)
     return record.count();
 }
 
+QDataStream &operator>>(QDataStream &in, Buyer &b)
+{
+    in >> b.id >> b.userName >> b.password >> b.balance >> b.record;
+    b.curClass = BUYER;
+    return in;
+}
+
+QDataStream &operator <<(QDataStream &out, Buyer& b)
+{
+    out << b.id << b.userName << b.password << b.balance << b.record;
+    return out;
+}
+
 /******************************************************************************/
 
 Member::Member()
@@ -93,6 +106,18 @@ void Member::setLevel(int level)
     this->level = level;
 }
 
+QDataStream &operator >>(QDataStream& in, Member& m)
+{
+    in >> m.id >> m.userName >> m.password >> m.balance >> m.level >> m.token >> m.record;
+    m.curClass = MEMBER;
+    return in;
+}
+
+QDataStream &operator <<(QDataStream& out, Member& m)
+{
+    out << m.id << m.userName << m.password << m.balance << m.level << m.token << m.record;
+    return out;
+}
 
 /******************************************************************************/
 
@@ -106,3 +131,15 @@ Seller::Seller(int id, QString userName, QString password, double balance)
     curClass = SELLER;
 }
 
+QDataStream &operator >>(QDataStream& in, Seller& s)
+{
+    in >> s.id >> s.userName >> s.password >> s.balance;
+    s.curClass = SELLER;
+    return in;
+}
+
+QDataStream &operator <<(QDataStream& out, Seller& s)
+{
+    out << s.id << s.userName << s.password << s.balance;
+    return out;
+}

@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QDate>
+#include <QFile>
+#include <QDataStream>
 
 enum goodsClass{GOODS, FOOD, ELECTRONICS, DAILYNECESSITIES};
 class Goods
@@ -10,12 +12,12 @@ class Goods
 public:
     Goods();
     virtual ~Goods();
-    Goods(int id, QString foodName, int amount, double price, QString owner);
+    Goods(int id, QString goodsName, int amount, double price, QString owner);
     int getId() const {return id;}
     int getAmount() {return amount;}
     double getPrice() {return price;}
     QString getOwner() {return owner;}
-    QString getFoodName() {return foodName;}
+    QString getGoodsName() {return goodsName;}
 
     goodsClass getClass() {return curClass;}
     void changeAmount(int amount);
@@ -23,7 +25,7 @@ public:
 
 protected:
     int id;
-    QString foodName;
+    QString goodsName;
     int amount;
     double price;
     QString owner;
@@ -36,12 +38,14 @@ class Food : public Goods
 {
 public:
     Food();
-    Food(int id, QString foodName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, QDate reduceDate, double reduceRate);
+    Food(int id, QString goodsName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, QDate reduceDate, double reduceRate);
     QDate getProduceDate() {return produceDate;}
     QDate getValidityDate() {return validityDate;}
     QDate getReduceDate() {return reduceDate;}
     double getReduceRate() {return reduceRate;}
     double reducedPrice();
+    friend QDataStream &operator>>(QDataStream& in, Food&);
+    friend QDataStream &operator<<(QDataStream& out, Food&);
 
 private:
     QDate produceDate;
@@ -61,6 +65,8 @@ public:
     QDate getValidityDate() {return validityDate;}
     double getRuduceRate() {return reduceRate;}
     double reducedPrice();
+    friend QDataStream &operator>>(QDataStream& in, Electronics& e);
+    friend QDataStream &operator<<(QDataStream& out, Electronics& e);
 
 private:
     QDate produceDate;
@@ -78,6 +84,8 @@ public:
     QDate getProduceDate() {return produceDate;}
     QDate getValidityDate() {return validityDate;}
     double reducedPrice();
+    friend QDataStream &operator>>(QDataStream& in, DailyNecessities& d);
+    friend QDataStream &operator<<(QDataStream& out, DailyNecessities& d);
 
 private:
     QDate produceDate;
