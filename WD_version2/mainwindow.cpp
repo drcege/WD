@@ -7,6 +7,7 @@
 #include <QMovie>
 #include <QtMath>
 #include <QDataStream>
+#include <QTextStream>
 
 #define LIMIT 8888
 
@@ -61,10 +62,75 @@ MainWindow::~MainWindow()
 
 bool MainWindow::loadData()
 {
-    USERID = 1;
-    GOODSID = 10;
+    USERID = 0;
+    GOODSID = 0;
+    QString warn;
 
-    listSeller.append(Seller(1, "戈策", "1", 10000000));
+    QFile fileBuyer("data/buyer.txt");
+    if(fileBuyer.open(QIODevice::ReadOnly))
+    {
+        QDataStream inBuyer(&fileBuyer);
+        quint32 magic;
+        inBuyer >> magic;
+        if (magic == 0xa0b0c0d0 )
+        {
+            Buyer buyer;
+            while(!inBuyer.atEnd())
+            {
+                inBuyer >> buyer;
+                listBuyer.append(buyer);
+            }
+            int lastId = buyer.getId();
+            USERID = (lastId > USERID ? lastId : USERID);
+        }
+        else
+            warn += "buyer.txt 已损坏\n";
+        fileBuyer.close();
+    }
+
+    QFile fileMember("data/member.txt");
+    if(fileMember.open(QIODevice::ReadOnly))
+    {
+        QDataStream inMember(&fileMember);
+        quint32 magic;
+        inMember >> magic;
+        if (magic == 0xa0b0c0d0 )
+        {
+            Member member;
+            while(!inMember.atEnd())
+            {
+                inMember >> member;
+                listMember.append(member);
+            }
+            int lastId = member.getId();
+            USERID = (lastId > USERID ? lastId : USERID);
+        }
+        else
+            warn += "member.txt 已损坏\n";
+        fileMember.close();
+    }
+
+    QFile fileSeller("data/Seller.txt");
+    if(fileSeller.open(QIODevice::ReadOnly))
+    {
+        QDataStream inSeller(&fileSeller);
+        quint32 magic;
+        inSeller >> magic;
+        if (magic == 0xa0b0c0d0 )
+        {
+            Seller seller;
+            while(!inSeller.atEnd())
+            {
+                inSeller >> seller;
+                listSeller.append(seller);
+            }
+            int lastId = seller.getId();
+            USERID = (lastId > USERID ? lastId : USERID);
+        }
+        else
+            warn += "seller.txt 已损坏\n";
+        fileSeller.close();
+    }
 
     QFile fileFood("data/food.txt");
     if (fileFood.open(QIODevice::ReadOnly))
@@ -83,6 +149,9 @@ bool MainWindow::loadData()
             int lastId = food.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         }
+        else
+            warn += "food.txt 已损坏\n";
+        fileFood.close();
     }
     /*vecFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-15", Qt::ISODate), 0.2));
     vecFood.append(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014-11-05", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), 0.2));
@@ -107,6 +176,9 @@ bool MainWindow::loadData()
             int lastId = elect.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         }
+        else
+            warn += "elect.txt 已损坏\n";
+        fileElect.close();
     }
     /*
     vecElectronics.push_back(Electronics(5, "iphone4s", 50, 2060.0, "戈策", QDate::fromString("2014-01-01",Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
@@ -131,12 +203,21 @@ bool MainWindow::loadData()
             int lastId = daily.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         }
+        else
+            warn += "daily.txt 已损坏\n";
+        fileDaily.close();
     }
     /*
     vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 10.0, "戈策", QDate::fromString("2014-10-01", Qt::ISODate), QDate::fromString("2014-12-31", Qt::ISODate)));
     vecDailyNecessities.push_back(DailyNecessities(10, "牙膏", 200, 15.0, "戈策", QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2015-01-01", Qt::ISODate)));
 */
-
+    if(!warn.isEmpty()){
+        QFile fileLog("data/log.txt");
+        fileLog.open(QIODevice::WriteOnly);
+        QTextStream log(&fileLog);
+        log << warn;
+        fileLog.close();
+    }
     return true;
 }
 
