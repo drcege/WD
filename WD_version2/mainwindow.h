@@ -25,12 +25,12 @@ private:
     int USERID;
     int GOODSID;
     User* curUser;
-    QList<Buyer> vecBuyer;
-    QList<Member> vecMember;
-    QList<Seller> vecSeller;
-    QList<Food> vecFood;
-    QList<Electronics> vecElectronics;
-    QList<DailyNecessities> vecDailyNecessities;
+    QList<Buyer> listBuyer;
+    QList<Member> listMember;
+    QList<Seller> listSeller;
+    QList<Food> listFood;
+    QList<Electronics> listElectronics;
+    QList<DailyNecessities> listDailyNecessities;
 
     /*********************  Custom Functions *****************************/
     bool loadData();

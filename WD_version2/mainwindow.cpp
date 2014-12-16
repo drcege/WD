@@ -36,19 +36,19 @@ MainWindow::MainWindow(QWidget *parent) :
     // 读取数据，初始化内部数据变量
     loadData();
     QTreeWidgetItem* treeParent = ui->treeWidget->topLevelItem(0);
-    for(int p = 0; p < vecFood.count(); ++p)
+    for(int p = 0; p < listFood.count(); ++p)
     {
-        addTreeNode(treeParent, &(vecFood[p]));
+        addTreeNode(treeParent, &(listFood[p]));
     }
     treeParent = ui->treeWidget->topLevelItem(1);
-    for(int p = 0; p < vecElectronics.count(); ++p)
+    for(int p = 0; p < listElectronics.count(); ++p)
     {
-        addTreeNode(treeParent, &(vecElectronics[p]));
+        addTreeNode(treeParent, &(listElectronics[p]));
     }
     treeParent = ui->treeWidget->topLevelItem(2);
-    for(int p = 0; p < vecDailyNecessities.count(); ++p)
+    for(int p = 0; p < listDailyNecessities.count(); ++p)
     {
-        addTreeNode(treeParent, &(vecDailyNecessities[p]));
+        addTreeNode(treeParent, &(listDailyNecessities[p]));
     }
 }
 
@@ -64,7 +64,7 @@ bool MainWindow::loadData()
     USERID = 1;
     GOODSID = 10;
 
-    vecSeller.append(Seller(1, "戈策", "1", 10000000));
+    listSeller.append(Seller(1, "戈策", "1", 10000000));
 
     QFile fileFood("data/food.txt");
     if (fileFood.open(QIODevice::ReadOnly))
@@ -78,7 +78,7 @@ bool MainWindow::loadData()
             while(!inFood.atEnd())
             {
                 inFood >> food;
-                vecFood.append(food);
+                listFood.append(food);
             }
             int lastId = food.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
@@ -102,7 +102,7 @@ bool MainWindow::loadData()
             while(!inElect.atEnd())
             {
                 inElect >> elect;
-                vecElectronics.append(elect);
+                listElectronics.append(elect);
             }
             int lastId = elect.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
@@ -126,7 +126,7 @@ bool MainWindow::loadData()
             while(!inDaily.atEnd())
             {
                 inDaily >> daily;
-                vecDailyNecessities.append(daily);
+                listDailyNecessities.append(daily);
             }
             int lastId = daily.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
@@ -142,46 +142,46 @@ bool MainWindow::loadData()
 
 User* MainWindow::findUser(QString userName, int& pos)
 {
-    for(int i = 0; i < vecBuyer.size(); ++i)
-        if(userName == vecBuyer[i].getUserName())
+    for(int i = 0; i < listBuyer.size(); ++i)
+        if(userName == listBuyer[i].getUserName())
         {
             pos = i;
-            return &vecBuyer[i];
+            return &listBuyer[i];
         }
-    for(int i = 0; i < vecMember.size(); ++i)
-        if(userName == vecMember[i].getUserName())
+    for(int i = 0; i < listMember.size(); ++i)
+        if(userName == listMember[i].getUserName())
         {
             pos = i;
-            return &vecMember[i];
+            return &listMember[i];
         }
-    for(int i = 0; i < vecSeller.size(); ++i)
-        if(userName == vecSeller[i].getUserName())
+    for(int i = 0; i < listSeller.size(); ++i)
+        if(userName == listSeller[i].getUserName())
         {
             pos = i;
-            return &vecSeller[i];
+            return &listSeller[i];
         }
     return Q_NULLPTR;
 }
 
 Goods* MainWindow::findGoods(int id, int &pos)
 {
-    for(int i = 0; i < vecFood.count(); ++i)
-        if(id == vecFood.at(i).getId())
+    for(int i = 0; i < listFood.count(); ++i)
+        if(id == listFood.at(i).getId())
         {
             pos = i;
-            return &vecFood[i];
+            return &listFood[i];
         }
-    for(int i = 0; i < vecElectronics.count(); ++i)
-        if(id == vecElectronics.at(i).getId())
+    for(int i = 0; i < listElectronics.count(); ++i)
+        if(id == listElectronics.at(i).getId())
         {
             pos = i;
-            return &vecElectronics[i];
+            return &listElectronics[i];
         }
-    for(int i = 0; i < vecDailyNecessities.count(); ++i)
-        if(id == vecDailyNecessities.at(i).getId())
+    for(int i = 0; i < listDailyNecessities.count(); ++i)
+        if(id == listDailyNecessities.at(i).getId())
         {
             pos = i;
-            return &vecDailyNecessities[i];
+            return &listDailyNecessities[i];
         }
     return Q_NULLPTR;
 }
@@ -443,12 +443,12 @@ void MainWindow::on_pushButton_register_clicked()
     if(ui->buttonGroup->checkedButton() == ui->radioButton_buyer)    // 新建买家
     {
         Buyer curBuyer(++USERID, user, pwd);
-        vecBuyer.push_back(curBuyer);
+        listBuyer.push_back(curBuyer);
     }
     else if(ui->buttonGroup->checkedButton() == ui->radioButton_seller)   // 新建卖家
     {
         Seller curSeller(++USERID, user, pwd);
-        vecSeller.push_back(curSeller);
+        listSeller.push_back(curSeller);
     }
     QMessageBox::information(this,tr("注册成功！"),tr("恭喜你 ^_^ 注册成功！"),QMessageBox::Ok);
     resetRegisterPage();
@@ -547,13 +547,13 @@ void MainWindow::on_pushButton_buy_clicked()
         {
             switch (curGoods->getClass()) {
             case FOOD:
-                vecFood.removeAt(pos);
+                listFood.removeAt(pos);
                 break;
             case ELECTRONICS:
-                vecElectronics.removeAt(pos);
+                listElectronics.removeAt(pos);
                 break;
             case DAILYNECESSITIES:
-                vecDailyNecessities.removeAt(pos);
+                listDailyNecessities.removeAt(pos);
                 break;
             default:
                 break;
@@ -661,7 +661,7 @@ void MainWindow::on_pushButton_in_clicked()
     {
         QTreeWidgetItem* current = ui->treeWidget->topLevelItem(0);
         Food* food = new Food(++GOODSID, name, amount, price, owner, produceDate, validityDate, reduceDate, rate);
-        vecFood.push_back(*food);
+        listFood.push_back(*food);
         addTreeNode(current, food);
         delete food;
     }
@@ -669,7 +669,7 @@ void MainWindow::on_pushButton_in_clicked()
     {
         QTreeWidgetItem* current = ui->treeWidget->topLevelItem(1);
         Electronics* elect = new Electronics(++GOODSID, name, amount, price, owner, produceDate, validityDate, rate);
-        vecElectronics.push_back(*elect);
+        listElectronics.push_back(*elect);
         addTreeNode(current, elect);
         delete elect;
     }
@@ -677,7 +677,7 @@ void MainWindow::on_pushButton_in_clicked()
     {
         QTreeWidgetItem* current = ui->treeWidget->topLevelItem(2);
         DailyNecessities* daily = new DailyNecessities(++GOODSID, name, amount, price, owner, produceDate, validityDate);
-        vecDailyNecessities.push_back(*daily);
+        listDailyNecessities.push_back(*daily);
         addTreeNode(current, daily);
         delete daily;
     }
@@ -718,9 +718,9 @@ void MainWindow::on_pushButton_Upgrade_clicked()
             Member newMember(*(dynamic_cast<Buyer*>(curUser)));
             //Member newMember(++USERID, buyer->getUserName(), buyer->getPassword(), buyer->getBalance(), 1);
             ///////////////// 需要查找插入位置！！！！！！！！！！！！
-            QList<Member>::iterator newPos =  qLowerBound(vecMember.begin(), vecMember.end(), newMember);
-            vecMember.insert(newPos, newMember);
-            vecBuyer.removeAt(pos);
+            QList<Member>::iterator newPos =  qLowerBound(listMember.begin(), listMember.end(), newMember);
+            listMember.insert(newPos, newMember);
+            listBuyer.removeAt(pos);
         }
     }
     else
