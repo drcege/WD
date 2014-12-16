@@ -10,7 +10,6 @@ User::User()
 
 User::~User()
 {
-
 }
 
 User::User(int id, QString userName, QString password, double balance)
@@ -35,7 +34,7 @@ Buyer::Buyer()
 }
 
 Buyer::Buyer(int id, QString userName, QString password, double balance)
-    :User(id, userName, password, balance)
+    : User(id, userName, password, balance)
 {
     curClass = BUYER;
 }
@@ -63,7 +62,7 @@ QDataStream &operator>>(QDataStream &in, Buyer &b)
     return in;
 }
 
-QDataStream &operator <<(QDataStream &out, Buyer& b)
+QDataStream &operator <<(QDataStream &out, const Buyer &b)
 {
     out << b.id << b.userName << b.password << b.balance << b.record;
     return out;
@@ -76,7 +75,7 @@ Member::Member()
 }
 
 Member::Member(int id, QString userName, QString password, double balance, int level, int token)
-    :Buyer(id, userName, password, balance)
+    : Buyer(id, userName, password, balance)
 {
     this->level = level;
     this->token = token;
@@ -92,7 +91,7 @@ Member::Member(Buyer buyer)
     this->balance = buyer.getBalance();
     this->level = 1;
     this->token = 0;
-    for(int r = 0; r < buyer.recordCount(); ++r)
+    for (int r = 0; r < buyer.recordCount(); ++r)
         this->record.push_back(buyer.getRecord(r));
 }
 
@@ -106,14 +105,14 @@ void Member::setLevel(int level)
     this->level = level;
 }
 
-QDataStream &operator >>(QDataStream& in, Member& m)
+QDataStream &operator >>(QDataStream &in, Member &m)
 {
     in >> m.id >> m.userName >> m.password >> m.balance >> m.level >> m.token >> m.record;
     m.curClass = MEMBER;
     return in;
 }
 
-QDataStream &operator <<(QDataStream& out, Member& m)
+QDataStream &operator <<(QDataStream &out, const Member &m)
 {
     out << m.id << m.userName << m.password << m.balance << m.level << m.token << m.record;
     return out;
@@ -126,19 +125,19 @@ Seller::Seller()
 }
 
 Seller::Seller(int id, QString userName, QString password, double balance)
-    :User(id, userName, password, balance)
+    : User(id, userName, password, balance)
 {
     curClass = SELLER;
 }
 
-QDataStream &operator >>(QDataStream& in, Seller& s)
+QDataStream &operator >>(QDataStream &in, Seller &s)
 {
     in >> s.id >> s.userName >> s.password >> s.balance;
     s.curClass = SELLER;
     return in;
 }
 
-QDataStream &operator <<(QDataStream& out, Seller& s)
+QDataStream &operator <<(QDataStream &out, const Seller &s)
 {
     out << s.id << s.userName << s.password << s.balance;
     return out;

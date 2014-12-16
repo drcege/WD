@@ -1,14 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QString>
-#include <QMap>
-#include <QTreeWidgetItem>
+#include <QtWidgets>
+
 #include "user.h"
 #include "goods.h"
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -20,11 +19,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
     Ui::MainWindow *ui;
     int USERID;
     int GOODSID;
-    User* curUser;
+    User *curUser;
     QList<Buyer> listBuyer;
     QList<Member> listMember;
     QList<Seller> listSeller;
@@ -34,11 +36,11 @@ private:
 
     /*********************  Custom Functions *****************************/
     bool loadData();
-    User* findUser(QString userName, int &pos);
-    Goods* findGoods(int id, int& pos);
-    void addTreeNode(QTreeWidgetItem* parent, Food *food);
-    void addTreeNode(QTreeWidgetItem* parent, Electronics *elect);
-    void addTreeNode(QTreeWidgetItem* parent, DailyNecessities *daily);
+    User *findUser(QString userName, int &pos);
+    Goods *findGoods(int id, int &pos);
+    void addTreeNode(QTreeWidgetItem *parent, Food *food);
+    void addTreeNode(QTreeWidgetItem *parent, Electronics *elect);
+    void addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily);
     void addTreeRecord(QStringList rec);
 
     /***********************  reset  ************************************/
@@ -108,11 +110,10 @@ private slots:
 
     void on_action_logout_triggered();
 
-    void on_action_exit_triggered();
-
     void on_action_about_triggered();
 
     void on_action_help_triggered();
+
 };
 
 #endif // MAINWINDOW_H
