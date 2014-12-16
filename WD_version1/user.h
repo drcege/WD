@@ -5,7 +5,7 @@
 #include <QVector>
 #include <QStringList>
 
-enum userClass{USER, BUYER, MEMBER, SELLER};
+enum userClass {USER, BUYER, MEMBER, SELLER};
 
 class User
 {
@@ -23,7 +23,7 @@ protected:
     userClass curClass;
 
 public:
-    int getId() const{return id;}
+    int getId() const {return id;}
     QString getUserName() {return userName;}
     QString getPassword() {return password;}
     double getBalance() { return balance;}
@@ -55,7 +55,7 @@ public:
     Member(Buyer buyer);
     void changeToken(int token);
     void setLevel(int level);
-    bool operator < (const Member& rhs)
+    bool operator < (const Member &rhs)
     {
         return id < rhs.getId();
     }

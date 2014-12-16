@@ -4,7 +4,7 @@
 #include <QString>
 #include <QDate>
 
-enum goodsClass{GOODS, FOOD, ELECTRONICS, DAILYNECESSITIES};
+enum goodsClass {GOODS, FOOD, ELECTRONICS, DAILYNECESSITIES};
 class Goods
 {
 public:

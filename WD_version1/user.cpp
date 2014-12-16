@@ -10,7 +10,6 @@ User::User()
 
 User::~User()
 {
-
 }
 
 User::User(int id, QString userName, QString password, double balance)
@@ -35,7 +34,7 @@ Buyer::Buyer()
 }
 
 Buyer::Buyer(int id, QString userName, QString password, double balance)
-    :User(id, userName, password, balance)
+    : User(id, userName, password, balance)
 {
     curClass = BUYER;
 }
@@ -63,7 +62,7 @@ Member::Member()
 }
 
 Member::Member(int id, QString userName, QString password, double balance, int level, int token)
-    :Buyer(id, userName, password, balance)
+    : Buyer(id, userName, password, balance)
 {
     this->level = level;
     this->token = token;
@@ -79,7 +78,7 @@ Member::Member(Buyer buyer)
     this->balance = buyer.getBalance();
     this->level = 1;
     this->token = 0;
-    for(int r = 0; r < buyer.recordCount(); ++r)
+    for (int r = 0; r < buyer.recordCount(); ++r)
         this->record.push_back(buyer.getRecord(r));
 }
 
@@ -101,7 +100,7 @@ Seller::Seller()
 }
 
 Seller::Seller(int id, QString userName, QString password, double balance)
-    :User(id, userName, password, balance)
+    : User(id, userName, password, balance)
 {
     curClass = SELLER;
 }

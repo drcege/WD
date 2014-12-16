@@ -8,7 +8,8 @@
 #include "user.h"
 #include "goods.h"
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -24,7 +25,7 @@ private:
     Ui::MainWindow *ui;
     int USERID;
     int GOODSID;
-    User* curUser;
+    User *curUser;
     QList<Buyer> vecBuyer;
     QList<Member> vecMember;
     QList<Seller> vecSeller;
@@ -34,11 +35,11 @@ private:
 
     /*********************  Custom Functions *****************************/
     bool loadData();
-    User* findUser(QString userName, int &pos);
-    Goods* findGoods(int id, int& pos);
-    void addTreeNode(QTreeWidgetItem* parent, Food *food);
-    void addTreeNode(QTreeWidgetItem* parent, Electronics *elect);
-    void addTreeNode(QTreeWidgetItem* parent, DailyNecessities *daily);
+    User *findUser(QString userName, int &pos);
+    Goods *findGoods(int id, int &pos);
+    void addTreeNode(QTreeWidgetItem *parent, Food *food);
+    void addTreeNode(QTreeWidgetItem *parent, Electronics *elect);
+    void addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily);
     void addTreeRecord(QStringList rec);
 
     /***********************  reset  ************************************/
