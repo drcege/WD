@@ -69,7 +69,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="loginPage">
        <layout class="QGridLayout" name="gridLayout_2" rowstretch="8,1,3,1,1,1,1,8" columnstretch="6,2,2,1,2,8">
@@ -604,7 +604,7 @@
            <bool>false</bool>
           </property>
           <property name="headerHidden">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <attribute name="headerVisible">
            <bool>false</bool>
@@ -914,7 +914,7 @@
         <item row="1" column="3" rowspan="2" colspan="2">
          <widget class="QStackedWidget" name="stackedWidget_2">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="page_buyer">
            <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1">
@@ -2289,16 +2289,39 @@
   <tabstop>pushButton_register</tabstop>
   <tabstop>pushButton_back</tabstop>
   <tabstop>treeWidget</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>pushButton</tabstop>
   <tabstop>spinBox_buyer</tabstop>
-  <tabstop>spinBox_seller</tabstop>
-  <tabstop>dateEdit_produce</tabstop>
-  <tabstop>dateEdit_validity</tabstop>
-  <tabstop>dateEdit_reduce</tabstop>
-  <tabstop>pushButton_in</tabstop>
+  <tabstop>lineEdit_price</tabstop>
   <tabstop>lineEdit_discount</tabstop>
   <tabstop>lineEdit_token</tabstop>
   <tabstop>lineEdit_real</tabstop>
-  <tabstop>lineEdit_price</tabstop>
+  <tabstop>pushButton_buy</tabstop>
+  <tabstop>radioButton_all</tabstop>
+  <tabstop>radioButton_mine</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>spinBox_seller</tabstop>
+  <tabstop>doubleSpinBox_price</tabstop>
+  <tabstop>dateEdit_produce</tabstop>
+  <tabstop>dateEdit_validity</tabstop>
+  <tabstop>dateEdit_reduce</tabstop>
+  <tabstop>doubleSpinBox_rate</tabstop>
+  <tabstop>pushButton_in</tabstop>
+  <tabstop>lineEdit_Username</tabstop>
+  <tabstop>lineEdit_userClass</tabstop>
+  <tabstop>lineEdit_Balance</tabstop>
+  <tabstop>pushButton_Recharge</tabstop>
+  <tabstop>doubleSpinBox_Recharge</tabstop>
+  <tabstop>lineEdit_Level</tabstop>
+  <tabstop>pushButton_Upgrade</tabstop>
+  <tabstop>lineEdit_note</tabstop>
+  <tabstop>lineEdit_Token</tabstop>
+  <tabstop>pushButton_Exchange</tabstop>
+  <tabstop>spinBox_Token</tabstop>
+  <tabstop>pushButton_record</tabstop>
+  <tabstop>pushButton_back_record</tabstop>
+  <tabstop>treeWidget_record</tabstop>
  </tabstops>
  <resources>
   <include location="images.qrc"/>

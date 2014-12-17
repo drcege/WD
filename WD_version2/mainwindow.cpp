@@ -54,7 +54,7 @@ bool MainWindow::loadData()
     QVector<QString> warn;
     QFile file;
 
-    file.setFileName("data/buyer.txt");
+    file.setFileName("data/buyer.dat");
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
         quint32 magic;
@@ -68,10 +68,10 @@ bool MainWindow::loadData()
             int lastId = buyer.getId();
             USERID = (lastId > USERID ? lastId : USERID);
         } else
-            warn.append("buyer.txt 已损坏");
+            warn.append("buyer.dat 已损坏");
         file.close();
     }
-    file.setFileName("data/member.txt");
+    file.setFileName("data/member.dat");
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
         quint32 magic;
@@ -85,10 +85,10 @@ bool MainWindow::loadData()
             int lastId = member.getId();
             USERID = (lastId > USERID ? lastId : USERID);
         } else
-            warn.append("member.txt 已损坏");
+            warn.append("member.dat 已损坏");
         file.close();
     }
-    file.setFileName("data/seller.txt");
+    file.setFileName("data/seller.dat");
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
         quint32 magic;
@@ -102,10 +102,10 @@ bool MainWindow::loadData()
             int lastId = seller.getId();
             USERID = (lastId > USERID ? lastId : USERID);
         } else
-            warn.append("seller.txt 已损坏");
+            warn.append("seller.dat 已损坏");
         file.close();
     }
-    file.setFileName("data/food.txt");
+    file.setFileName("data/food.dat");
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
         quint32 magic;
@@ -119,10 +119,10 @@ bool MainWindow::loadData()
             int lastId = food.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         } else
-            warn.append("food.txt 已损坏");
+            warn.append("food.dat 已损坏");
         file.close();
     }
-    file.setFileName("data/elect.txt");
+    file.setFileName("data/elect.dat");
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
         quint32 magic;
@@ -136,10 +136,10 @@ bool MainWindow::loadData()
             int lastId = elect.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         } else
-            warn.append("elect.txt 已损坏");
+            warn.append("elect.dat 已损坏");
         file.close();
     }
-    file.setFileName("data/daily.txt");
+    file.setFileName("data/daily.dat");
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
         quint32 magic;
@@ -153,7 +153,7 @@ bool MainWindow::loadData()
             int lastId = daily.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         } else
-            warn.append("daily.txt 已损坏");
+            warn.append("daily.dat 已损坏");
         file.close();
     }
     if (!warn.isEmpty()) {
@@ -785,7 +785,7 @@ void MainWindow::on_action_help_triggered()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     QFile file;
-    file.setFileName("data/buyer.txt");
+    file.setFileName("data/buyer.dat");
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
@@ -794,7 +794,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             out << listBuyer.at(i);
         file.close();
     }
-    file.setFileName("data/member.txt");
+    file.setFileName("data/member.dat");
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
@@ -803,7 +803,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             out << listMember.at(i);
         file.close();
     }
-    file.setFileName("data/seller.txt");
+    file.setFileName("data/seller.dat");
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
@@ -812,7 +812,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             out << listSeller.at(i);
         file.close();
     }
-    file.setFileName("data/food.txt");
+    file.setFileName("data/food.dat");
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
@@ -821,7 +821,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             out << listFood.at(i);
         file.close();
     }
-    file.setFileName("data/elect.txt");
+    file.setFileName("data/elect.dat");
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
@@ -830,7 +830,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             out << listElectronics.at(i);
         file.close();
     }
-    file.setFileName("data/daily.txt");
+    file.setFileName("data/daily.dat");
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
