@@ -26,17 +26,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeWidget->expandAll();
     // 读取数据，初始化内部数据变量
     loadData();
-    QTreeWidgetItem *treeParent = ui->treeWidget->topLevelItem(0);
+    QTreeWidgetItem *treeParent;
+    treeParent = ui->treeWidget->topLevelItem(0);
     for (int p = 0; p < listFood.count(); ++p) {
         addTreeNode(treeParent, &(listFood[p]));
     }
     treeParent = ui->treeWidget->topLevelItem(1);
-    for (int p = 0; p < listElectronics.count(); ++p) {
-        addTreeNode(treeParent, &(listElectronics[p]));
+    for (int p = 0; p < listElect.count(); ++p) {
+        addTreeNode(treeParent, &(listElect[p]));
     }
     treeParent = ui->treeWidget->topLevelItem(2);
-    for (int p = 0; p < listDailyNecessities.count(); ++p) {
-        addTreeNode(treeParent, &(listDailyNecessities[p]));
+    for (int p = 0; p < listDaily.count(); ++p) {
+        addTreeNode(treeParent, &(listDaily[p]));
     }
 }
 
@@ -131,7 +132,7 @@ bool MainWindow::loadData()
             Electronics elect;
             while (!in.atEnd()) {
                 in >> elect;
-                listElectronics.append(elect);
+                listElect.append(elect);
             }
             int lastId = elect.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
@@ -148,7 +149,7 @@ bool MainWindow::loadData()
             DailyNecessities daily;
             while (!in.atEnd()) {
                 in >> daily;
-                listDailyNecessities.append(daily);
+                listDaily.append(daily);
             }
             int lastId = daily.getId();
             GOODSID = (lastId > GOODSID ? lastId : GOODSID);
@@ -197,15 +198,15 @@ Goods *MainWindow::findGoods(int id, int &pos)
             pos = i;
             return &listFood[i];
         }
-    for (int i = 0; i < listElectronics.count(); ++i)
-        if (id == listElectronics.at(i).getId()) {
+    for (int i = 0; i < listElect.count(); ++i)
+        if (id == listElect.at(i).getId()) {
             pos = i;
-            return &listElectronics[i];
+            return &listElect[i];
         }
-    for (int i = 0; i < listDailyNecessities.count(); ++i)
-        if (id == listDailyNecessities.at(i).getId()) {
+    for (int i = 0; i < listDaily.count(); ++i)
+        if (id == listDaily.at(i).getId()) {
             pos = i;
-            return &listDailyNecessities[i];
+            return &listDaily[i];
         }
     return Q_NULLPTR;
 }
@@ -241,6 +242,52 @@ void MainWindow::addTreeRecord(QStringList rec)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(rec);
     ui->treeWidget_record->addTopLevelItem(item);
+}
+
+void MainWindow::listAllGoods(QString key)
+{
+    for(int i = 0; i < 3; ++i)
+        ui->treeWidget->topLevelItem(i)->takeChildren();
+    QTreeWidgetItem *treeParent;
+    treeParent = ui->treeWidget->topLevelItem(0);
+    for (int p = 0; p < listFood.count(); ++p) {
+        if(listFood[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listFood[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(1);
+    for (int p = 0; p < listElect.count(); ++p) {
+        if(listElect[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listElect[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(2);
+    for (int p = 0; p < listDaily.count(); ++p) {
+        if(listDaily[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listDaily[p]));
+    }
+
+}
+
+void MainWindow::listMyGoods(QString key)
+{
+    for(int i = 0; i < 3; ++i)
+        ui->treeWidget->topLevelItem(i)->takeChildren();
+    QTreeWidgetItem *treeParent;
+    QString name = curUser->getUserName();
+    treeParent = ui->treeWidget->topLevelItem(0);
+    for (int p = 0; p < listFood.count(); ++p) {
+        if(listFood[p].getOwner() == name && listFood[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listFood[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(1);
+    for (int p = 0; p < listElect.count(); ++p) {
+        if(listElect[p].getOwner() == name && listElect[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listElect[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(2);
+    for (int p = 0; p < listDaily.count(); ++p) {
+        if(listDaily[p].getOwner() == name && listDaily[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listDaily[p]));
+    }
 }
 
 /********************************  reset  ************************************/
@@ -544,10 +591,10 @@ void MainWindow::on_pushButton_buy_clicked()
                 listFood.removeAt(pos);
                 break;
             case ELECTRONICS:
-                listElectronics.removeAt(pos);
+                listElect.removeAt(pos);
                 break;
             case DAILYNECESSITIES:
-                listDailyNecessities.removeAt(pos);
+                listDaily.removeAt(pos);
                 break;
             default:
                 break;
@@ -565,30 +612,32 @@ void MainWindow::on_pushButton_buy_clicked()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_pushButton_search_clicked()
+{
+    QString key = ui->lineEdit_search->text();
+    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+        listAllGoods(key);
+    else
+        listMyGoods(key);
+}
+
+void MainWindow::on_pushButton_clear_clicked()
+{
+    ui->lineEdit_search->clear();
+    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+        listAllGoods();
+    else
+        listMyGoods();
+}
+
 void MainWindow::on_radioButton_all_clicked()
 {
-    QString name = curUser->getUserName();
-    for (int p = 0; p < ui->treeWidget->topLevelItemCount(); ++p) {
-        QTreeWidgetItem *parent = ui->treeWidget->topLevelItem(p);
-        for (int q = 0; q < parent->childCount(); ++q) {
-            QTreeWidgetItem *child = parent->child(q);
-            if (child->text(5) != name)
-                child->setHidden(false);
-        }
-    }
+    listAllGoods(ui->lineEdit_search->text());
 }
 
 void MainWindow::on_radioButton_mine_clicked()
 {
-    QString name = curUser->getUserName();
-    for (int p = 0; p < ui->treeWidget->topLevelItemCount(); ++p) {
-        QTreeWidgetItem *parent = ui->treeWidget->topLevelItem(p);
-        for (int q = 0; q < parent->childCount(); ++q) {
-            QTreeWidgetItem *child = parent->child(q);
-            if (child->text(5) != name)
-                child->setHidden(true);
-        }
-    }
+    listMyGoods(ui->lineEdit_search->text());
 }
 
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
@@ -650,13 +699,13 @@ void MainWindow::on_pushButton_in_clicked()
     } else if ("电子产品" == goodsClass) {
         QTreeWidgetItem *current = ui->treeWidget->topLevelItem(1);
         Electronics *elect = new Electronics(++GOODSID, name, amount, price, owner, produceDate, validityDate, rate);
-        listElectronics.push_back(*elect);
+        listElect.push_back(*elect);
         addTreeNode(current, elect);
         delete elect;
     } else {
         QTreeWidgetItem *current = ui->treeWidget->topLevelItem(2);
         DailyNecessities *daily = new DailyNecessities(++GOODSID, name, amount, price, owner, produceDate, validityDate);
-        listDailyNecessities.push_back(*daily);
+        listDaily.push_back(*daily);
         addTreeNode(current, daily);
         delete daily;
     }
@@ -826,8 +875,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
         out << magic;
-        for (int i = 0; i < listElectronics.size(); ++i)
-            out << listElectronics.at(i);
+        for (int i = 0; i < listElect.size(); ++i)
+            out << listElect.at(i);
         file.close();
     }
     file.setFileName("data/daily.dat");
@@ -835,8 +884,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
         out << magic;
-        for (int i = 0; i < listDailyNecessities.size(); ++i)
-            out << listDailyNecessities.at(i);
+        for (int i = 0; i < listDaily.size(); ++i)
+            out << listDaily.at(i);
         file.close();
     }
     event->accept();

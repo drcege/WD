@@ -31,8 +31,8 @@ private:
     QList<Member> listMember;
     QList<Seller> listSeller;
     QList<Food> listFood;
-    QList<Electronics> listElectronics;
-    QList<DailyNecessities> listDailyNecessities;
+    QList<Electronics> listElect;
+    QList<DailyNecessities> listDaily;
 
     /*********************  Custom Functions *****************************/
     bool loadData();
@@ -42,6 +42,8 @@ private:
     void addTreeNode(QTreeWidgetItem *parent, Electronics *elect);
     void addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily);
     void addTreeRecord(QStringList rec);
+    void listAllGoods(QString key="");
+    void listMyGoods(QString key="");
 
     /***********************  reset  ************************************/
     void resetLoginPage();
@@ -77,6 +79,10 @@ private slots:
     void on_pushButton_buy_clicked();
 
     ////////////////////////  pageSeller  ////////////////////////////
+
+    void on_pushButton_search_clicked();
+
+    void on_pushButton_clear_clicked();
 
     void on_radioButton_all_clicked();
 
