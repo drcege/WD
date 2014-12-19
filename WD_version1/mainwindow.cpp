@@ -1,11 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QApplication>
-#include <QMessageBox>
-#include <QSizePolicy>
-#include <QtAlgorithms>
-#include <QMovie>
-#include <QtMath>
 
 #define LIMIT 8888
 
@@ -18,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QHeaderView *head =  ui->treeWidget->header();
     head->setSectionsMovable(false);
     head->setVisible(true);
-    QHeaderView  *headRecord = ui->treeWidget_record->header();
+    QHeaderView *headRecord = ui->treeWidget_record->header();
     head->setSectionsMovable(false);
     headRecord->setVisible(true);
     connect(ui->lineEdit_user_login, SIGNAL(textChanged(QString)), this, SLOT(loginPage_textChanged()));

@@ -1,10 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QString>
-#include <QMap>
-#include <QTreeWidgetItem>
+#include <QtWidgets>
+
 #include "user.h"
 #include "goods.h"
 
