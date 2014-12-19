@@ -15,7 +15,7 @@ public:
     int getAmount() {return amount;}
     double getPrice() {return price;}
     QString getOwner() {return owner;}
-    QString getFoodName() {return foodName;}
+    QString getGoodsName() {return foodName;}
 
     goodsClass getClass() {return curClass;}
     void changeAmount(int amount);

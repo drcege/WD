@@ -33,16 +33,16 @@ MainWindow::MainWindow(QWidget *parent) :
     // 读取数据，初始化内部数据变量
     loadData();
     QTreeWidgetItem *treeParent = ui->treeWidget->topLevelItem(0);
-    for (int p = 0; p < vecFood.count(); ++p) {
-        addTreeNode(treeParent, &(vecFood[p]));
+    for (int p = 0; p < listFood.count(); ++p) {
+        addTreeNode(treeParent, &(listFood[p]));
     }
     treeParent = ui->treeWidget->topLevelItem(1);
-    for (int p = 0; p < vecElectronics.count(); ++p) {
-        addTreeNode(treeParent, &(vecElectronics[p]));
+    for (int p = 0; p < listElect.count(); ++p) {
+        addTreeNode(treeParent, &(listElect[p]));
     }
     treeParent = ui->treeWidget->topLevelItem(2);
-    for (int p = 0; p < vecDailyNecessities.count(); ++p) {
-        addTreeNode(treeParent, &(vecDailyNecessities[p]));
+    for (int p = 0; p < listDaily.count(); ++p) {
+        addTreeNode(treeParent, &(listDaily[p]));
     }
 }
 
@@ -55,17 +55,17 @@ MainWindow::~MainWindow()
 
 bool MainWindow::loadData()
 {
-    vecSeller.append(Seller(1, "戈策", "1", 10000000));
-    vecFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-15", Qt::ISODate), 0.2));
-    vecFood.append(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014-11-05", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), 0.2));
-    vecFood.append(Food(3, "面包", 10, 3.5, "戈策", QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), QDate::fromString("2014-11-25", Qt::ISODate), 0.2));
-    vecFood.append(Food(4, "火腿", 30, 2.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), 0.2));
-    vecElectronics.push_back(Electronics(5, "iphone4s", 50, 2060.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
-    vecElectronics.push_back(Electronics(6, "iphone5c", 50, 2788.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
-    vecElectronics.push_back(Electronics(7, "iphone6", 50, 5288.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
-    vecElectronics.push_back(Electronics(8, "iphone6 plus", 50, 5600.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
-    vecDailyNecessities.push_back(DailyNecessities(9, "牙刷", 500, 10.0, "戈策", QDate::fromString("2014-10-01", Qt::ISODate), QDate::fromString("2014-12-31", Qt::ISODate)));
-    vecDailyNecessities.push_back(DailyNecessities(10, "牙膏", 200, 15.0, "戈策", QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2015-01-01", Qt::ISODate)));
+    listSeller.append(Seller(1, "戈策", "1", 10000000));
+    listFood.append(Food(1, "蛋糕", 20, 20.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-15", Qt::ISODate), 0.2));
+    listFood.append(Food(2, "鸡蛋", 35, 1.5, "戈策", QDate::fromString("2014-11-05", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), 0.2));
+    listFood.append(Food(3, "面包", 10, 3.5, "戈策", QDate::fromString("2014-11-20", Qt::ISODate), QDate::fromString("2014-11-28", Qt::ISODate), QDate::fromString("2014-11-25", Qt::ISODate), 0.2));
+    listFood.append(Food(4, "火腿", 30, 2.0, "戈策", QDate::fromString("2014-11-01", Qt::ISODate), QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2014-11-20", Qt::ISODate), 0.2));
+    listElect.push_back(Electronics(5, "iphone4s", 50, 2060.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
+    listElect.push_back(Electronics(6, "iphone5c", 50, 2788.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
+    listElect.push_back(Electronics(7, "iphone6", 50, 5288.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
+    listElect.push_back(Electronics(8, "iphone6 plus", 50, 5600.0, "戈策", QDate::fromString("2014-01-01", Qt::ISODate), QDate::fromString("2016-01-01", Qt::ISODate), 0.01));
+    listDaily.push_back(DailyNecessities(9, "牙刷", 500, 10.0, "戈策", QDate::fromString("2014-10-01", Qt::ISODate), QDate::fromString("2014-12-31", Qt::ISODate)));
+    listDaily.push_back(DailyNecessities(10, "牙膏", 200, 15.0, "戈策", QDate::fromString("2014-11-30", Qt::ISODate), QDate::fromString("2015-01-01", Qt::ISODate)));
     // 设置为当前最大值
     USERID = 1;
     GOODSID = 10;
@@ -74,40 +74,40 @@ bool MainWindow::loadData()
 
 User *MainWindow::findUser(QString userName, int &pos)
 {
-    for (int i = 0; i < vecBuyer.size(); ++i)
-        if (userName == vecBuyer[i].getUserName()) {
+    for (int i = 0; i < listBuyer.size(); ++i)
+        if (userName == listBuyer[i].getUserName()) {
             pos = i;
-            return &vecBuyer[i];
+            return &listBuyer[i];
         }
-    for (int i = 0; i < vecMember.size(); ++i)
-        if (userName == vecMember[i].getUserName()) {
+    for (int i = 0; i < listMember.size(); ++i)
+        if (userName == listMember[i].getUserName()) {
             pos = i;
-            return &vecMember[i];
+            return &listMember[i];
         }
-    for (int i = 0; i < vecSeller.size(); ++i)
-        if (userName == vecSeller[i].getUserName()) {
+    for (int i = 0; i < listSeller.size(); ++i)
+        if (userName == listSeller[i].getUserName()) {
             pos = i;
-            return &vecSeller[i];
+            return &listSeller[i];
         }
     return Q_NULLPTR;
 }
 
 Goods *MainWindow::findGoods(int id, int &pos)
 {
-    for (int i = 0; i < vecFood.count(); ++i)
-        if (id == vecFood.at(i).getId()) {
+    for (int i = 0; i < listFood.count(); ++i)
+        if (id == listFood.at(i).getId()) {
             pos = i;
-            return &vecFood[i];
+            return &listFood[i];
         }
-    for (int i = 0; i < vecElectronics.count(); ++i)
-        if (id == vecElectronics.at(i).getId()) {
+    for (int i = 0; i < listElect.count(); ++i)
+        if (id == listElect.at(i).getId()) {
             pos = i;
-            return &vecElectronics[i];
+            return &listElect[i];
         }
-    for (int i = 0; i < vecDailyNecessities.count(); ++i)
-        if (id == vecDailyNecessities.at(i).getId()) {
+    for (int i = 0; i < listDaily.count(); ++i)
+        if (id == listDaily.at(i).getId()) {
             pos = i;
-            return &vecDailyNecessities[i];
+            return &listDaily[i];
         }
     return Q_NULLPTR;
 }
@@ -116,7 +116,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Food *food)
 {
     QStringList sl;
     QString reduced = (food->reducedPrice() < 0 ? "已过期" : QString::number(food->reducedPrice(), 'f', 2));
-    sl << "" << food->getFoodName() << QString::number(food->getAmount()) << QString::number(food->getPrice(), 'f', 2) << reduced << food->getOwner() << food->getProduceDate().toString(Qt::ISODate) << food->getValidityDate().toString(Qt::ISODate) << food->getReduceDate().toString(Qt::ISODate) << QString::number(food->getReduceRate(), 'f', 2) << QString::number(food->getId());
+    sl << "" << food->getGoodsName() << QString::number(food->getAmount()) << QString::number(food->getPrice(), 'f', 2) << reduced << food->getOwner() << food->getProduceDate().toString(Qt::ISODate) << food->getValidityDate().toString(Qt::ISODate) << food->getReduceDate().toString(Qt::ISODate) << QString::number(food->getReduceRate(), 'f', 2) << QString::number(food->getId());
     QTreeWidgetItem *item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -125,7 +125,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, Electronics *elect)
 {
     QStringList sl;
     QString reduced = (elect->reducedPrice() < 0 ? "已过期" : QString::number(elect->reducedPrice(), 'f', 2));
-    sl << "" << elect->getFoodName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(), 'f', 2) << reduced << elect->getOwner() << elect->getProduceDate().toString(Qt::ISODate) << elect->getValidityDate().toString(Qt::ISODate) << "-" << QString::number(elect->getRuduceRate(), 'f', 2) << QString::number(elect->getId());
+    sl << "" << elect->getGoodsName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(), 'f', 2) << reduced << elect->getOwner() << elect->getProduceDate().toString(Qt::ISODate) << elect->getValidityDate().toString(Qt::ISODate) << "-" << QString::number(elect->getRuduceRate(), 'f', 2) << QString::number(elect->getId());
     QTreeWidgetItem *item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -134,7 +134,7 @@ void MainWindow::addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily)
 {
     QStringList sl;
     QString reduced = (daily->reducedPrice() < 0 ? "已过期" : QString::number(daily->reducedPrice(), 'f', 2));
-    sl << "" << daily->getFoodName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(), 'f', 2) << reduced << daily->getOwner() << daily->getProduceDate().toString(Qt::ISODate) << daily->getValidityDate().toString(Qt::ISODate) << "-" << "-" << QString::number(daily->getId());
+    sl << "" << daily->getGoodsName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(), 'f', 2) << reduced << daily->getOwner() << daily->getProduceDate().toString(Qt::ISODate) << daily->getValidityDate().toString(Qt::ISODate) << "-" << "-" << QString::number(daily->getId());
     QTreeWidgetItem *item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }
@@ -143,6 +143,52 @@ void MainWindow::addTreeRecord(QStringList rec)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(rec);
     ui->treeWidget_record->addTopLevelItem(item);
+}
+
+void MainWindow::listAllGoods(QString key)
+{
+    for(int i = 0; i < 3; ++i)
+        ui->treeWidget->topLevelItem(i)->takeChildren();
+    QTreeWidgetItem *treeParent;
+    treeParent = ui->treeWidget->topLevelItem(0);
+    for (int p = 0; p < listFood.count(); ++p) {
+        if(listFood[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listFood[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(1);
+    for (int p = 0; p < listElect.count(); ++p) {
+        if(listElect[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listElect[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(2);
+    for (int p = 0; p < listDaily.count(); ++p) {
+        if(listDaily[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listDaily[p]));
+    }
+
+}
+
+void MainWindow::listMyGoods(QString key)
+{
+    for(int i = 0; i < 3; ++i)
+        ui->treeWidget->topLevelItem(i)->takeChildren();
+    QTreeWidgetItem *treeParent;
+    QString name = curUser->getUserName();
+    treeParent = ui->treeWidget->topLevelItem(0);
+    for (int p = 0; p < listFood.count(); ++p) {
+        if(listFood[p].getOwner() == name && listFood[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listFood[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(1);
+    for (int p = 0; p < listElect.count(); ++p) {
+        if(listElect[p].getOwner() == name && listElect[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listElect[p]));
+    }
+    treeParent = ui->treeWidget->topLevelItem(2);
+    for (int p = 0; p < listDaily.count(); ++p) {
+        if(listDaily[p].getOwner() == name && listDaily[p].getGoodsName().contains(key))
+            addTreeNode(treeParent, &(listDaily[p]));
+    }
 }
 
 /********************************  reset  ************************************/
@@ -348,10 +394,10 @@ void MainWindow::on_pushButton_register_clicked()
     // 注册成功，新用户加入容器
     if (ui->buttonGroup->checkedButton() == ui->radioButton_buyer) { // 新建买家
         Buyer curBuyer(++USERID, user, pwd);
-        vecBuyer.push_back(curBuyer);
+        listBuyer.push_back(curBuyer);
     } else if (ui->buttonGroup->checkedButton() == ui->radioButton_seller) { // 新建卖家
         Seller curSeller(++USERID, user, pwd);
-        vecSeller.push_back(curSeller);
+        listSeller.push_back(curSeller);
     }
     QMessageBox::information(this, tr("注册成功！"), tr("恭喜你 ^_^ 注册成功！"), QMessageBox::Ok);
     resetRegisterPage();
@@ -439,13 +485,13 @@ void MainWindow::on_pushButton_buy_clicked()
         if (0 == amount) {
             switch (curGoods->getClass()) {
             case FOOD:
-                vecFood.removeAt(pos);
+                listFood.removeAt(pos);
                 break;
             case ELECTRONICS:
-                vecElectronics.removeAt(pos);
+                listElect.removeAt(pos);
                 break;
             case DAILYNECESSITIES:
-                vecDailyNecessities.removeAt(pos);
+                listDaily.removeAt(pos);
                 break;
             default:
                 break;
@@ -463,30 +509,32 @@ void MainWindow::on_pushButton_buy_clicked()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+void MainWindow::on_pushButton_search_clicked()
+{
+    QString key = ui->lineEdit_search->text();
+    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+        listAllGoods(key);
+    else
+        listMyGoods(key);
+}
+
+void MainWindow::on_pushButton_clear_clicked()
+{
+    ui->lineEdit_search->clear();
+    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+        listAllGoods();
+    else
+        listMyGoods();
+}
+
 void MainWindow::on_radioButton_all_clicked()
 {
-    QString name = curUser->getUserName();
-    for (int p = 0; p < ui->treeWidget->topLevelItemCount(); ++p) {
-        QTreeWidgetItem *parent = ui->treeWidget->topLevelItem(p);
-        for (int q = 0; q < parent->childCount(); ++q) {
-            QTreeWidgetItem *child = parent->child(q);
-            if (child->text(5) != name)
-                child->setHidden(false);
-        }
-    }
+    listAllGoods(ui->lineEdit_search->text());
 }
 
 void MainWindow::on_radioButton_mine_clicked()
 {
-    QString name = curUser->getUserName();
-    for (int p = 0; p < ui->treeWidget->topLevelItemCount(); ++p) {
-        QTreeWidgetItem *parent = ui->treeWidget->topLevelItem(p);
-        for (int q = 0; q < parent->childCount(); ++q) {
-            QTreeWidgetItem *child = parent->child(q);
-            if (child->text(5) != name)
-                child->setHidden(true);
-        }
-    }
+    listMyGoods(ui->lineEdit_search->text());
 }
 
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
@@ -542,19 +590,19 @@ void MainWindow::on_pushButton_in_clicked()
     if ("食品" == goodsClass) {
         QTreeWidgetItem *current = ui->treeWidget->topLevelItem(0);
         Food *food = new Food(++GOODSID, name, amount, price, owner, produceDate, validityDate, reduceDate, rate);
-        vecFood.push_back(*food);
+        listFood.push_back(*food);
         addTreeNode(current, food);
         delete food;
     } else if ("电子产品" == goodsClass) {
         QTreeWidgetItem *current = ui->treeWidget->topLevelItem(1);
         Electronics *elect = new Electronics(++GOODSID, name, amount, price, owner, produceDate, validityDate, rate);
-        vecElectronics.push_back(*elect);
+        listElect.push_back(*elect);
         addTreeNode(current, elect);
         delete elect;
     } else {
         QTreeWidgetItem *current = ui->treeWidget->topLevelItem(2);
         DailyNecessities *daily = new DailyNecessities(++GOODSID, name, amount, price, owner, produceDate, validityDate);
-        vecDailyNecessities.push_back(*daily);
+        listDaily.push_back(*daily);
         addTreeNode(current, daily);
         delete daily;
     }
@@ -593,9 +641,9 @@ void MainWindow::on_pushButton_Upgrade_clicked()
             Member newMember(*(dynamic_cast<Buyer *>(curUser)));
             //Member newMember(++USERID, buyer->getUserName(), buyer->getPassword(), buyer->getBalance(), 1);
             ///////////////// 需要查找插入位置！！！！！！！！！！！！
-            QList<Member>::iterator newPos =  qLowerBound(vecMember.begin(), vecMember.end(), newMember);
-            vecMember.insert(newPos, newMember);
-            vecBuyer.removeAt(pos);
+            QList<Member>::iterator newPos =  qLowerBound(listMember.begin(), listMember.end(), newMember);
+            listMember.insert(newPos, newMember);
+            listBuyer.removeAt(pos);
         }
     } else {
         int token = dynamic_cast<Member *>(curUser)->getToken();

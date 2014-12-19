@@ -26,12 +26,12 @@ private:
     int USERID;
     int GOODSID;
     User *curUser;
-    QList<Buyer> vecBuyer;
-    QList<Member> vecMember;
-    QList<Seller> vecSeller;
-    QList<Food> vecFood;
-    QList<Electronics> vecElectronics;
-    QList<DailyNecessities> vecDailyNecessities;
+    QList<Buyer> listBuyer;
+    QList<Member> listMember;
+    QList<Seller> listSeller;
+    QList<Food> listFood;
+    QList<Electronics> listElect;
+    QList<DailyNecessities> listDaily;
 
     /*********************  Custom Functions *****************************/
     bool loadData();
@@ -41,6 +41,8 @@ private:
     void addTreeNode(QTreeWidgetItem *parent, Electronics *elect);
     void addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily);
     void addTreeRecord(QStringList rec);
+    void listAllGoods(QString key="");
+    void listMyGoods(QString key="");
 
     /***********************  reset  ************************************/
     void resetLoginPage();
@@ -76,6 +78,10 @@ private slots:
     void on_pushButton_buy_clicked();
 
     ////////////////////////  pageSeller  ////////////////////////////
+
+    void on_pushButton_search_clicked();
+
+    void on_pushButton_clear_clicked();
 
     void on_radioButton_all_clicked();
 
