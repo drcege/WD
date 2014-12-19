@@ -211,29 +211,24 @@ Goods *MainWindow::findGoods(int id, int &pos)
     return Q_NULLPTR;
 }
 
-void MainWindow::addTreeNode(QTreeWidgetItem *parent, Food *food)
+void MainWindow::addTreeNode(QTreeWidgetItem *parent, Goods *goods)
 {
     QStringList sl;
-    QString reduced = (food->reducedPrice() < 0 ? "已过期" : QString::number(food->reducedPrice(), 'f', 2));
-    sl << "" << food->getGoodsName() << QString::number(food->getAmount()) << QString::number(food->getPrice(), 'f', 2) << reduced << food->getOwner() << food->getProduceDate().toString(Qt::ISODate) << food->getValidityDate().toString(Qt::ISODate) << food->getReduceDate().toString(Qt::ISODate) << QString::number(food->getReduceRate(), 'f', 2) << QString::number(food->getId());
-    QTreeWidgetItem *item = new QTreeWidgetItem(sl);
-    parent->addChild(item);
-}
-
-void MainWindow::addTreeNode(QTreeWidgetItem *parent, Electronics *elect)
-{
-    QStringList sl;
-    QString reduced = (elect->reducedPrice() < 0 ? "已过期" : QString::number(elect->reducedPrice(), 'f', 2));
-    sl << "" << elect->getGoodsName() << QString::number(elect->getAmount()) << QString::number(elect->getPrice(), 'f', 2) << reduced << elect->getOwner() << elect->getProduceDate().toString(Qt::ISODate) << elect->getValidityDate().toString(Qt::ISODate) << "-" << QString::number(elect->getRuduceRate(), 'f', 2) << QString::number(elect->getId());
-    QTreeWidgetItem *item = new QTreeWidgetItem(sl);
-    parent->addChild(item);
-}
-
-void MainWindow::addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily)
-{
-    QStringList sl;
-    QString reduced = (daily->reducedPrice() < 0 ? "已过期" : QString::number(daily->reducedPrice(), 'f', 2));
-    sl << "" << daily->getGoodsName() << QString::number(daily->getAmount()) << QString::number(daily->getPrice(), 'f', 2) << reduced << daily->getOwner() << daily->getProduceDate().toString(Qt::ISODate) << daily->getValidityDate().toString(Qt::ISODate) << "-" << "-" << QString::number(daily->getId());
+    QString reduced = (goods->reducedPrice() < 0 ? "已过期" : QString::number(goods->reducedPrice(), 'f', 2));
+    sl << "" << goods->getGoodsName() << QString::number(goods->getAmount()) << QString::number(goods->getPrice(), 'f', 2) << reduced << goods->getOwner();
+    if(goods->getClass() == FOOD) {
+        Food *f = dynamic_cast<Food*>(goods);
+        sl << f->getProduceDate().toString(Qt::ISODate) << f->getValidityDate().toString(Qt::ISODate) << f->getReduceDate().toString(Qt::ISODate) << QString::number(f->getReduceRate(), 'f', 2);
+    }
+    else if(goods->getClass() == ELECTRONICS) {
+        Electronics *e = dynamic_cast<Electronics*>(goods);
+        sl << e->getProduceDate().toString(Qt::ISODate) << e->getValidityDate().toString(Qt::ISODate)<< "-" << QString::number(e->getRuduceRate(), 'f', 2);
+    }
+    else {
+        DailyNecessities *d = dynamic_cast<DailyNecessities*>(goods);
+    sl << d->getProduceDate().toString(Qt::ISODate) << d->getValidityDate().toString(Qt::ISODate) << "-" << "-" ;
+    }
+    sl << QString::number(goods->getId());
     QTreeWidgetItem *item = new QTreeWidgetItem(sl);
     parent->addChild(item);
 }

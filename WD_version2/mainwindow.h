@@ -3,8 +3,12 @@
 
 #include <QtWidgets>
 
-#include "user.h"
-#include "goods.h"
+#include "buyer.h"
+#include "member.h"
+#include "seller.h"
+#include "food.h"
+#include "electronics.h"
+#include "dailynecessities.h"
 
 namespace Ui
 {
@@ -38,9 +42,7 @@ private:
     bool loadData();
     User *findUser(QString userName, int &pos);
     Goods *findGoods(int id, int &pos);
-    void addTreeNode(QTreeWidgetItem *parent, Food *food);
-    void addTreeNode(QTreeWidgetItem *parent, Electronics *elect);
-    void addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily);
+    void addTreeNode(QTreeWidgetItem *parent, Goods *goods);
     void addTreeRecord(QStringList rec);
     void listAllGoods(QString key="");
     void listMyGoods(QString key="");

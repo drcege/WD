@@ -26,119 +26,27 @@ void User::recharge(double money)
     balance += money;
 }
 
-
-/******************************************************************************/
-
-Buyer::Buyer()
+int User::getId() const
 {
+    return id;
 }
 
-Buyer::Buyer(int id, QString userName, QString password, double balance)
-    : User(id, userName, password, balance)
+QString User::getUserName()
 {
-    curClass = BUYER;
+    return userName;
 }
 
-int Buyer::recordCount()
+QString User::getPassword()
 {
-    return record.count();
+    return password;
 }
 
-QStringList Buyer::getRecord(int i)
+double User::getBalance()
 {
-    return record.at(i);
+    return balance;
 }
 
-int Buyer::appendRecord(QStringList rec)
+userClass User::getClass()
 {
-    record.append(rec);
-    return record.count();
-}
-
-QDataStream &operator>>(QDataStream &in, Buyer &b)
-{
-    in >> b.id >> b.userName >> b.password >> b.balance >> b.record;
-    b.curClass = BUYER;
-    return in;
-}
-
-QDataStream &operator <<(QDataStream &out, const Buyer &b)
-{
-    out << b.id << b.userName << b.password << b.balance << b.record;
-    return out;
-}
-
-/******************************************************************************/
-
-Member::Member()
-{
-}
-
-Member::Member(int id, QString userName, QString password, double balance, int level, int token)
-    : Buyer(id, userName, password, balance)
-{
-    this->level = level;
-    this->token = token;
-    curClass = MEMBER;
-}
-
-Member::Member(Buyer buyer)
-{
-    curClass = MEMBER;
-    this->id = buyer.getId();
-    this->userName = buyer.getUserName();
-    this->password = buyer.getPassword();
-    this->balance = buyer.getBalance();
-    this->level = 1;
-    this->token = 0;
-    for (int r = 0; r < buyer.recordCount(); ++r)
-        this->record.push_back(buyer.getRecord(r));
-}
-
-void Member::changeToken(int token)
-{
-    this->token += token;
-}
-
-void Member::setLevel(int level)
-{
-    this->level = level;
-}
-
-QDataStream &operator >>(QDataStream &in, Member &m)
-{
-    in >> m.id >> m.userName >> m.password >> m.balance >> m.level >> m.token >> m.record;
-    m.curClass = MEMBER;
-    return in;
-}
-
-QDataStream &operator <<(QDataStream &out, const Member &m)
-{
-    out << m.id << m.userName << m.password << m.balance << m.level << m.token << m.record;
-    return out;
-}
-
-/******************************************************************************/
-
-Seller::Seller()
-{
-}
-
-Seller::Seller(int id, QString userName, QString password, double balance)
-    : User(id, userName, password, balance)
-{
-    curClass = SELLER;
-}
-
-QDataStream &operator >>(QDataStream &in, Seller &s)
-{
-    in >> s.id >> s.userName >> s.password >> s.balance;
-    s.curClass = SELLER;
-    return in;
-}
-
-QDataStream &operator <<(QDataStream &out, const Seller &s)
-{
-    out << s.id << s.userName << s.password << s.balance;
-    return out;
+    return curClass;
 }
