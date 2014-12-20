@@ -32,7 +32,7 @@
    <enum>Qt::StrongFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>WD_version1</string>
+   <string>WD_version2</string>
   </property>
   <property name="windowIcon">
    <iconset resource="images.qrc">
@@ -604,7 +604,7 @@
            <bool>false</bool>
           </property>
           <property name="headerHidden">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <attribute name="headerVisible">
            <bool>false</bool>
@@ -2360,7 +2360,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = WD_version1
+TARGET = WD_version2
 TEMPLATE = app
 CONFIG += c++11
 
