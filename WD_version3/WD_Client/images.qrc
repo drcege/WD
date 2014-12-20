@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="back">images/back.png</file>
+        <file>images/blink.png</file>
+    </qresource>
+</RCC>
