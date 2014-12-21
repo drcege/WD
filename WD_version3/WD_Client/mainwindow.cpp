@@ -168,6 +168,7 @@ void MainWindow::setMainPage(QVector<QVector<QStringList> > vecGoods, QString ne
         ui->dateEdit_validity->setDate(QDate::currentDate());
         ui->stackedWidget_2->setCurrentWidget(ui->page_seller);
     }
+    // 商品列表
     for(int t = 0; t < ui->treeWidget->topLevelItemCount(); ++t){
         for(int p = 0; p < vecGoods.at(t).size(); ++p)
             addTreeNode(t, vecGoods.at(t).at(p));
@@ -194,6 +195,9 @@ void MainWindow::resetRegisterPage()
 
 void MainWindow::resetMainPage()
 {
+    // 清楚商品列表
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i)
+        ui->treeWidget->topLevelItem(i)->takeChildren();
     ///page_buyer
     ui->spinBox_buyer->setValue(0);
     ui->lineEdit_price->clear();
