@@ -177,6 +177,7 @@ bool MainWindow::loadData()
 
 User *MainWindow::findUser(QString userName, int &pos)
 {
+    pos = -1;
     for (int i = 0; i < listBuyer.size(); ++i)
         if (userName == listBuyer[i].getUserName()) {
             pos = i;
@@ -197,6 +198,7 @@ User *MainWindow::findUser(QString userName, int &pos)
 
 Goods *MainWindow::findGoods(int id, int &pos)
 {
+    pos = -1;
     for (int i = 0; i < listFood.count(); ++i)
         if (id == listFood.at(i).getId()) {
             pos = i;
