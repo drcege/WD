@@ -27,7 +27,7 @@ public:
     QString getUserName();
     QString getPassword();
     double getBalance();
-    virtual userClass getClass();
+    virtual userClass getClass() = 0;
 };
 
 #endif // USER_H

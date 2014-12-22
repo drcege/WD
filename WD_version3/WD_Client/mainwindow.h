@@ -44,6 +44,7 @@ private:
     qint16 clientPort, serverPort;
 
     /*********************  Custom Functions *****************************/
+
     void addTreeNode(QTreeWidgetItem *parent, Goods *goods);
     void addTreeNode(int index, QStringList newGoods);
     void addTreeRecord(QStringList rec);
@@ -129,7 +130,6 @@ private slots:
 
     /**********************  UDP  ******************/
     void processPendingDatagrams();
-
 };
 
 #endif // MAINWINDOW_H

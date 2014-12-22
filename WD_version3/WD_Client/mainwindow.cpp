@@ -496,7 +496,7 @@ void MainWindow::processPendingDatagrams()
             in >> loginOK;
             if(loginOK){
                 resetLoginPage();
-                in >> newUser >> newClass >> newBalance >> newLevel >> newToken >> newRecord >> vecGoods;
+                in >> newUser >> newClass >> newBalance >> newLevel >> newToken >> vecRecord >> vecGoods;
                 setManagePage(newUser, newClass, newBalance, newLevel, newToken, vecRecord);
                 setMainPage(vecGoods, newClass, newLevel.toInt());
             } else{
@@ -516,6 +516,7 @@ void MainWindow::processPendingDatagrams()
                 QMessageBox::information(this, tr("注册失败！"), tr("用户名已存在！"));
             else
                 QMessageBox::information(this, tr("注册失败！"), tr("两次密码不一致！"));
+            qDebug() << res;
             break;
         case BuyFeedBack:
             in >> buyOK;
@@ -554,34 +555,39 @@ void MainWindow::processPendingDatagrams()
             in >> newUser >> newBalance;
             if(ui->lineEdit_Username->text() == newUser){
                 ui->lineEdit_Balance->setText(newBalance);
+                if (ui->lineEdit_userClass->text() == "卖家")
+                    ui->doubleSpinBox_Recharge->setMinimum(-1 * newBalance.toDouble());
                 QString msg = (newBalance.toDouble() > 0 ? "充值成功" : "提现成功");
                 QMessageBox::information(this, msg, msg+"！");
             }
             break;
         case UpgradeFeedBack:
-            in >> upgradeOK;
-            if(upgradeOK){
-                in >> newLevel;
-                ui->lineEdit_Level->setText(newLevel);
-                ui->lineEdit_discount->setText(QString::number(1-newLevel.toInt()*0.05,'f', 2));
-                ui->lineEdit_note->setText("需支付 " + QString::number(newLevel.toInt() * 1000) + " 代币");
-                if(newLevel == "1"){
-                    in >> newBalance;
-                    ui->lineEdit_Balance->setText(newBalance);
-                    ui->label_Token->setVisible(true);
-                    ui->lineEdit_Token->setVisible(true);
-                    ui->pushButton_Exchange->setVisible(true);
-                    ui->spinBox_Token->setVisible(true);
-                }else{
-                    in >> newToken;
-                    ui->lineEdit_Token->setText(newToken);
+            in >> newUser >> upgradeOK >> newLevel >> newBalance >> newToken;
+            if(ui->lineEdit_Username->text() == newUser){
+                if(upgradeOK){
+                    ui->lineEdit_Level->setText(newLevel);
+                    ui->lineEdit_discount->setText(QString::number(1-newLevel.toInt()*0.05,'f', 2));
+                    ui->lineEdit_note->setText("需支付 " + QString::number(newLevel.toInt() * 1000) + " 代币");
+                    if(newLevel == "1"){
+                        ui->lineEdit_Balance->setText(newBalance);
+                        ui->label_Token->setVisible(true);
+                        ui->lineEdit_Token->setVisible(true);
+                        ui->pushButton_Exchange->setVisible(true);
+                        ui->spinBox_Token->setVisible(true);
+                    }else{
+                        ui->lineEdit_Token->setText(newToken);
+                    }
                 }
+                else
+                    QMessageBox::warning(this, "升级失败", "升级失败！");
             }
             break;
         case ExchangeFeedBack:
-            in >> newBalance >> newToken;
-            ui->lineEdit_Balance->setText("￥" + newBalance);
-            ui->lineEdit_Token->setText(newToken);
+            in >> newUser >> newBalance >> newToken;
+            if(ui->lineEdit_Username->text() == newUser){
+                ui->lineEdit_Balance->setText("￥" + newBalance);
+                ui->lineEdit_Token->setText(newToken);
+            }
             break;
         default:
             break;
@@ -594,9 +600,9 @@ void MainWindow::sendRequest(UdpType type)
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
-    QString user, pwd, repeat, id, goodsClass, userClass, name, owner, money;
-    double pay;
-    int amount, token;
+    QString user, pwd, repeat, goodsClass, userClass, name, owner;
+    double pay, money;
+    int id, amount, token;
     double price, rate;
     QDate produceDate, validityDate, reduceDate;
 
@@ -615,10 +621,11 @@ void MainWindow::sendRequest(UdpType type)
         out << user << pwd << repeat << userClass;
         break;
     case BuyRequest:
-        id = ui->treeWidget->currentItem()->text(10);
         user = ui->lineEdit_Username->text();
+        id = ui->treeWidget->currentItem()->text(10).toInt();
+        amount =  ui->spinBox_buyer->value();
         pay = ui->lineEdit_real->text().toDouble();
-        out << id << user << pay;
+        out << user << id << amount << pay;
         break;
     case StockRequest:
         goodsClass = ui->comboBox->currentText();
@@ -630,6 +637,10 @@ void MainWindow::sendRequest(UdpType type)
         validityDate = ui->dateEdit_validity->date();
         reduceDate = ui->dateEdit_reduce->date();
         rate = ui->doubleSpinBox_rate->value();
+        if (!(produceDate <= reduceDate && reduceDate <= validityDate)) {
+            QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 降价期 ≤ 有效期");
+            break;
+        }
         out << goodsClass << name << amount << price << owner << produceDate << validityDate << reduceDate << rate;
         break;
     case RechargeRequest:
