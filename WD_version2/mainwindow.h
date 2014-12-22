@@ -121,7 +121,6 @@ private slots:
     void on_action_about_triggered();
 
     void on_action_help_triggered();
-
 };
 
 #endif // MAINWINDOW_H

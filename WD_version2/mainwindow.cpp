@@ -52,6 +52,10 @@ bool MainWindow::loadData()
 {
     USERID = 0;
     GOODSID = 0;
+
+    QDir dir;
+    if(!dir.exists("data"))
+        dir.mkdir("data");
     QVector<QString> warn;
     QFile file;
 
@@ -241,47 +245,27 @@ void MainWindow::addTreeRecord(QStringList rec)
 
 void MainWindow::listAllGoods(QString key)
 {
-    for(int i = 0; i < 3; ++i)
-        ui->treeWidget->topLevelItem(i)->takeChildren();
     QTreeWidgetItem *treeParent;
-    treeParent = ui->treeWidget->topLevelItem(0);
-    for (int p = 0; p < listFood.count(); ++p) {
-        if(listFood[p].getGoodsName().contains(key))
-            addTreeNode(treeParent, &(listFood[p]));
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
+        treeParent = ui->treeWidget->topLevelItem(i);
+        for (int p = 0; p < treeParent->childCount(); ++p) {
+            bool state = treeParent->child(p)->text(10).contains(key);
+            treeParent->child(p)->setHidden(state);
+        }
     }
-    treeParent = ui->treeWidget->topLevelItem(1);
-    for (int p = 0; p < listElect.count(); ++p) {
-        if(listElect[p].getGoodsName().contains(key))
-            addTreeNode(treeParent, &(listElect[p]));
-    }
-    treeParent = ui->treeWidget->topLevelItem(2);
-    for (int p = 0; p < listDaily.count(); ++p) {
-        if(listDaily[p].getGoodsName().contains(key))
-            addTreeNode(treeParent, &(listDaily[p]));
-    }
-
 }
 
 void MainWindow::listMyGoods(QString key)
 {
-    for(int i = 0; i < 3; ++i)
-        ui->treeWidget->topLevelItem(i)->takeChildren();
     QTreeWidgetItem *treeParent;
-    QString name = curUser->getUserName();
-    treeParent = ui->treeWidget->topLevelItem(0);
-    for (int p = 0; p < listFood.count(); ++p) {
-        if(listFood[p].getOwner() == name && listFood[p].getGoodsName().contains(key))
-            addTreeNode(treeParent, &(listFood[p]));
-    }
-    treeParent = ui->treeWidget->topLevelItem(1);
-    for (int p = 0; p < listElect.count(); ++p) {
-        if(listElect[p].getOwner() == name && listElect[p].getGoodsName().contains(key))
-            addTreeNode(treeParent, &(listElect[p]));
-    }
-    treeParent = ui->treeWidget->topLevelItem(2);
-    for (int p = 0; p < listDaily.count(); ++p) {
-        if(listDaily[p].getOwner() == name && listDaily[p].getGoodsName().contains(key))
-            addTreeNode(treeParent, &(listDaily[p]));
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
+        treeParent = ui->treeWidget->topLevelItem(i);
+        for (int p = 0; p < treeParent->childCount(); ++p) {
+            QTreeWidgetItem *treeChild = treeParent->child(p);
+            QString  user = ui->lineEdit_Username->text();
+            bool state = (treeChild->text(5) == user)&&(treeChild->text(10).contains(key));
+            treeParent->child(p)->setHidden(state);
+        }
     }
 }
 
@@ -570,7 +554,7 @@ void MainWindow::on_pushButton_buy_clicked()
         }
         QTreeWidgetItem *curItem =  ui->treeWidget->currentItem();
         int pos = -1;
-        // 买家收入
+        // 卖家收入
         User *owner = findUser(curItem->text(5), pos);
         owner->recharge(money);
         // 当前商品数量减少
@@ -732,6 +716,7 @@ void MainWindow::on_pushButton_Upgrade_clicked()
         if (curUser->getBalance() < LIMIT)
             QMessageBox::warning(this, "余额不足", "余额不足，无法升级会员！");
         else {
+            curUser->recharge(-1 * LIMIT);
             QMessageBox::information(this, "升级成功", "升级成功！初始为1级会员，请重新登陆");
             emit ui->action_logout->trigger();
             int pos = -1;
@@ -828,6 +813,9 @@ void MainWindow::on_action_help_triggered()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    QDir dir;
+    if(!dir.exists("data"))
+        dir.mkdir("data");
     QFile file;
     file.setFileName("data/buyer.dat");
     if (file.open(QIODevice::WriteOnly)) {
