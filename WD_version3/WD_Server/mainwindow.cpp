@@ -331,7 +331,6 @@ void MainWindow::processPendingDatagrams()
                 case SELLER:
                     out << "卖家"; break;
                 }
-
                 out << curUser->getBalance();
                 vecRecord.clear();
                 if(curUser->getClass() == SELLER){    // 卖家

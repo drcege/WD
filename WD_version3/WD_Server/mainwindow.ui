@@ -35,7 +35,7 @@
    <string>Server</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../WD_version2/images.qrc">
+   <iconset resource="images.qrc">
     <normaloff>:/images/images/blink.png</normaloff>:/images/images/blink.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -47,7 +47,11 @@
    </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTreeWidget" name="treeWidget"/>
+     <widget class="QTreeWidget" name="treeWidget">
+      <attribute name="headerVisible">
+       <bool>false</bool>
+      </attribute>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -94,7 +98,9 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>action_exit</sender>
