@@ -42,6 +42,14 @@ goodsClass Electronics::getClass()
     return ELECTRONICS;
 }
 
+QStringList Electronics::toStringList()
+{
+    QStringList sl;
+    QString reduced = (reducedPrice() < 0 ? "已过期" : QString::number(reducedPrice(), 'f', 2));
+    sl << "" << getGoodsName() << QString::number(getAmount()) << QString::number(getPrice(), 'f', 2) << reduced << getOwner() << getProduceDate().toString(Qt::ISODate) << getValidityDate().toString(Qt::ISODate)<< "-" << QString::number(getRuduceRate(), 'f', 2) << QString::number(getId());
+    return sl;
+}
+
 QDataStream &operator>>(QDataStream &in, Electronics &e)
 {
     in >> e.id >> e.goodsName >> e.amount >> e.price >> e.owner >> e.produceDate >> e.validityDate >> e.reduceRate;

@@ -58,10 +58,12 @@ private:
     bool loadData();
     User *findUser(QString userName, int &pos);
     Goods *findGoods(int id, int &pos);
+    QVector<QVector<QStringList> > getAllGoods();
 
 private slots:
+    void on_action_about_triggered();
+    void on_action_help_triggered();
     void processPendingDatagrams();
-
 };
 
 #endif // MAINWINDOW_H

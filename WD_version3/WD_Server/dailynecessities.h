@@ -14,6 +14,7 @@ public:
 
     double reducedPrice();
     goodsClass getClass();
+    QStringList toStringList();
     friend QDataStream &operator>>(QDataStream &in, DailyNecessities &d);
     friend QDataStream &operator<<(QDataStream &out, const DailyNecessities &d);
 

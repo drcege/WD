@@ -18,7 +18,6 @@ User::User(int id, QString userName, QString password, double balance)
     this->userName = userName;
     this->password = password;
     this->balance = balance;
-    this->curClass = USER;
 }
 
 void User::recharge(double money)
@@ -44,9 +43,4 @@ QString User::getPassword()
 double User::getBalance()
 {
     return balance;
-}
-
-userClass User::getClass()
-{
-    return curClass;
 }

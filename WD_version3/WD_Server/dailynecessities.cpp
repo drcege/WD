@@ -33,6 +33,14 @@ goodsClass DailyNecessities::getClass()
     return DAILYNECESSITIES;
 }
 
+QStringList DailyNecessities::toStringList()
+{
+    QStringList sl;
+    QString reduced = (reducedPrice() < 0 ? "已过期" : QString::number(reducedPrice(), 'f', 2));
+    sl << "" << getGoodsName() << QString::number(getAmount()) << QString::number(getPrice(), 'f', 2) << reduced << getOwner() << QString::number(getId()) << getProduceDate().toString(Qt::ISODate) << getValidityDate().toString(Qt::ISODate) << "-" << "-" ;
+    return sl;
+}
+
 QDataStream &operator>>(QDataStream &in, DailyNecessities &d)
 {
     in >> d.id >> d.goodsName >> d.amount >> d.price >> d.owner >> d.produceDate >> d.validityDate;

@@ -8,10 +8,11 @@ class Buyer : public User
 public:
     Buyer();
     Buyer(int id, QString userName, QString password, double balance = 0.0);
-
+    userClass getClass();
     QStringList getRecord(int i);
     int recordCount();
     int appendRecord(QStringList rec);
+
     friend QDataStream &operator>>(QDataStream &in, Buyer &b);
     friend QDataStream &operator<<(QDataStream &out, const Buyer &b);
 

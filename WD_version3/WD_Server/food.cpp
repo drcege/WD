@@ -47,6 +47,14 @@ goodsClass Food::getClass()
     return FOOD;
 }
 
+QStringList Food::toStringList()
+{
+    QStringList sl;
+    QString reduced = (reducedPrice() < 0 ? "已过期" : QString::number(reducedPrice(), 'f', 2));
+    sl << "" << getGoodsName() << QString::number(getAmount()) << QString::number(getPrice(), 'f', 2) << reduced << getOwner() << getProduceDate().toString(Qt::ISODate) << getValidityDate().toString(Qt::ISODate) << getReduceDate().toString(Qt::ISODate) << QString::number(getReduceRate(), 'f', 2) << QString::number(getId());
+    return sl;
+}
+
 QDataStream &operator>>(QDataStream &in, Food &f)
 {
     in >> f.id >> f.goodsName >> f.amount >> f.price >> f.owner >> f.produceDate >> f.validityDate >> f.reduceDate >> f.reduceRate;

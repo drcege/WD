@@ -2,6 +2,7 @@
 #define GOODS_H
 
 #include <QString>
+#include <QStringList>
 #include <QDate>
 #include <QFile>
 #include <QDataStream>
@@ -22,8 +23,11 @@ public:
     QString getGoodsName();
 
     void changeAmount(int amount);
-    virtual goodsClass getClass() = 0;
     virtual double reducedPrice() = 0;
+    virtual goodsClass getClass() = 0;
+    virtual QStringList toStringList() = 0;
+
+
 
 protected:
     int id;

@@ -15,6 +15,7 @@ public:
 
     double reducedPrice();
     goodsClass getClass();
+    QStringList toStringList();
     friend QDataStream &operator>>(QDataStream &in, Electronics &e);
     friend QDataStream &operator<<(QDataStream &out, const Electronics &e);
 
