@@ -506,11 +506,11 @@
        </layout>
       </widget>
       <widget class="QWidget" name="mainPage">
-       <layout class="QGridLayout" name="gridLayout_5" rowstretch="2,1,10" columnstretch="1,20,3,3,2,2,1">
-        <item row="1" column="4" rowspan="2" colspan="2">
+       <layout class="QGridLayout" name="gridLayout_5" rowstretch="2,1,10" columnstretch="2,20,3,2,2,2">
+        <item row="1" column="3" rowspan="2" colspan="2">
          <widget class="QStackedWidget" name="stackedWidget_2">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="page_buyer">
            <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1">
@@ -1012,7 +1012,7 @@
           </widget>
          </widget>
         </item>
-        <item row="0" column="1" colspan="5">
+        <item row="0" column="1" colspan="4">
          <widget class="QLabel" name="label_head_2">
           <property name="font">
            <font>
@@ -1030,7 +1030,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="6" rowspan="3">
+        <item row="0" column="5" rowspan="3">
          <spacer name="horizontalSpacer_5">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -1056,7 +1056,7 @@
           </property>
          </spacer>
         </item>
-        <item row="2" column="1" colspan="3">
+        <item row="1" column="1" rowspan="2" colspan="2">
          <widget class="QTreeWidget" name="treeWidget">
           <property name="font">
            <font>
@@ -1101,6 +1101,9 @@
           </attribute>
           <attribute name="headerCascadingSectionResizes">
            <bool>false</bool>
+          </attribute>
+          <attribute name="headerDefaultSectionSize">
+           <number>95</number>
           </attribute>
           <attribute name="headerHighlightSections">
            <bool>false</bool>
@@ -1399,28 +1402,6 @@
             <string/>
            </property>
           </item>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_search"/>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="pushButton_search">
-          <property name="text">
-           <string>搜索</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QPushButton" name="pushButton_clear">
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>清空</string>
-          </property>
          </widget>
         </item>
        </layout>
@@ -2286,8 +2267,8 @@
   <tabstop>lineEdit_user_login</tabstop>
   <tabstop>lineEdit_pwd_login</tabstop>
   <tabstop>pushButton_login</tabstop>
-  <tabstop>pushButton_now</tabstop>
   <tabstop>pushButton_quit</tabstop>
+  <tabstop>pushButton_now</tabstop>
   <tabstop>lineEdit_user_register</tabstop>
   <tabstop>lineEdit_pwd_register</tabstop>
   <tabstop>lineEdit_pwd_repeat</tabstop>
@@ -2297,20 +2278,74 @@
   <tabstop>pushButton_back</tabstop>
   <tabstop>treeWidget</tabstop>
   <tabstop>spinBox_buyer</tabstop>
-  <tabstop>spinBox_seller</tabstop>
-  <tabstop>dateEdit_produce</tabstop>
-  <tabstop>dateEdit_validity</tabstop>
-  <tabstop>dateEdit_reduce</tabstop>
-  <tabstop>pushButton_in</tabstop>
+  <tabstop>lineEdit_price</tabstop>
   <tabstop>lineEdit_discount</tabstop>
   <tabstop>lineEdit_token</tabstop>
   <tabstop>lineEdit_real</tabstop>
-  <tabstop>lineEdit_price</tabstop>
+  <tabstop>pushButton_buy</tabstop>
+  <tabstop>radioButton_all</tabstop>
+  <tabstop>radioButton_mine</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>spinBox_seller</tabstop>
+  <tabstop>doubleSpinBox_price</tabstop>
+  <tabstop>dateEdit_produce</tabstop>
+  <tabstop>dateEdit_validity</tabstop>
+  <tabstop>dateEdit_reduce</tabstop>
+  <tabstop>doubleSpinBox_rate</tabstop>
+  <tabstop>pushButton_in</tabstop>
+  <tabstop>lineEdit_Username</tabstop>
+  <tabstop>lineEdit_userClass</tabstop>
+  <tabstop>lineEdit_Balance</tabstop>
+  <tabstop>pushButton_Recharge</tabstop>
+  <tabstop>doubleSpinBox_Recharge</tabstop>
+  <tabstop>lineEdit_Level</tabstop>
+  <tabstop>pushButton_Upgrade</tabstop>
+  <tabstop>lineEdit_note</tabstop>
+  <tabstop>lineEdit_Token</tabstop>
+  <tabstop>pushButton_Exchange</tabstop>
+  <tabstop>spinBox_Token</tabstop>
+  <tabstop>pushButton_record</tabstop>
+  <tabstop>pushButton_back_record</tabstop>
+  <tabstop>treeWidget_record</tabstop>
  </tabstops>
  <resources>
   <include location="images.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>action_exit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_quit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <buttongroups>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>

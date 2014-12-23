@@ -3,8 +3,12 @@
 
 #include <QtWidgets>
 
-#include "user.h"
-#include "goods.h"
+#include "buyer.h"
+#include "member.h"
+#include "seller.h"
+#include "food.h"
+#include "electronics.h"
+#include "dailynecessities.h"
 
 namespace Ui
 {
@@ -35,12 +39,10 @@ private:
     bool loadData();
     User *findUser(QString userName, int &pos);
     Goods *findGoods(int id, int &pos);
-    void addTreeNode(QTreeWidgetItem *parent, Food *food);
-    void addTreeNode(QTreeWidgetItem *parent, Electronics *elect);
-    void addTreeNode(QTreeWidgetItem *parent, DailyNecessities *daily);
+    void addTreeNode(int index, QStringList newGoods);
     void addTreeRecord(QStringList rec);
-    void listAllGoods(QString key="");
-    void listMyGoods(QString key="");
+    void listAllGoods(QString key = "");
+    void listMyGoods(QString key = "");
 
     /***********************  reset  ************************************/
     void resetLoginPage();
@@ -55,8 +57,6 @@ private slots:
 
     void on_pushButton_login_clicked();
 
-    void on_pushButton_quit_clicked();
-
     void on_pushButton_now_clicked();
 
     /**********************  registerPage  ******************************/
@@ -68,18 +68,15 @@ private slots:
 
     /************************  mainPage  ********************************/
 
-    /////////////////////////  pageBuyer  /////////////////////////////
     void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    //!pageBuyer
 
     void on_spinBox_buyer_valueChanged(int arg1);
 
     void on_pushButton_buy_clicked();
 
-    ////////////////////////  pageSeller  ////////////////////////////
-
-    void on_pushButton_search_clicked();
-
-    void on_pushButton_clear_clicked();
+    //!pageSeller
 
     void on_radioButton_all_clicked();
 
@@ -112,8 +109,6 @@ private slots:
     void on_action_manage_triggered();
 
     void on_action_logout_triggered();
-
-    void on_action_exit_triggered();
 
     void on_action_about_triggered();
 

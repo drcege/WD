@@ -15,11 +15,23 @@ CONFIG += c++11
 SOURCES += main.cpp\
         mainwindow.cpp \
     user.cpp \
-    goods.cpp
+    goods.cpp \
+    food.cpp \
+    electronics.cpp \
+    dailynecessities.cpp \
+    seller.cpp \
+    member.cpp \
+    buyer.cpp
 
 HEADERS  += mainwindow.h \
     user.h \
-    goods.h
+    goods.h \
+    food.h \
+    electronics.h \
+    dailynecessities.h \
+    seller.h \
+    member.h \
+    buyer.h
 
 FORMS    += mainwindow.ui
 
