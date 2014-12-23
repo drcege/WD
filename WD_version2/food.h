@@ -9,13 +9,14 @@ public:
     Food();
     Food(int id, QString goodsName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, QDate reduceDate, double reduceRate);
 
+    goodsClass getClass();
+    double reducedPrice();
     QDate getProduceDate();
     QDate getValidityDate();
     QDate getReduceDate();
     double getReduceRate();
+    QStringList toStringList();
 
-    double reducedPrice();
-    goodsClass getClass();
     friend QDataStream &operator>>(QDataStream &in, Food &);
     friend QDataStream &operator<<(QDataStream &out, const Food &);
 
@@ -25,6 +26,5 @@ private:
     QDate reduceDate;
     double reduceRate;
 };
-
 
 #endif // FOOD_H

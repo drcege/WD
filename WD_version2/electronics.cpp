@@ -12,20 +12,9 @@ Electronics::Electronics(int id, QString electName, int amount, double price, QS
     this->reduceRate = reduceRate;
 }
 
-
-QDate Electronics::getProduceDate()
+goodsClass Electronics::getClass()
 {
-    return produceDate;
-}
-
-QDate Electronics::getValidityDate()
-{
-    return validityDate;
-}
-
-double Electronics::getRuduceRate()
-{
-    return reduceRate;
+    return ELECTRONICS;
 }
 
 double Electronics::reducedPrice()
@@ -37,14 +26,35 @@ double Electronics::reducedPrice()
     return (reducedPrice < 0 ? 0 : reducedPrice);
 }
 
-goodsClass Electronics::getClass()
+QDate Electronics::getProduceDate()
 {
-    return ELECTRONICS;
+    return produceDate;
 }
+
+QDate Electronics::getValidityDate()
+{
+    return validityDate;
+}
+
+double Electronics::getReduceRate()
+{
+    return reduceRate;
+}
+
+QStringList Electronics::toStringList()
+{
+    QStringList sl;
+    QString reduced = (reducedPrice() < 0 ? "已过期" : QString::number(reducedPrice(), 'f', 2));
+    sl << "" << getGoodsName() << QString::number(getAmount()) << QString::number(getPrice(), 'f', 2) << reduced << getOwner() << getProduceDate().toString(Qt::ISODate) << getValidityDate().toString(Qt::ISODate)<< "-" << QString::number(getReduceRate(), 'f', 2) << QString::number(getId());
+    return sl;
+}
+
 
 QDataStream &operator>>(QDataStream &in, Electronics &e)
 {
     in >> e.id >> e.goodsName >> e.amount >> e.price >> e.owner >> e.produceDate >> e.validityDate >> e.reduceRate;
+    if(in.status() != QDataStream::Ok)
+        throw QString("elect.dat 已损坏");
     return in;
 }
 

@@ -2,6 +2,7 @@
 #define GOODS_H
 
 #include <QString>
+#include <QStringList>
 #include <QDate>
 #include <QFile>
 #include <QDataStream>
@@ -12,15 +13,14 @@ class Goods
 {
 public:
     Goods();
-    virtual ~Goods();
     Goods(int id, QString goodsName, int amount, double price, QString owner);
+    virtual ~Goods();
 
     int getId() const;
-    int getAmount();
-    double getPrice();
-    QString getOwner();
-    QString getGoodsName();
-
+    int getAmount() const;
+    double getPrice() const;
+    QString getOwner() const;
+    QString getGoodsName() const;
     void changeAmount(int amount);
     virtual goodsClass getClass() = 0;
     virtual double reducedPrice() = 0;

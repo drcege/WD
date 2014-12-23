@@ -42,7 +42,7 @@ private:
     bool loadData();
     User *findUser(QString userName, int &pos);
     Goods *findGoods(int id, int &pos);
-    void addTreeNode(QTreeWidgetItem *parent, Goods *goods);
+    void addTreeNode(int index, QStringList newGoods);
     void addTreeRecord(QStringList rec);
     void listAllGoods(QString key="");
     void listMyGoods(QString key="");
@@ -60,8 +60,6 @@ private slots:
 
     void on_pushButton_login_clicked();
 
-    void on_pushButton_quit_clicked();
-
     void on_pushButton_now_clicked();
 
     /**********************  registerPage  ******************************/
@@ -73,18 +71,20 @@ private slots:
 
     /************************  mainPage  ********************************/
 
-    /////////////////////////  pageBuyer  /////////////////////////////
+    void on_pushButton_search_clicked();
+
+    void on_pushButton_clear_clicked();
+
     void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    //!pageBuyer
 
     void on_spinBox_buyer_valueChanged(int arg1);
 
     void on_pushButton_buy_clicked();
 
-    ////////////////////////  pageSeller  ////////////////////////////
+    //!pageSeller
 
-    void on_pushButton_search_clicked();
-
-    void on_pushButton_clear_clicked();
 
     void on_radioButton_all_clicked();
 

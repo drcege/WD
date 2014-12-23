@@ -13,7 +13,6 @@ Member::Member(int id, QString userName, QString password, double balance, int l
 
 Member::Member(Buyer buyer)
 {
-    curClass = MEMBER;
     this->id = buyer.getId();
     this->userName = buyer.getUserName();
     this->password = buyer.getPassword();
@@ -22,6 +21,11 @@ Member::Member(Buyer buyer)
     this->token = 0;
     for (int r = 0; r < buyer.recordCount(); ++r)
         this->record.push_back(buyer.getRecord(r));
+}
+
+userClass Member::getClass()
+{
+    return MEMBER;
 }
 
 int Member::getLevel()
@@ -34,25 +38,21 @@ int Member::getToken()
     return token;
 }
 
-void Member::changeToken(int token)
-{
-    this->token += token;
-}
-
 void Member::setLevel(int level)
 {
     this->level = level;
 }
 
-bool Member::operator <(const Member &rhs)
+void Member::changeToken(int token)
 {
-    return this->id < rhs.getId();
+    this->token += token;
 }
 
 QDataStream &operator >>(QDataStream &in, Member &m)
 {
     in >> m.id >> m.userName >> m.password >> m.balance >> m.level >> m.token >> m.record;
-    m.curClass = MEMBER;
+    if(in.status() != QDataStream::Ok)
+        throw QString("member.dat 已损坏");
     return in;
 }
 

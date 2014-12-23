@@ -22,22 +22,22 @@ int Goods::getId() const
     return id;
 }
 
-int Goods::getAmount()
+int Goods::getAmount() const
 {
     return amount;
 }
 
-double Goods::getPrice()
+double Goods::getPrice() const
 {
     return price;
 }
 
-QString Goods::getOwner()
+QString Goods::getOwner() const
 {
     return owner;
 }
 
-QString Goods::getGoodsName()
+QString Goods::getGoodsName() const
 {
     return goodsName;
 }
@@ -46,4 +46,3 @@ void Goods::changeAmount(int amount)
 {
     this->amount += amount;
 }
-

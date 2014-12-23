@@ -9,12 +9,13 @@ public:
     Electronics();
     Electronics(int id, QString electName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, double reduceRate);
 
+    goodsClass getClass();
+    double reducedPrice();
     QDate getProduceDate();
     QDate getValidityDate();
-    double getRuduceRate();
+    double getReduceRate();
+    QStringList toStringList();
 
-    double reducedPrice();
-    goodsClass getClass();
     friend QDataStream &operator>>(QDataStream &in, Electronics &e);
     friend QDataStream &operator<<(QDataStream &out, const Electronics &e);
 

@@ -15,29 +15,28 @@ MainWindow::MainWindow(QWidget *parent) :
     QHeaderView *headRecord = ui->treeWidget_record->header();
     head->setSectionsMovable(false);
     headRecord->setVisible(true);
+
     connect(ui->lineEdit_user_login, SIGNAL(textChanged(QString)), this, SLOT(loginPage_textChanged()));
     connect(ui->lineEdit_pwd_login, SIGNAL(textChanged(QString)), this, SLOT(loginPage_textChanged()));
     connect(ui->lineEdit_user_register, SIGNAL(textChanged(QString)), this, SLOT(registerPage_textChanged()));
     connect(ui->lineEdit_pwd_register, SIGNAL(textChanged(QString)), this, SLOT(registerPage_textChanged()));
     connect(ui->lineEdit_pwd_repeat, SIGNAL(textChanged(QString)), this, SLOT(registerPage_textChanged()));
+
     ui->stackedWidget->setCurrentWidget(ui->loginPage);
     ui->lineEdit_user_login->setFocus();
     ui->pushButton_login->setDefault(true);
     ui->treeWidget->expandAll();
+
     // 读取数据，初始化内部数据变量
     loadData();
-    QTreeWidgetItem *treeParent;
-    treeParent = ui->treeWidget->topLevelItem(0);
     for (int p = 0; p < listFood.count(); ++p) {
-        addTreeNode(treeParent, &(listFood[p]));
+        addTreeNode(0, listFood[p].toStringList());
     }
-    treeParent = ui->treeWidget->topLevelItem(1);
     for (int p = 0; p < listElect.count(); ++p) {
-        addTreeNode(treeParent, &(listElect[p]));
+        addTreeNode(1, listElect[p].toStringList());
     }
-    treeParent = ui->treeWidget->topLevelItem(2);
     for (int p = 0; p < listDaily.count(); ++p) {
-        addTreeNode(treeParent, &(listDaily[p]));
+        addTreeNode(2, listDaily[p].toStringList());
     }
 }
 
@@ -50,12 +49,13 @@ MainWindow::~MainWindow()
 
 bool MainWindow::loadData()
 {
-    USERID = 0;
-    GOODSID = 0;
+    USERID = GOODSID = 0;
 
     QDir dir;
-    if(!dir.exists("data"))
+    if(!dir.exists("data")){
         dir.mkdir("data");
+        return true;
+    }
     QVector<QString> warn;
     QFile file;
 
@@ -65,13 +65,20 @@ bool MainWindow::loadData()
         quint32 magic;
         in >> magic;
         if (magic == 0xa0b0c0d0) {
+            int userid;
+            in >> userid;
+            USERID = (userid > USERID ? userid : USERID);
             Buyer buyer;
             while (!in.atEnd()) {
-                in >> buyer;
+                try{
+                    in >> buyer;
+                }catch(QString e)
+                {
+                    warn.append(e);
+                    break;
+                }
                 listBuyer.append(buyer);
             }
-            int lastId = buyer.getId();
-            USERID = (lastId > USERID ? lastId : USERID);
         } else
             warn.append("buyer.dat 已损坏");
         file.close();
@@ -82,13 +89,19 @@ bool MainWindow::loadData()
         quint32 magic;
         in >> magic;
         if (magic == 0xa0b0c0d0) {
+            int userid;
+            in >> userid;
+            USERID = (userid > USERID ? userid : USERID);
             Member member;
             while (!in.atEnd()) {
-                in >> member;
+                try{
+                    in >> member;
+                }catch(QString e){
+                    warn.append(e);
+                    break;
+                }
                 listMember.append(member);
             }
-            int lastId = member.getId();
-            USERID = (lastId > USERID ? lastId : USERID);
         } else
             warn.append("member.dat 已损坏");
         file.close();
@@ -99,13 +112,19 @@ bool MainWindow::loadData()
         quint32 magic;
         in >> magic;
         if (magic == 0xa0b0c0d0) {
+            int userid;
+            in >> userid;
+            USERID = (userid > USERID ? userid : USERID);
             Seller seller;
             while (!in.atEnd()) {
-                in >> seller;
+                try{
+                    in >> seller;
+                }catch(QString e){
+                    warn.append(e);
+                    break;
+                }
                 listSeller.append(seller);
             }
-            int lastId = seller.getId();
-            USERID = (lastId > USERID ? lastId : USERID);
         } else
             warn.append("seller.dat 已损坏");
         file.close();
@@ -116,13 +135,19 @@ bool MainWindow::loadData()
         quint32 magic;
         in >> magic;
         if (magic == 0xa0b0c0d0) {
+            int userid;
+            in >> userid;
+            GOODSID = (userid > GOODSID ? userid : GOODSID);
             Food food;
             while (!in.atEnd()) {
-                in >> food;
+                try{
+                    in >> food;
+                }catch(QString e){
+                    warn.append(e);
+                    break;
+                }
                 listFood.append(food);
             }
-            int lastId = food.getId();
-            GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         } else
             warn.append("food.dat 已损坏");
         file.close();
@@ -133,13 +158,19 @@ bool MainWindow::loadData()
         quint32 magic;
         in >> magic;
         if (magic == 0xa0b0c0d0) {
+            int userid;
+            in >> userid;
+            GOODSID = (userid > GOODSID ? userid : GOODSID);
             Electronics elect;
             while (!in.atEnd()) {
-                in >> elect;
+                try{
+                    in >> elect;
+                }catch(QString e){
+                    warn.append(e);
+                    break;
+                }
                 listElect.append(elect);
             }
-            int lastId = elect.getId();
-            GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         } else
             warn.append("elect.dat 已损坏");
         file.close();
@@ -150,27 +181,34 @@ bool MainWindow::loadData()
         quint32 magic;
         in >> magic;
         if (magic == 0xa0b0c0d0) {
+            int userid;
+            in >> userid;
+            GOODSID = (userid > GOODSID ? userid : GOODSID);
             DailyNecessities daily;
             while (!in.atEnd()) {
-                in >> daily;
+                try{
+                    in >> daily;
+                }catch(QString e)
+                {
+                    warn.append(e);
+                    break;
+                }
                 listDaily.append(daily);
             }
-            int lastId = daily.getId();
-            GOODSID = (lastId > GOODSID ? lastId : GOODSID);
         } else
             warn.append("daily.dat 已损坏");
         file.close();
     }
     if (!warn.isEmpty()) {
         QFile fileLog("data/log.txt");
-        fileLog.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text);
-        QTextStream log(&fileLog);
-        log << QDateTime::currentDateTime().toString(Qt::ISODate) << endl;
-        for (int i = 0; i < warn.size(); ++i) {
-            log << warn.at(i) << endl;
+        if(fileLog.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text)){
+            QTextStream log(&fileLog);
+            log << QDateTime::currentDateTime().toString(Qt::ISODate) << endl;
+            for (int i = 0; i < warn.size(); ++i)
+                log << warn.at(i) << endl;
+            log << endl;
+            fileLog.close();
         }
-        log << endl;
-        fileLog.close();
     }
     return true;
 }
@@ -217,26 +255,10 @@ Goods *MainWindow::findGoods(int id, int &pos)
     return Q_NULLPTR;
 }
 
-void MainWindow::addTreeNode(QTreeWidgetItem *parent, Goods *goods)
+void MainWindow::addTreeNode(int index, QStringList newGoods)
 {
-    QStringList sl;
-    QString reduced = (goods->reducedPrice() < 0 ? "已过期" : QString::number(goods->reducedPrice(), 'f', 2));
-    sl << "" << goods->getGoodsName() << QString::number(goods->getAmount()) << QString::number(goods->getPrice(), 'f', 2) << reduced << goods->getOwner();
-    if(goods->getClass() == FOOD) {
-        Food *f = dynamic_cast<Food*>(goods);
-        sl << f->getProduceDate().toString(Qt::ISODate) << f->getValidityDate().toString(Qt::ISODate) << f->getReduceDate().toString(Qt::ISODate) << QString::number(f->getReduceRate(), 'f', 2);
-    }
-    else if(goods->getClass() == ELECTRONICS) {
-        Electronics *e = dynamic_cast<Electronics*>(goods);
-        sl << e->getProduceDate().toString(Qt::ISODate) << e->getValidityDate().toString(Qt::ISODate)<< "-" << QString::number(e->getRuduceRate(), 'f', 2);
-    }
-    else {
-        DailyNecessities *d = dynamic_cast<DailyNecessities*>(goods);
-    sl << d->getProduceDate().toString(Qt::ISODate) << d->getValidityDate().toString(Qt::ISODate) << "-" << "-" ;
-    }
-    sl << QString::number(goods->getId());
-    QTreeWidgetItem *item = new QTreeWidgetItem(sl);
-    parent->addChild(item);
+    QTreeWidgetItem *item = new QTreeWidgetItem(newGoods);
+    ui->treeWidget->topLevelItem(index)->addChild(item);
 }
 
 void MainWindow::addTreeRecord(QStringList rec)
@@ -251,8 +273,8 @@ void MainWindow::listAllGoods(QString key)
     for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
         treeParent = ui->treeWidget->topLevelItem(i);
         for (int p = 0; p < treeParent->childCount(); ++p) {
-            bool state = treeParent->child(p)->text(10).contains(key);
-            treeParent->child(p)->setHidden(state);
+            bool state = treeParent->child(p)->text(1).contains(key);
+            treeParent->child(p)->setHidden(!state);
         }
     }
 }
@@ -264,9 +286,9 @@ void MainWindow::listMyGoods(QString key)
         treeParent = ui->treeWidget->topLevelItem(i);
         for (int p = 0; p < treeParent->childCount(); ++p) {
             QTreeWidgetItem *treeChild = treeParent->child(p);
-            QString  user = ui->lineEdit_Username->text();
-            bool state = (treeChild->text(5) == user)&&(treeChild->text(10).contains(key));
-            treeParent->child(p)->setHidden(state);
+            QString user = ui->lineEdit_Username->text();
+            bool state = (treeChild->text(5) == user)&&(treeChild->text(1).contains(key));
+            treeParent->child(p)->setHidden(!state);
         }
     }
 }
@@ -435,11 +457,6 @@ void MainWindow::on_pushButton_login_clicked()
     }
 }
 
-void MainWindow::on_pushButton_quit_clicked()
-{
-    QApplication::quit();
-}
-
 void MainWindow::on_pushButton_now_clicked()
 {
     resetLoginPage();
@@ -500,6 +517,28 @@ void MainWindow::on_pushButton_back_clicked()
 
 /******************************  mainPage  ************************************/
 
+void MainWindow::on_pushButton_search_clicked()
+{
+    QString key = ui->lineEdit_search->text();
+    if(curUser->getClass() == SELLER){
+        if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+            listAllGoods(key);
+        else
+            listMyGoods(key);
+    }
+    else
+        listAllGoods(key);
+}
+
+void MainWindow::on_pushButton_clear_clicked()
+{
+    ui->lineEdit_search->clear();
+    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+        listAllGoods();
+    else
+        listMyGoods();
+}
+
 void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
     if (current->parent() == Q_NULLPTR)
@@ -510,6 +549,8 @@ void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTre
             emit ui->spinBox_buyer->valueChanged(-1);
     }
 }
+
+//!pageBuyer
 
 void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
 {
@@ -523,7 +564,7 @@ void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
         ui->pushButton_buy->setDisabled(true);
         return;
     }
-    int amount = ui->spinBox_buyer->value();
+    int amount = arg1;
     double price = strp.toDouble();
     ui->lineEdit_price->setText(QString::number(price * amount, 'f', 2));
     price *= amount;
@@ -592,24 +633,7 @@ void MainWindow::on_pushButton_buy_clicked()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_pushButton_search_clicked()
-{
-    QString key = ui->lineEdit_search->text();
-    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
-        listAllGoods(key);
-    else
-        listMyGoods(key);
-}
-
-void MainWindow::on_pushButton_clear_clicked()
-{
-    ui->lineEdit_search->clear();
-    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
-        listAllGoods();
-    else
-        listMyGoods();
-}
+//!pageSeller
 
 void MainWindow::on_radioButton_all_clicked()
 {
@@ -661,10 +685,6 @@ void MainWindow::on_pushButton_in_clicked()
     QDate produceDate = ui->dateEdit_produce->date();
     QDate validityDate = ui->dateEdit_validity->date();
     QDate reduceDate = ui->dateEdit_reduce->date();
-    if (!(produceDate <= reduceDate && reduceDate <= validityDate)) {
-        QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 降价期 ≤ 有效期");
-        return;
-    }
     QString name = ui->lineEdit_name->text();
     QString owner = curUser->getUserName();
     int amount = ui->spinBox_seller->value();
@@ -672,29 +692,37 @@ void MainWindow::on_pushButton_in_clicked()
     double rate = ui->doubleSpinBox_rate->value();
     QString goodsClass = ui->comboBox->currentText();
     if ("食品" == goodsClass) {
-        QTreeWidgetItem *current = ui->treeWidget->topLevelItem(0);
+        if (!(produceDate <= reduceDate && reduceDate <= validityDate)) {
+            QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 降价期 ≤ 有效期");
+            return;
+        }
         Food *food = new Food(++GOODSID, name, amount, price, owner, produceDate, validityDate, reduceDate, rate);
         listFood.push_back(*food);
-        addTreeNode(current, food);
+        addTreeNode(0, food->toStringList());
         delete food;
     } else if ("电子产品" == goodsClass) {
-        QTreeWidgetItem *current = ui->treeWidget->topLevelItem(1);
+        if (!(produceDate <= validityDate)) {
+            QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 有效期");
+            return;
+        }
         Electronics *elect = new Electronics(++GOODSID, name, amount, price, owner, produceDate, validityDate, rate);
         listElect.push_back(*elect);
-        addTreeNode(current, elect);
+        addTreeNode(1, elect->toStringList());
         delete elect;
     } else {
-        QTreeWidgetItem *current = ui->treeWidget->topLevelItem(2);
+        if (!(produceDate <= validityDate)) {
+            QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 有效期");
+            return;
+        }
         DailyNecessities *daily = new DailyNecessities(++GOODSID, name, amount, price, owner, produceDate, validityDate);
         listDaily.push_back(*daily);
-        addTreeNode(current, daily);
+        addTreeNode(2, daily->toStringList());
         delete daily;
     }
     QMessageBox::information(this, "进货成功", "进货成功！");
     ui->lineEdit_name->clear();
     ui->lineEdit_name->setFocus();
 }
-
 
 /****************************  managePage  *********************************/
 
@@ -724,10 +752,7 @@ void MainWindow::on_pushButton_Upgrade_clicked()
             int pos = -1;
             findUser(curUser->getUserName(), pos);
             Member newMember(*(dynamic_cast<Buyer *>(curUser)));
-            //Member newMember(++USERID, buyer->getUserName(), buyer->getPassword(), buyer->getBalance(), 1);
-            ///////////////// 查找插入位置！！！！！！！！！！！！
-            QList<Member>::iterator newPos =  qLowerBound(listMember.begin(), listMember.end(), newMember);
-            listMember.insert(newPos, newMember);
+            listMember.append(newMember);
             listBuyer.removeAt(pos);
         }
     } else {
@@ -815,15 +840,12 @@ void MainWindow::on_action_help_triggered()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    QDir dir;
-    if(!dir.exists("data"))
-        dir.mkdir("data");
     QFile file;
     file.setFileName("data/buyer.dat");
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
-        out << magic;
+        out << magic << USERID;
         for (int i = 0; i < listBuyer.size(); ++i)
             out << listBuyer.at(i);
         file.close();
@@ -832,7 +854,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
-        out << magic;
+        out << magic << USERID;
         for (int i = 0; i < listMember.size(); ++i)
             out << listMember.at(i);
         file.close();
@@ -841,7 +863,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
-        out << magic;
+        out << magic << USERID;
         for (int i = 0; i < listSeller.size(); ++i)
             out << listSeller.at(i);
         file.close();
@@ -850,7 +872,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
-        out << magic;
+        out << magic << GOODSID;
         for (int i = 0; i < listFood.size(); ++i)
             out << listFood.at(i);
         file.close();
@@ -859,7 +881,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
-        out << magic;
+        out << magic << GOODSID;
         for (int i = 0; i < listElect.size(); ++i)
             out << listElect.at(i);
         file.close();
@@ -868,7 +890,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (file.open(QIODevice::WriteOnly)) {
         QDataStream out(&file);
         quint32 magic = 0xa0b0c0d0;
-        out << magic;
+        out << magic << GOODSID;
         for (int i = 0; i < listDaily.size(); ++i)
             out << listDaily.at(i);
         file.close();

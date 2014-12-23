@@ -7,17 +7,16 @@ Buyer::Buyer()
 Buyer::Buyer(int id, QString userName, QString password, double balance)
     : User(id, userName, password, balance)
 {
-    curClass = BUYER;
+}
+
+userClass Buyer::getClass()
+{
+    return BUYER;
 }
 
 int Buyer::recordCount()
 {
     return record.count();
-}
-
-QStringList Buyer::getRecord(int i)
-{
-    return record.at(i);
 }
 
 int Buyer::appendRecord(QStringList rec)
@@ -26,10 +25,16 @@ int Buyer::appendRecord(QStringList rec)
     return record.count();
 }
 
+QStringList Buyer::getRecord(int i)
+{
+    return record.at(i);
+}
+
 QDataStream &operator>>(QDataStream &in, Buyer &b)
 {
     in >> b.id >> b.userName >> b.password >> b.balance >> b.record;
-    b.curClass = BUYER;
+    if(in.status() != QDataStream::Ok)
+        throw QString("buyer.dat 已损坏");
     return in;
 }
 

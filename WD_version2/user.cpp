@@ -18,12 +18,6 @@ User::User(int id, QString userName, QString password, double balance)
     this->userName = userName;
     this->password = password;
     this->balance = balance;
-    this->curClass = USER;
-}
-
-void User::recharge(double money)
-{
-    balance += money;
 }
 
 int User::getId() const
@@ -31,22 +25,22 @@ int User::getId() const
     return id;
 }
 
-QString User::getUserName()
+QString User::getUserName() const
 {
     return userName;
 }
 
-QString User::getPassword()
+QString User::getPassword() const
 {
     return password;
 }
 
-double User::getBalance()
+double User::getBalance() const
 {
     return balance;
 }
 
-userClass User::getClass()
+void User::recharge(double money)
 {
-    return curClass;
+    balance += money;
 }
