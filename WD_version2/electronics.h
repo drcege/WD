@@ -25,5 +25,4 @@ private:
     double reduceRate;
 };
 
-
 #endif // ELECTRONICS_H

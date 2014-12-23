@@ -8,16 +8,16 @@ User::User()
     this->balance = 0.0;
 }
 
-User::~User()
-{
-}
-
 User::User(int id, QString userName, QString password, double balance)
 {
     this->id = id;
     this->userName = userName;
     this->password = password;
     this->balance = balance;
+}
+
+User::~User()
+{
 }
 
 int User::getId() const

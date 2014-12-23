@@ -26,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEdit_user_login->setFocus();
     ui->pushButton_login->setDefault(true);
     ui->treeWidget->expandAll();
-
     // 读取数据，初始化内部数据变量
     loadData();
     for (int p = 0; p < listFood.count(); ++p) {
@@ -50,15 +49,13 @@ MainWindow::~MainWindow()
 bool MainWindow::loadData()
 {
     USERID = GOODSID = 0;
-
     QDir dir;
-    if(!dir.exists("data")){
+    if (!dir.exists("data")) {
         dir.mkdir("data");
         return true;
     }
     QVector<QString> warn;
     QFile file;
-
     file.setFileName("data/buyer.dat");
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream in(&file);
@@ -70,10 +67,9 @@ bool MainWindow::loadData()
             USERID = (userid > USERID ? userid : USERID);
             Buyer buyer;
             while (!in.atEnd()) {
-                try{
+                try {
                     in >> buyer;
-                }catch(QString e)
-                {
+                } catch (QString e) {
                     warn.append(e);
                     break;
                 }
@@ -94,9 +90,9 @@ bool MainWindow::loadData()
             USERID = (userid > USERID ? userid : USERID);
             Member member;
             while (!in.atEnd()) {
-                try{
+                try {
                     in >> member;
-                }catch(QString e){
+                } catch (QString e) {
                     warn.append(e);
                     break;
                 }
@@ -117,9 +113,9 @@ bool MainWindow::loadData()
             USERID = (userid > USERID ? userid : USERID);
             Seller seller;
             while (!in.atEnd()) {
-                try{
+                try {
                     in >> seller;
-                }catch(QString e){
+                } catch (QString e) {
                     warn.append(e);
                     break;
                 }
@@ -140,9 +136,9 @@ bool MainWindow::loadData()
             GOODSID = (userid > GOODSID ? userid : GOODSID);
             Food food;
             while (!in.atEnd()) {
-                try{
+                try {
                     in >> food;
-                }catch(QString e){
+                } catch (QString e) {
                     warn.append(e);
                     break;
                 }
@@ -163,9 +159,9 @@ bool MainWindow::loadData()
             GOODSID = (userid > GOODSID ? userid : GOODSID);
             Electronics elect;
             while (!in.atEnd()) {
-                try{
+                try {
                     in >> elect;
-                }catch(QString e){
+                } catch (QString e) {
                     warn.append(e);
                     break;
                 }
@@ -186,10 +182,9 @@ bool MainWindow::loadData()
             GOODSID = (userid > GOODSID ? userid : GOODSID);
             DailyNecessities daily;
             while (!in.atEnd()) {
-                try{
+                try {
                     in >> daily;
-                }catch(QString e)
-                {
+                } catch (QString e) {
                     warn.append(e);
                     break;
                 }
@@ -201,7 +196,7 @@ bool MainWindow::loadData()
     }
     if (!warn.isEmpty()) {
         QFile fileLog("data/log.txt");
-        if(fileLog.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text)){
+        if (fileLog.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
             QTextStream log(&fileLog);
             log << QDateTime::currentDateTime().toString(Qt::ISODate) << endl;
             for (int i = 0; i < warn.size(); ++i)
@@ -270,7 +265,7 @@ void MainWindow::addTreeRecord(QStringList rec)
 void MainWindow::listAllGoods(QString key)
 {
     QTreeWidgetItem *treeParent;
-    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
+    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
         treeParent = ui->treeWidget->topLevelItem(i);
         for (int p = 0; p < treeParent->childCount(); ++p) {
             bool state = treeParent->child(p)->text(1).contains(key);
@@ -282,12 +277,12 @@ void MainWindow::listAllGoods(QString key)
 void MainWindow::listMyGoods(QString key)
 {
     QTreeWidgetItem *treeParent;
-    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
+    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
         treeParent = ui->treeWidget->topLevelItem(i);
         for (int p = 0; p < treeParent->childCount(); ++p) {
             QTreeWidgetItem *treeChild = treeParent->child(p);
             QString user = ui->lineEdit_Username->text();
-            bool state = (treeChild->text(5) == user)&&(treeChild->text(1).contains(key));
+            bool state = (treeChild->text(5) == user) && (treeChild->text(1).contains(key));
             treeParent->child(p)->setHidden(!state);
         }
     }
@@ -520,20 +515,19 @@ void MainWindow::on_pushButton_back_clicked()
 void MainWindow::on_pushButton_search_clicked()
 {
     QString key = ui->lineEdit_search->text();
-    if(curUser->getClass() == SELLER){
-        if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+    if (curUser->getClass() == SELLER) {
+        if (ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
             listAllGoods(key);
         else
             listMyGoods(key);
-    }
-    else
+    } else
         listAllGoods(key);
 }
 
 void MainWindow::on_pushButton_clear_clicked()
 {
     ui->lineEdit_search->clear();
-    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+    if (ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
         listAllGoods();
     else
         listMyGoods();
@@ -541,12 +535,13 @@ void MainWindow::on_pushButton_clear_clicked()
 
 void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-    if (current->parent() == Q_NULLPTR)
+    if (current->parent() == Q_NULLPTR) {
+        ui->lineEdit_price->setText("0.00");
         ui->pushButton_buy->setDisabled(true);
-    else {
+    } else {
         ui->spinBox_buyer->setMaximum(current->text(2).toInt());
         if (curUser->getClass() != SELLER)
-            emit ui->spinBox_buyer->valueChanged(-1);
+            emit ui->spinBox_buyer->valueChanged(ui->spinBox_buyer->value());
     }
 }
 
@@ -556,11 +551,13 @@ void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
 {
     QTreeWidgetItem *current = ui->treeWidget->currentItem();
     if (current->parent() == Q_NULLPTR) {
+        ui->lineEdit_price->setText("0.00");
         ui->pushButton_buy->setDisabled(true);
         return;
     }
     QString strp = current->text(4);
     if (strp == "已过期") {
+        ui->lineEdit_price->setText("0.00");
         ui->pushButton_buy->setDisabled(true);
         return;
     }

@@ -4,10 +4,6 @@ Goods::Goods()
 {
 }
 
-Goods::~Goods()
-{
-}
-
 Goods::Goods(int id, QString foodName, int amount, double price, QString owner)
 {
     this->id = id;
@@ -15,6 +11,10 @@ Goods::Goods(int id, QString foodName, int amount, double price, QString owner)
     this->amount = amount;
     this->price = price;
     this->owner = owner;
+}
+
+Goods::~Goods()
+{
 }
 
 int Goods::getId() const
