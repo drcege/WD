@@ -22,25 +22,26 @@ User::~User()
 
 int User::getId() const
 {
-    return id;
+    return this->id;
 }
 
 QString User::getUserName() const
 {
-    return userName;
+    return this->userName;
 }
 
 QString User::getPassword() const
 {
-    return password;
+    return this->password;
 }
 
 double User::getBalance() const
 {
-    return balance;
+    return this->balance;
 }
 
-void User::recharge(double money)
+double User::recharge(double money)
 {
     balance += money;
+    return this->balance;
 }

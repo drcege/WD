@@ -18,7 +18,7 @@ public:
     QString getUserName() const;
     QString getPassword() const;
     double getBalance() const;
-    void recharge(double money);
+    double recharge(double money);
     virtual UserClass getClass() = 0;
 
 protected:

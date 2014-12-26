@@ -11,10 +11,10 @@ public:
     Member(Buyer buyer);
 
     UserClass getClass();
-    int getLevel();
-    int getToken();
-    void setLevel(int level);
-    void changeToken(int token);
+    int getLevel() const;
+    int getToken() const;
+    int setLevel(int level);
+    int changeToken(int token);
 
     friend QDataStream &operator>>(QDataStream &in, Member &m);
     friend QDataStream &operator<<(QDataStream &out, const Member &m);

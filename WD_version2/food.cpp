@@ -27,24 +27,24 @@ double Food::reducedPrice()
     return price * (1 - reduceRate);
 }
 
-QDate Food::getProduceDate()
+QDate Food::getProduceDate() const
 {
-    return produceDate;
+    return this->produceDate;
 }
 
-QDate Food::getValidityDate()
+QDate Food::getValidityDate() const
 {
-    return validityDate;
+    return this->validityDate;
 }
 
-QDate Food::getReduceDate()
+QDate Food::getReduceDate() const
 {
-    return reduceDate;
+    return this->reduceDate;
 }
 
-double Food::getReduceRate()
+double Food::getReduceRate() const
 {
-    return reduceRate;
+    return this->reduceRate;
 }
 
 QStringList Food::toStringList()

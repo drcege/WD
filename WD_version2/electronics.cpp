@@ -26,19 +26,19 @@ double Electronics::reducedPrice()
     return (reducedPrice < 0 ? 0 : reducedPrice);
 }
 
-QDate Electronics::getProduceDate()
+QDate Electronics::getProduceDate() const
 {
-    return produceDate;
+    return this->produceDate;
 }
 
-QDate Electronics::getValidityDate()
+QDate Electronics::getValidityDate() const
 {
-    return validityDate;
+    return this->validityDate;
 }
 
-double Electronics::getReduceRate()
+double Electronics::getReduceRate() const
 {
-    return reduceRate;
+    return this->reduceRate;
 }
 
 QStringList Electronics::toStringList()

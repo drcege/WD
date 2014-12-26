@@ -21,7 +21,7 @@ public:
     double getPrice() const;
     QString getOwner() const;
     QString getGoodsName() const;
-    void changeAmount(int amount);
+    int changeAmount(int amount);
     virtual GoodsClass getClass() = 0;
     virtual double reducedPrice() = 0;
 

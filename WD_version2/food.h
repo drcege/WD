@@ -11,10 +11,10 @@ public:
 
     GoodsClass getClass();
     double reducedPrice();
-    QDate getProduceDate();
-    QDate getValidityDate();
-    QDate getReduceDate();
-    double getReduceRate();
+    QDate getProduceDate() const;
+    QDate getValidityDate() const;
+    QDate getReduceDate() const;
+    double getReduceRate() const;
     QStringList toStringList();
 
     friend QDataStream &operator>>(QDataStream &in, Food &);

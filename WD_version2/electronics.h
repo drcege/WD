@@ -11,9 +11,9 @@ public:
 
     GoodsClass getClass();
     double reducedPrice();
-    QDate getProduceDate();
-    QDate getValidityDate();
-    double getReduceRate();
+    QDate getProduceDate() const;
+    QDate getValidityDate() const;
+    double getReduceRate() const;
     QStringList toStringList();
 
     friend QDataStream &operator>>(QDataStream &in, Electronics &e);

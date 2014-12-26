@@ -23,14 +23,14 @@ double DailyNecessities::reducedPrice()
     return price;
 }
 
-QDate DailyNecessities::getProduceDate()
+QDate DailyNecessities::getProduceDate() const
 {
-    return produceDate;
+    return this->produceDate;
 }
 
-QDate DailyNecessities::getValidityDate()
+QDate DailyNecessities::getValidityDate() const
 {
-    return validityDate;
+    return this->validityDate;
 }
 
 QStringList DailyNecessities::toStringList()
