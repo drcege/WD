@@ -155,6 +155,7 @@ bool MainWindow::loadData()
 
 User *MainWindow::findUser(QString userName, int &pos)
 {
+    pos = -1;
     for (int i = 0; i < listBuyer.size(); ++i)
         if (userName == listBuyer[i].getUserName()) {
             pos = i;
@@ -175,6 +176,7 @@ User *MainWindow::findUser(QString userName, int &pos)
 
 Goods *MainWindow::findGoods(int id, int &pos)
 {
+    pos = -1;
     for (int i = 0; i < listFood.count(); ++i)
         if (id == listFood.at(i).getId()) {
             pos = i;
@@ -205,9 +207,7 @@ QVector<QVector<QStringList> > MainWindow::getAllGoods()
     for(int i = 0; i < listDaily.count(); ++i){
         allGoods[2].append(listDaily[i].toStringList());
     }
-    for(int i = 0; i < allGoods.size(); ++i)
-        for(int j = 0; j < allGoods.at(i).size(); ++i)
-            qDebug() << allGoods.at(i).at(j);
+    qDebug() << allGoods.size() << allGoods[0].size() << allGoods[1].size() << allGoods[2].size();
     return allGoods;
 }
 
@@ -224,7 +224,6 @@ void MainWindow::on_action_help_triggered()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    qDebug() << "close";
     QDir dir;
     if(!dir.exists("data"))
         dir.mkdir("data");
@@ -302,7 +301,7 @@ void MainWindow::processPendingDatagrams()
         User* curUser;
         QString user, pwd, repeat, goodsClass, userClass, name, owner;
         QVector<QStringList> vecRecord;
-        QVector<QVector<QStringList> > vecGoods;
+        QVector<QVector<QStringList> > vecGoods(3);
         double pay, money;
         int id, amount, token, pos;
         double price, rate;
@@ -313,28 +312,27 @@ void MainWindow::processPendingDatagrams()
         switch (type) {
         case LoginRequest:
             in >> user >> pwd;
-            out << LoginFeedBack;
+            out << LoginResponse;
             curUser = findUser(user, pos);
             if (curUser == Q_NULLPTR || pwd != curUser->getPassword()){
-                qDebug() << "login false";
                 out << false;
             }
             else {    // 登陆成功
-                qDebug() << "login succ" << pos;
                 out << true;
                 out << curUser->getUserName();
                 switch(curUser->getClass()){
                 case BUYER:
-                    out << "买家"; break;
+                    userClass = "买家"; break;
                 case MEMBER:
-                    out << "会员"; break;
+                    userClass = "会员"; break;
                 case SELLER:
-                    out << "卖家"; break;
+                    userClass = "卖家"; break;
                 }
-                out << curUser->getBalance();
+                out << userClass;
+                out << QString::number(curUser->getBalance(), 'f', 2);
                 vecRecord.clear();
                 if(curUser->getClass() == SELLER){    // 卖家
-                    out << "" << "" << vecRecord;
+                    out << QString() << QString() << vecRecord;
                 }else {
                     Buyer *curBuyer = dynamic_cast<Buyer *>(curUser);
                     for (int r = 0; r < curBuyer->recordCount(); ++r)
@@ -344,7 +342,7 @@ void MainWindow::processPendingDatagrams()
                         out << QString::number(curMem->getLevel()) << QString::number(curMem->getToken()) << vecRecord;
                     }
                     else {    // 买家
-                        out << "" << "" << vecRecord;
+                        out << QString() << QString() << vecRecord;
                     }
                 }    // end of 非卖家
                 vecGoods = getAllGoods();
@@ -353,7 +351,7 @@ void MainWindow::processPendingDatagrams()
             break;
         case RegisterRequest:
             in >> user >> pwd >> repeat >> userClass;
-            out << RegisterFeedBack;
+            out << RegisterResponse;
             if (pwd != repeat) {    // 密码不一致
                 out << 0;
                 break;
@@ -369,15 +367,15 @@ void MainWindow::processPendingDatagrams()
                 Seller curSeller(++USERID, user, pwd);
                 listSeller.push_back(curSeller);
             }
-            qDebug() << "register request";
             out << 1;
             break;
         case BuyRequest:
             in >> user >> id >> amount >> pay;
-            out << BuyFeedBack;
+            out << BuyResponse;
             curUser = findUser(user, pos);
             if (pay > curUser->getBalance()) {
                 out << false;
+                qDebug() << "buy false";
             } else {
                 out << true;
                 // 买家支付
@@ -390,10 +388,18 @@ void MainWindow::processPendingDatagrams()
                 // 商品数量减少
                 Goods *curGoods = findGoods(id, pos);
                 curGoods->changeAmount(-1 * amount);
+                if (0 == curGoods->getAmount()) {
+                    if(curGoods->getClass() == FOOD)
+                        listFood.removeAt(pos);
+                    else if(curGoods->getClass() == ELECTRONICS)
+                        listElect.removeAt(pos);
+                    else
+                        listDaily.removeAt(pos);
+                }
                 // 卖家收入
                 User* seller = findUser(curGoods->getOwner(), pos);
                 seller->recharge(pay);
-                out << id << QString::number(curGoods->getAmount()) << user << QString::number(curUser->getBalance());
+                out << QString::number(id) << QString::number(curGoods->getAmount()) << user << QString::number(curUser->getBalance());
                 if(curUser->getClass() == MEMBER)
                     out << QString::number(dynamic_cast<Member *>(curUser)->getToken());
                 else
@@ -406,7 +412,7 @@ void MainWindow::processPendingDatagrams()
             break;
         case StockRequest:
             in >> goodsClass >> name >> amount >> price >> owner >> produceDate >> validityDate >> reduceDate >> rate;
-            out << StockFeedBack;
+            out << StockResponse;
             if ("食品" == goodsClass) {
                 Food food(++GOODSID, name, amount, price, owner, produceDate, validityDate, reduceDate, rate);
                 listFood.push_back(food);
@@ -423,18 +429,18 @@ void MainWindow::processPendingDatagrams()
             break;
         case RechargeRequest:
             in >> user >> money;
-            out << RechargeFeedBack;
+            out << RechargeResponse;
             curUser = findUser(user, pos);
             curUser->recharge(money);
             out << user << QString::number(curUser->getBalance(), 'f', 2);
             break;
         case UpgradeRequest:
             in >> user;
-            out << UpgradeFeedBack << user;
+            out << UpgradeResponse << user;
             curUser = findUser(user, pos);
             if (BUYER == curUser->getClass()) {
                 if (curUser->getBalance() < LIMIT)
-                    out << false << "" << "" << "";
+                    out << false << QString() << QString() << QString();
                 else {
                     curUser->recharge(-1 * LIMIT);
                     Member newMember(*(dynamic_cast<Buyer *>(curUser)));
@@ -442,13 +448,13 @@ void MainWindow::processPendingDatagrams()
                     QList<Member>::iterator newPos =  qLowerBound(listMember.begin(), listMember.end(), newMember);
                     listMember.insert(newPos, newMember);
                     listBuyer.removeAt(pos);
-                    out << true << "1" << QString::number(newMember.getBalance(), 'f', 2) << "0";
+                    out << true << QString("1") << QString::number(newMember.getBalance(), 'f', 2) << "0";
                 }
             } else {
                 int token = dynamic_cast<Member *>(curUser)->getToken();
                 int level = dynamic_cast<Member *>(curUser)->getLevel();
                 if (token < level * 1000)
-                    out << false << "" << "" << "";
+                    out << false << QString() << QString() << QString();
                 else {
                     dynamic_cast<Member *>(curUser)->changeToken(-1000 * level);
                     level += 1;
@@ -459,7 +465,7 @@ void MainWindow::processPendingDatagrams()
             break;
         case ExchangeRequest:
             in >> user >> token;
-            out << ExchangeFeedBack;
+            out << ExchangeResponse;
             curUser = findUser(user, pos);
             dynamic_cast<Member *>(curUser)->recharge(token / 10.0);
             dynamic_cast<Member *>(curUser)->changeToken(-1 * token);
