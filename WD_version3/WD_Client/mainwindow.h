@@ -17,13 +17,13 @@ class MainWindow;
 }
 
 typedef enum {
-    RegisterRequest, RegisterFeedBack,
-    LoginRequest, LoginFeedBack,
-    BuyRequest, BuyFeedBack,
-    StockRequest, StockFeedBack,
-    RechargeRequest, RechargeFeedBack,
-    UpgradeRequest, UpgradeFeedBack,
-    ExchangeRequest, ExchangeFeedBack
+    RegisterRequest, RegisterResponse,
+    LoginRequest, LoginResponse,
+    BuyRequest, BuyResponse,
+    StockRequest, StockResponse,
+    RechargeRequest, RechargeResponse,
+    UpgradeRequest, UpgradeResponse,
+    ExchangeRequest, ExchangeResponse
 }UdpType;
 
 class MainWindow : public QMainWindow

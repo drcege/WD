@@ -287,7 +287,7 @@ void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTre
     if (current->parent() == Q_NULLPTR){
         ui->lineEdit_price->setText("0.00");
         ui->pushButton_buy->setDisabled(true);
-        }
+    }
     else {
         ui->spinBox_buyer->setMaximum(current->text(2).toInt());
         if (ui->lineEdit_userClass->text() != "卖家")
@@ -487,7 +487,7 @@ void MainWindow::processPendingDatagrams()
 
         in >> type;
         switch (type) {
-        case LoginFeedBack:
+        case LoginResponse:
         {
             in >> resCode >> reqUser;
             if(resCode == 0){    //成功
@@ -512,7 +512,7 @@ void MainWindow::processPendingDatagrams()
             }
             break;
         }
-        case RegisterFeedBack:
+        case RegisterResponse:
         {
             in >> resCode >> reqUser;
             if(resCode == 0){
@@ -533,7 +533,7 @@ void MainWindow::processPendingDatagrams()
             }
             break;
         }
-        case BuyFeedBack:
+        case BuyResponse:
         {
             in >> resCode >> reqUser;
             if(resCode == 0) {
@@ -570,7 +570,7 @@ void MainWindow::processPendingDatagrams()
             }
             break;
         }
-        case StockFeedBack:
+        case StockResponse:
         {
             in >> resCode >> reqUser;
             int index;
@@ -581,7 +581,7 @@ void MainWindow::processPendingDatagrams()
                 QMessageBox::information(this, "进货成功", "进货成功！");
             break;
         }
-        case RechargeFeedBack:
+        case RechargeResponse:
         {
             in >> resCode >> reqUser;
             double balance;
@@ -595,7 +595,7 @@ void MainWindow::processPendingDatagrams()
             }
             break;
         }
-        case UpgradeFeedBack:
+        case UpgradeResponse:
         {
             in >> resCode >> reqUser;
             if(resCode == 0){
@@ -622,7 +622,7 @@ void MainWindow::processPendingDatagrams()
             }
             break;
         }
-        case ExchangeFeedBack:
+        case ExchangeResponse:
         {
             in >> resCode >> reqUser;
             double balance;
