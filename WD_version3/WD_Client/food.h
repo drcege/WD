@@ -15,7 +15,7 @@ public:
     double getReduceRate();
 
     double reducedPrice();
-    goodsClass getClass();
+    GoodsClass getClass();
     friend QDataStream &operator>>(QDataStream &in, Food &);
     friend QDataStream &operator<<(QDataStream &out, const Food &);
 

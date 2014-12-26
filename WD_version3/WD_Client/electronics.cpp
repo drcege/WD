@@ -37,7 +37,7 @@ double Electronics::reducedPrice()
     return (reducedPrice < 0 ? 0 : reducedPrice);
 }
 
-goodsClass Electronics::getClass()
+GoodsClass Electronics::getClass()
 {
     return ELECTRONICS;
 }

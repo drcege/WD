@@ -8,7 +8,7 @@ class Buyer : public User
 public:
     Buyer();
     Buyer(int id, QString userName, QString password, double balance = 0.0);
-    userClass getClass();
+    UserClass getClass();
     QStringList getRecord(int i);
     int recordCount();
     int appendRecord(QStringList rec);

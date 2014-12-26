@@ -13,7 +13,7 @@ public:
     QDate getValidityDate();
 
     double reducedPrice();
-    goodsClass getClass();
+    GoodsClass getClass();
     friend QDataStream &operator>>(QDataStream &in, DailyNecessities &d);
     friend QDataStream &operator<<(QDataStream &out, const DailyNecessities &d);
 

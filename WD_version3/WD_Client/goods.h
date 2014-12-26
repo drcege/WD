@@ -6,7 +6,7 @@
 #include <QFile>
 #include <QDataStream>
 
-enum goodsClass {FOOD, ELECTRONICS, DAILYNECESSITIES};
+enum GoodsClass {FOOD, ELECTRONICS, DAILYNECESSITIES};
 
 class Goods
 {
@@ -22,7 +22,7 @@ public:
     QString getGoodsName();
 
     void changeAmount(int amount);
-    virtual goodsClass getClass() = 0;
+    virtual GoodsClass getClass() = 0;
     virtual double reducedPrice() = 0;
 
 protected:

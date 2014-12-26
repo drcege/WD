@@ -9,7 +9,7 @@ Seller::Seller(int id, QString userName, QString password, double balance)
 {
 }
 
-userClass Seller::getClass()
+UserClass Seller::getClass()
 {
     return SELLER;
 }

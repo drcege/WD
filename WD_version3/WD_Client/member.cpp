@@ -23,7 +23,7 @@ Member::Member(Buyer buyer)
         this->record.push_back(buyer.getRecord(r));
 }
 
-userClass Member::getClass()
+UserClass Member::getClass()
 {
     return MEMBER;
 }

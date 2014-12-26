@@ -42,7 +42,7 @@ double Food::reducedPrice()
     return price * (1 - reduceRate);
 }
 
-goodsClass Food::getClass()
+GoodsClass Food::getClass()
 {
     return FOOD;
 }

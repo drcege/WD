@@ -28,7 +28,7 @@ double DailyNecessities::reducedPrice()
     return price;
 }
 
-goodsClass DailyNecessities::getClass()
+GoodsClass DailyNecessities::getClass()
 {
     return DAILYNECESSITIES;
 }

@@ -35,7 +35,7 @@
    <string>Client</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../WD_version2/images.qrc">
+   <iconset resource="images.qrc">
     <normaloff>:/images/images/blink.png</normaloff>:/images/images/blink.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -604,7 +604,7 @@
            <bool>false</bool>
           </property>
           <property name="headerHidden">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <attribute name="headerVisible">
            <bool>false</bool>
@@ -917,7 +917,7 @@
         <item row="1" column="4" rowspan="2" colspan="2">
          <widget class="QStackedWidget" name="stackedWidget_2">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page_buyer">
            <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1">
@@ -2121,7 +2121,7 @@
            <string>返回</string>
           </property>
           <property name="icon">
-           <iconset resource="../../WD_version2/images.qrc">
+           <iconset resource="images.qrc">
             <normaloff>:/images/back</normaloff>:/images/back</iconset>
           </property>
           <property name="flat">
@@ -2357,7 +2357,9 @@
   <tabstop>pushButton_back_record</tabstop>
   <tabstop>treeWidget_record</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>action_exit</sender>
@@ -2377,7 +2379,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

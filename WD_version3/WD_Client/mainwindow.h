@@ -45,13 +45,12 @@ private:
 
     /*********************  Custom Functions *****************************/
 
-    void addTreeNode(QTreeWidgetItem *parent, Goods *goods);
     void addTreeNode(int index, QStringList newGoods);
     void addTreeRecord(QStringList rec);
     void listAllGoods(QString key="");
     void listMyGoods(QString key="");
-    void setManagePage(QString newUser, QString newClass, QString balance1, QString newLevel, QString newToken, QVector<QStringList> vecRecord);
-    void setMainPage(QVector<QVector<QStringList> > vecGoods, QString newClass, int newLevel);
+    void setManagePage(QString newUser, UserClass userClass, double balance, int level, int token, QVector<QStringList> vecRecord);
+    void setMainPage(QVector<QVector<QStringList> > vec2Goods, UserClass userClass, int level);
 
     /***********************  reset  ************************************/
     void resetLoginPage();
