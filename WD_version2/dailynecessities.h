@@ -9,7 +9,7 @@ public:
     DailyNecessities();
     DailyNecessities(int id, QString dailyName, int amount, double price, QString owner, QDate produceDate, QDate validityDate);
 
-    goodsClass getClass();
+    GoodsClass getClass();
     double reducedPrice();
     QDate getProduceDate();
     QDate getValidityDate();

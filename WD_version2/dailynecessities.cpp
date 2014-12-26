@@ -11,7 +11,7 @@ DailyNecessities::DailyNecessities(int id, QString dailyName, int amount, double
     this->validityDate = validityDate;
 }
 
-goodsClass DailyNecessities::getClass()
+GoodsClass DailyNecessities::getClass()
 {
     return DAILYNECESSITIES;
 }

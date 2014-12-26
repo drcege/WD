@@ -5,7 +5,7 @@
 #include <QVector>
 #include <QStringList>
 
-enum userClass {BUYER, MEMBER, SELLER};
+enum UserClass {BUYER, MEMBER, SELLER};
 
 class User
 {
@@ -19,7 +19,7 @@ public:
     QString getPassword() const;
     double getBalance() const;
     void recharge(double money);
-    virtual userClass getClass() = 0;
+    virtual UserClass getClass() = 0;
 
 protected:
     int id;

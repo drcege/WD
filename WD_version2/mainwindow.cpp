@@ -473,7 +473,7 @@ void MainWindow::on_pushButton_register_clicked()
     QString user = ui->lineEdit_user_register->text();
     int pos = -1;
     if (findUser(user, pos) != Q_NULLPTR) {
-        QMessageBox::information(this, tr("注册失败！"), tr("用户名已存在！"), QMessageBox::Ok);
+        QMessageBox::information(this, tr("注册失败！"), tr("用户名已存在！"));
         resetRegisterPage();
         return;
     }
@@ -481,7 +481,7 @@ void MainWindow::on_pushButton_register_clicked()
     QString pwd = ui->lineEdit_pwd_register->text();
     QString repeatPwd = ui->lineEdit_pwd_repeat->text();
     if (pwd != repeatPwd) {
-        QMessageBox::information(this, tr("注册失败！"), tr("两次密码不一致！"), QMessageBox::Ok);
+        QMessageBox::information(this, tr("注册失败！"), tr("两次密码不一致！"));
         ui->lineEdit_pwd_register->clear();
         ui->lineEdit_pwd_repeat->clear();
         ui->lineEdit_pwd_register->setFocus();

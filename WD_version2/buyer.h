@@ -9,7 +9,7 @@ public:
     Buyer();
     Buyer(int id, QString userName, QString password, double balance = 0.0);
 
-    userClass getClass();
+    UserClass getClass();
     int recordCount();
     int appendRecord(QStringList rec);
     QStringList getRecord(int i);

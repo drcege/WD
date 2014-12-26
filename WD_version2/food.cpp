@@ -13,7 +13,7 @@ Food::Food(int id, QString goodsName, int amount, double price, QString owner, Q
     this->reduceRate = reduceRate;
 }
 
-goodsClass Food::getClass()
+GoodsClass Food::getClass()
 {
     return FOOD;
 }

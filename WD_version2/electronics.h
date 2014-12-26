@@ -9,7 +9,7 @@ public:
     Electronics();
     Electronics(int id, QString electName, int amount, double price, QString owner, QDate produceDate, QDate validityDate, double reduceRate);
 
-    goodsClass getClass();
+    GoodsClass getClass();
     double reducedPrice();
     QDate getProduceDate();
     QDate getValidityDate();

@@ -12,7 +12,7 @@ Electronics::Electronics(int id, QString electName, int amount, double price, QS
     this->reduceRate = reduceRate;
 }
 
-goodsClass Electronics::getClass()
+GoodsClass Electronics::getClass()
 {
     return ELECTRONICS;
 }

@@ -10,7 +10,7 @@ public:
     Member(int id, QString userName, QString password, double balance = 0.0, int level = 0, int token = 0);
     Member(Buyer buyer);
 
-    userClass getClass();
+    UserClass getClass();
     int getLevel();
     int getToken();
     void setLevel(int level);
