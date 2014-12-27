@@ -11,26 +11,26 @@ DailyNecessities::DailyNecessities(int id, QString dailyName, int amount, double
     this->validityDate = validityDate;
 }
 
-QDate DailyNecessities::getProduceDate()
+GoodsClass DailyNecessities::getClass()
 {
-    return produceDate;
-}
-
-QDate DailyNecessities::getValidityDate()
-{
-    return validityDate;
+    return DAILYNECESSITIES;
 }
 
 double DailyNecessities::reducedPrice()
 {
     if (QDate::currentDate() > validityDate)
         return -1;
-    return price;
+    return this->price;
 }
 
-goodsClass DailyNecessities::getClass()
+QDate DailyNecessities::getProduceDate() const
 {
-    return DAILYNECESSITIES;
+    return this->produceDate;
+}
+
+QDate DailyNecessities::getValidityDate() const
+{
+    return this->validityDate;
 }
 
 QStringList DailyNecessities::toStringList()

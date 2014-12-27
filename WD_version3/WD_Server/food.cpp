@@ -13,24 +13,9 @@ Food::Food(int id, QString goodsName, int amount, double price, QString owner, Q
     this->reduceRate = reduceRate;
 }
 
-QDate Food::getProduceDate()
+GoodsClass Food::getClass()
 {
-    return produceDate;
-}
-
-QDate Food::getValidityDate()
-{
-    return validityDate;
-}
-
-QDate Food::getReduceDate()
-{
-    return reduceDate;
-}
-
-double Food::getReduceRate()
-{
-    return reduceRate;
+    return FOOD;
 }
 
 double Food::reducedPrice()
@@ -42,9 +27,24 @@ double Food::reducedPrice()
     return price * (1 - reduceRate);
 }
 
-goodsClass Food::getClass()
+QDate Food::getProduceDate() const
 {
-    return FOOD;
+    return this->produceDate;
+}
+
+QDate Food::getValidityDate() const
+{
+    return this->validityDate;
+}
+
+QDate Food::getReduceDate() const
+{
+    return this->reduceDate;
+}
+
+double Food::getReduceRate() const
+{
+    return this->reduceRate;
 }
 
 QStringList Food::toStringList()
@@ -60,7 +60,6 @@ QDataStream &operator>>(QDataStream &in, Food &f)
     in >> f.id >> f.goodsName >> f.amount >> f.price >> f.owner >> f.produceDate >> f.validityDate >> f.reduceDate >> f.reduceRate;
     return in;
 }
-
 
 QDataStream &operator<<(QDataStream &out, const Food &f)
 {

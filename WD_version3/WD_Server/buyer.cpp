@@ -9,7 +9,7 @@ Buyer::Buyer(int id, QString userName, QString password, double balance)
 {
 }
 
-userClass Buyer::getClass()
+UserClass Buyer::getClass()
 {
     return BUYER;
 }
@@ -19,15 +19,15 @@ int Buyer::recordCount()
     return record.count();
 }
 
-QStringList Buyer::getRecord(int i)
-{
-    return record.at(i);
-}
-
 int Buyer::appendRecord(QStringList rec)
 {
     record.append(rec);
     return record.count();
+}
+
+QStringList Buyer::getRecord(int i)
+{
+    return record.at(i);
 }
 
 QDataStream &operator>>(QDataStream &in, Buyer &b)

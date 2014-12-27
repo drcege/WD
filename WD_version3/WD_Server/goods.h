@@ -7,27 +7,23 @@
 #include <QFile>
 #include <QDataStream>
 
-enum goodsClass {FOOD, ELECTRONICS, DAILYNECESSITIES};
+enum GoodsClass {FOOD, ELECTRONICS, DAILYNECESSITIES};
 
 class Goods
 {
 public:
     Goods();
-    virtual ~Goods();
     Goods(int id, QString goodsName, int amount, double price, QString owner);
+    virtual ~Goods();
 
     int getId() const;
-    int getAmount();
-    double getPrice();
-    QString getOwner();
-    QString getGoodsName();
-
-    void changeAmount(int amount);
+    int getAmount() const;
+    double getPrice() const;
+    QString getOwner() const;
+    QString getGoodsName() const;
+    int changeAmount(int amount);
     virtual double reducedPrice() = 0;
-    virtual goodsClass getClass() = 0;
-    virtual QStringList toStringList() = 0;
-
-
+    virtual GoodsClass getClass() = 0;
 
 protected:
     int id;

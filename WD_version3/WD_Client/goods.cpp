@@ -19,31 +19,32 @@ Goods::Goods(int id, QString foodName, int amount, double price, QString owner)
 
 int Goods::getId() const
 {
-    return id;
+    return this->id;
 }
 
-int Goods::getAmount()
+int Goods::getAmount() const
 {
-    return amount;
+    return this->amount;
 }
 
-double Goods::getPrice()
+double Goods::getPrice() const
 {
-    return price;
+    return this->price;
 }
 
-QString Goods::getOwner()
+QString Goods::getOwner() const
 {
-    return owner;
+    return this->owner;
 }
 
-QString Goods::getGoodsName()
+QString Goods::getGoodsName() const
 {
-    return goodsName;
+    return this->goodsName;
 }
 
-void Goods::changeAmount(int amount)
+int Goods::changeAmount(int amount)
 {
     this->amount += amount;
+    return this->amount;
 }
 

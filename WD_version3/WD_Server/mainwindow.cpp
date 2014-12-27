@@ -298,179 +298,204 @@ void MainWindow::processPendingDatagrams()
         QByteArray dataout;
         QDataStream out(&dataout, QIODevice::WriteOnly);
 
+        int type = 0, resCode = 0, pos = -1;
+        QString reqUser;
         User* curUser;
-        QString user, pwd, repeat, goodsClass, userClass, name, owner;
-        QVector<QStringList> vecRecord;
-        QVector<QVector<QStringList> > vecGoods(3);
-        double pay, money;
-        int id, amount, token, pos;
-        double price, rate;
-        QDate produceDate, validityDate, reduceDate;
 
-        int type;
         in >> type;
         switch (type) {
         case LoginRequest:
-            in >> user >> pwd;
+        {
             out << LoginResponse;
-            curUser = findUser(user, pos);
-            if (curUser == Q_NULLPTR || pwd != curUser->getPassword()){
-                out << false;
-            }
-            else {    // 登陆成功
-                out << true;
-                out << curUser->getUserName();
-                switch(curUser->getClass()){
-                case BUYER:
-                    userClass = "买家"; break;
-                case MEMBER:
-                    userClass = "会员"; break;
-                case SELLER:
-                    userClass = "卖家"; break;
+            QString pwd;
+            in >> reqUser >> pwd;
+            curUser = findUser(reqUser, pos);
+            if (curUser == Q_NULLPTR) {
+                resCode = -1;
+                out << resCode << reqUser;
+            } else if (pwd != curUser->getPassword()) {
+                resCode = 1;
+                out << resCode << reqUser;
+            } else {    // 登陆成功
+                resCode = 0;
+                UserClass userClass = curUser->getClass();
+                double balance = curUser->getBalance();
+                int level = 0, token = 0;
+                QVector<QStringList> vecRecord;
+                QVector<QVector<QStringList> > vec2Goods(3);
+                if(curUser->getClass() == MEMBER){    // 会员
+                    Member* curMem = dynamic_cast<Member*>(curUser);
+                    level = curMem->getLevel();
+                    token = curMem->getToken();
                 }
-                out << userClass;
-                out << QString::number(curUser->getBalance(), 'f', 2);
-                vecRecord.clear();
-                if(curUser->getClass() == SELLER){    // 卖家
-                    out << QString() << QString() << vecRecord;
-                }else {
+                if(curUser->getClass() != SELLER){
                     Buyer *curBuyer = dynamic_cast<Buyer *>(curUser);
                     for (int r = 0; r < curBuyer->recordCount(); ++r)
                         vecRecord.append(curBuyer->getRecord(r));
-                    if(curUser->getClass() == MEMBER){    // 会员
-                        Member* curMem = dynamic_cast<Member*>(curUser);
-                        out << QString::number(curMem->getLevel()) << QString::number(curMem->getToken()) << vecRecord;
-                    }
-                    else {    // 买家
-                        out << QString() << QString() << vecRecord;
-                    }
-                }    // end of 非卖家
-                vecGoods = getAllGoods();
-                out << vecGoods;
-            }    // end of 成功
+                }
+                vec2Goods = getAllGoods();
+                out << resCode << reqUser << userClass << balance << level << token << vecRecord << vec2Goods;
+            }    // end of else
             break;
+        }
         case RegisterRequest:
-            in >> user >> pwd >> repeat >> userClass;
+        {
+            qDebug() << "RegisterRequest";
             out << RegisterResponse;
-            if (pwd != repeat) {    // 密码不一致
-                out << 0;
-                break;
+            QString pwd, repeat;
+            int userClass;
+            in >> reqUser >> pwd >> repeat >> userClass;
+            if (findUser(reqUser, pos) != Q_NULLPTR) {    // 用户已存在
+                resCode = 1;
+            } else if (pwd != repeat) {    // 密码不一致
+                resCode = -1;
+            } else {
+                resCode = 0;
+                if (BUYER == userClass) { // 新建买家
+                    Buyer curBuyer(++USERID, reqUser, pwd);
+                    listBuyer.push_back(curBuyer);
+                } else if (SELLER == userClass) { // 新建卖家
+                    Seller curSeller(++USERID, reqUser, pwd);
+                    listSeller.push_back(curSeller);
+                }
             }
-            if (findUser(user, pos) != Q_NULLPTR) {    // 用户已存在
-                out << -1;
-                break;
-            }
-            if (userClass == "买家") { // 新建买家
-                Buyer curBuyer(++USERID, user, pwd);
-                listBuyer.push_back(curBuyer);
-            } else if (userClass == "卖家") { // 新建卖家
-                Seller curSeller(++USERID, user, pwd);
-                listSeller.push_back(curSeller);
-            }
-            out << 1;
+            out << resCode << reqUser;
+            qDebug() << "RegisterResponse";
             break;
+        }
         case BuyRequest:
-            in >> user >> id >> amount >> pay;
+        {
             out << BuyResponse;
-            curUser = findUser(user, pos);
+            int id, amount;
+            double pay;
+            in >> reqUser >> id >> amount >> pay;
+            curUser = findUser(reqUser, pos);
             if (pay > curUser->getBalance()) {
-                out << false;
+                resCode = -1;
+                out << resCode << reqUser;
                 qDebug() << "buy false";
             } else {
-                out << true;
-                // 买家支付
-                curUser->recharge(-1 * pay);
-                // 获得代币
-                if (MEMBER == curUser->getClass()) {
-                    int addtokens = qFloor(pay/10);
-                    dynamic_cast<Member *>(curUser)->changeToken(addtokens);
-                }
+                resCode = 0;
                 // 商品数量减少
                 Goods *curGoods = findGoods(id, pos);
-                curGoods->changeAmount(-1 * amount);
-                if (0 == curGoods->getAmount()) {
-                    if(curGoods->getClass() == FOOD)
+                int curAmount = curGoods->changeAmount(-1 * amount);
+                if (0 == curAmount) {
+                    if(FOOD == curGoods->getClass())
                         listFood.removeAt(pos);
-                    else if(curGoods->getClass() == ELECTRONICS)
+                    else if(ELECTRONICS == curGoods->getClass())
                         listElect.removeAt(pos);
                     else
                         listDaily.removeAt(pos);
                 }
+                // 买家支付
+                double curBalance = curUser->recharge(-1 * pay);
+                // 会员获得代币
+                int curToken = 0;
+                if (MEMBER == curUser->getClass()) {
+                    int addTokens = qFloor(pay/10);
+                    curToken = dynamic_cast<Member *>(curUser)->changeToken(addTokens);
+                }
                 // 卖家收入
                 User* seller = findUser(curGoods->getOwner(), pos);
                 seller->recharge(pay);
-                out << QString::number(id) << QString::number(curGoods->getAmount()) << user << QString::number(curUser->getBalance());
-                if(curUser->getClass() == MEMBER)
-                    out << QString::number(dynamic_cast<Member *>(curUser)->getToken());
-                else
-                    out << QString::number(0);
-                QStringList rec;
-                rec << QDate::currentDate().toString(Qt::ISODate) << QString::number(amount) << "￥" + QString::number(pay, 'f', 2) << curGoods->getGoodsName();
-                dynamic_cast<Buyer *>(curUser)->appendRecord(rec);
-                out << rec;
+                // 购买记录
+                QStringList record;
+                record << QDate::currentDate().toString(Qt::ISODate) << QString::number(amount) << "￥" + QString::number(pay, 'f', 2) << curGoods->getGoodsName();
+                dynamic_cast<Buyer *>(curUser)->appendRecord(record);
+                out << resCode << reqUser << id << curAmount << curBalance << curToken << record;
             }
             break;
+        }
         case StockRequest:
-            in >> goodsClass >> name >> amount >> price >> owner >> produceDate >> validityDate >> reduceDate >> rate;
+        {
             out << StockResponse;
-            if ("食品" == goodsClass) {
-                Food food(++GOODSID, name, amount, price, owner, produceDate, validityDate, reduceDate, rate);
+            int goodsClass, amount, index;
+            double price, rate;
+            QString goodsName;
+            QStringList newGoods;
+            QDate produceDate, validityDate, reduceDate;
+            in >> reqUser >> goodsClass >> goodsName >> amount >> price >> produceDate >> validityDate >> reduceDate >> rate;
+            if (FOOD == goodsClass) {
+                index = 0;
+                Food food(++GOODSID, goodsName, amount, price, reqUser, produceDate, validityDate, reduceDate, rate);
                 listFood.push_back(food);
-                out << 0 << food.toStringList();
-            } else if ("电子产品" == goodsClass) {
-                Electronics elect(++GOODSID, name, amount, price, owner, produceDate, validityDate, rate);
+                newGoods = food.toStringList();
+            } else if (ELECTRONICS == goodsClass) {
+                index = 1;
+                Electronics elect(++GOODSID, goodsName, amount, price, reqUser, produceDate, validityDate, rate);
                 listElect.push_back(elect);
-                out << 1 << elect.toStringList();
+                newGoods = elect.toStringList();
             } else {
-                DailyNecessities daily(++GOODSID, name, amount, price, owner, produceDate, validityDate);
+                index = 2;
+                DailyNecessities daily(++GOODSID, goodsName, amount, price, reqUser, produceDate, validityDate);
                 listDaily.push_back(daily);
-                out << 2 << daily.toStringList();
+                newGoods = daily.toStringList();
             }
+            resCode = 0;
+            out << resCode << reqUser << index << newGoods;
             break;
+        }
         case RechargeRequest:
-            in >> user >> money;
+        {
             out << RechargeResponse;
-            curUser = findUser(user, pos);
-            curUser->recharge(money);
-            out << user << QString::number(curUser->getBalance(), 'f', 2);
+            double money;
+            in >> reqUser >> money;
+            curUser = findUser(reqUser, pos);
+            double balance = curUser->recharge(money);
+            out << reqUser << balance;
             break;
+        }
         case UpgradeRequest:
-            in >> user;
-            out << UpgradeResponse << user;
-            curUser = findUser(user, pos);
-            if (BUYER == curUser->getClass()) {
-                if (curUser->getBalance() < LIMIT)
-                    out << false << QString() << QString() << QString();
-                else {
-                    curUser->recharge(-1 * LIMIT);
+        {
+            out << UpgradeResponse;
+            in >> reqUser;
+            int level, token;
+            double balance;
+            curUser = findUser(reqUser, pos);
+            if (BUYER == curUser->getClass()) {    //买家升级
+                if (curUser->getBalance() < LIMIT) {
+                    resCode = -1;
+                    out << resCode << reqUser;
+                } else {
+                    resCode = 0;
+                    balance = curUser->recharge(-1 * LIMIT);
                     Member newMember(*(dynamic_cast<Buyer *>(curUser)));
-                    ///////////////// 查找插入位置！！！！！！！！！！！！
-                    QList<Member>::iterator newPos =  qLowerBound(listMember.begin(), listMember.end(), newMember);
-                    listMember.insert(newPos, newMember);
+                    listMember.append(newMember);
                     listBuyer.removeAt(pos);
-                    out << true << QString("1") << QString::number(newMember.getBalance(), 'f', 2) << "0";
+                    level = 1;
+                    token = 0;
+                    out << resCode << reqUser << level << token << balance;
                 }
-            } else {
-                int token = dynamic_cast<Member *>(curUser)->getToken();
-                int level = dynamic_cast<Member *>(curUser)->getLevel();
-                if (token < level * 1000)
-                    out << false << QString() << QString() << QString();
-                else {
-                    dynamic_cast<Member *>(curUser)->changeToken(-1000 * level);
+            } else {    //会员升级
+                level = dynamic_cast<Member *>(curUser)->getLevel();
+                token = dynamic_cast<Member *>(curUser)->getToken();
+                if (token < level * 1000) {
+                    resCode = -1;
+                    out << resCode << reqUser;
+                } else {
+                    resCode = 0;
+                    token = dynamic_cast<Member *>(curUser)->changeToken(-1000 * level);
                     level += 1;
                     dynamic_cast<Member *>(curUser)->setLevel(level);
-                    out << true << QString::number(level) << QString::number(curUser->getBalance(), 'f', 2) << QString::number(token - level * 1000);
+                    balance = curUser->getBalance();
+                    out << resCode << reqUser << level << token << balance;
                 }
             }
             break;
+        }
         case ExchangeRequest:
-            in >> user >> token;
+        {
             out << ExchangeResponse;
-            curUser = findUser(user, pos);
-            dynamic_cast<Member *>(curUser)->recharge(token / 10.0);
-            dynamic_cast<Member *>(curUser)->changeToken(-1 * token);
-            out << user << QString::number(curUser->getBalance(), 'f', 2) << QString::number(dynamic_cast<Member *>(curUser)->getToken());
+            double balance;
+            int token;
+            in >> reqUser >> token;
+            curUser = findUser(reqUser, pos);
+            balance = dynamic_cast<Member *>(curUser)->recharge(token / 10.0);
+            token = dynamic_cast<Member *>(curUser)->changeToken(-1 * token);
+            resCode = 0;
+            out << resCode << reqUser << balance << token;
             break;
+        }
         default:
             break;
         }

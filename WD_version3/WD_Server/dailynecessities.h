@@ -9,12 +9,12 @@ public:
     DailyNecessities();
     DailyNecessities(int id, QString dailyName, int amount, double price, QString owner, QDate produceDate, QDate validityDate);
 
-    QDate getProduceDate();
-    QDate getValidityDate();
-
+    GoodsClass getClass();
     double reducedPrice();
-    goodsClass getClass();
+    QDate getProduceDate() const;
+    QDate getValidityDate() const;
     QStringList toStringList();
+
     friend QDataStream &operator>>(QDataStream &in, DailyNecessities &d);
     friend QDataStream &operator<<(QDataStream &out, const DailyNecessities &d);
 

@@ -12,20 +12,9 @@ Electronics::Electronics(int id, QString electName, int amount, double price, QS
     this->reduceRate = reduceRate;
 }
 
-
-QDate Electronics::getProduceDate()
+GoodsClass Electronics::getClass()
 {
-    return produceDate;
-}
-
-QDate Electronics::getValidityDate()
-{
-    return validityDate;
-}
-
-double Electronics::getRuduceRate()
-{
-    return reduceRate;
+    return ELECTRONICS;
 }
 
 double Electronics::reducedPrice()
@@ -37,16 +26,26 @@ double Electronics::reducedPrice()
     return (reducedPrice < 0 ? 0 : reducedPrice);
 }
 
-goodsClass Electronics::getClass()
+QDate Electronics::getProduceDate() const
 {
-    return ELECTRONICS;
+    return this->produceDate;
+}
+
+QDate Electronics::getValidityDate() const
+{
+    return this->validityDate;
+}
+
+double Electronics::getReduceRate() const
+{
+    return this->reduceRate;
 }
 
 QStringList Electronics::toStringList()
 {
     QStringList sl;
     QString reduced = (reducedPrice() < 0 ? "已过期" : QString::number(reducedPrice(), 'f', 2));
-    sl << "" << getGoodsName() << QString::number(getAmount()) << QString::number(getPrice(), 'f', 2) << reduced << getOwner() << getProduceDate().toString(Qt::ISODate) << getValidityDate().toString(Qt::ISODate)<< "-" << QString::number(getRuduceRate(), 'f', 2) << QString::number(getId());
+    sl << "" << getGoodsName() << QString::number(getAmount()) << QString::number(getPrice(), 'f', 2) << reduced << getOwner() << getProduceDate().toString(Qt::ISODate) << getValidityDate().toString(Qt::ISODate)<< "-" << QString::number(getReduceRate(), 'f', 2) << QString::number(getId());
     return sl;
 }
 

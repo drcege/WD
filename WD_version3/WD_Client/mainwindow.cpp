@@ -481,8 +481,7 @@ void MainWindow::processPendingDatagrams()
         udpSocket->readDatagram(datagram.data(), datagram.size());
         QDataStream in(&datagram, QIODevice::ReadOnly);
 
-        int type;
-        bool resCode;
+        int type, resCode;
         QString reqUser;
 
         in >> type;
@@ -497,13 +496,13 @@ void MainWindow::processPendingDatagrams()
                 QVector<QStringList> vecRecord;
                 QVector<QVector<QStringList> > vec2Goods(3);
                 in >> userClass >> balance >> level >> token >> vecRecord >> vec2Goods;
-                if(ui->lineEdit_Username->text() == reqUser){
+                if(ui->lineEdit_user_login->text() == reqUser){
                     setMainPage(vec2Goods, UserClass(userClass), level);    //!强制转换枚举
                     setManagePage(reqUser, UserClass(userClass), balance, level, token, vecRecord);
                     resetLoginPage();
                 }
             } else {    //失败
-                if(ui->lineEdit_Username->text() == reqUser){
+                if(ui->lineEdit_user_login->text() == reqUser){
                     if(resCode > 0)
                         QMessageBox::warning(this, tr("登陆失败！"), tr("密码错误！"));
                     else
@@ -514,9 +513,12 @@ void MainWindow::processPendingDatagrams()
         }
         case RegisterResponse:
         {
+            qDebug() << "RegisterResponse";
             in >> resCode >> reqUser;
+            qDebug() << resCode << reqUser;
             if(resCode == 0){
-                if(ui->lineEdit_Username->text() == reqUser){
+                qDebug() << "enter 0";
+                if(ui->lineEdit_user_register->text() == reqUser){
                     QMessageBox::information(this, "注册成功！", "恭喜你 ^_^ 注册成功！");
                     resetRegisterPage();
                     ui->stackedWidget->setCurrentWidget(ui->loginPage);
@@ -524,7 +526,8 @@ void MainWindow::processPendingDatagrams()
                     ui->pushButton_login->setDefault(true);
                 }
             } else {
-                if(ui->lineEdit_Username->text() == reqUser){
+                qDebug() << "enter not0";
+                if(ui->lineEdit_user_register->text() == reqUser){
                     if(resCode > 0)
                         QMessageBox::information(this, tr("注册失败！"), tr("用户名已存在！"));
                     else
@@ -663,6 +666,7 @@ void MainWindow::sendRequest(UdpType type)
         QString repeat = ui->lineEdit_pwd_repeat->text();
         UserClass userClass = (ui->buttonGroup->checkedButton() == ui->radioButton_buyer ? BUYER : SELLER);
         out << reqUser << pwd << repeat << userClass;
+        qDebug() << "RegisterRequest";
         break;
     }
     case BuyRequest:

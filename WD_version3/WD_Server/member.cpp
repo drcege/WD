@@ -23,34 +23,31 @@ Member::Member(Buyer buyer)
         this->record.push_back(buyer.getRecord(r));
 }
 
-userClass Member::getClass()
+UserClass Member::getClass()
 {
     return MEMBER;
 }
 
-int Member::getLevel()
+int Member::getLevel() const
 {
-    return level;
+    return this->level;
 }
 
-int Member::getToken()
+int Member::getToken() const
 {
-    return token;
+    return this->token;
 }
 
-void Member::changeToken(int token)
-{
-    this->token += token;
-}
-
-void Member::setLevel(int level)
+int Member::setLevel(int level)
 {
     this->level = level;
+    return this->level;
 }
 
-bool Member::operator <(const Member &rhs)
+int Member::changeToken(int token)
 {
-    return this->id < rhs.getId();
+    this->token += token;
+    return this->token;
 }
 
 QDataStream &operator >>(QDataStream &in, Member &m)
