@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
-    <height>473</height>
+    <width>825</width>
+    <height>477</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,7 +45,7 @@
      <height>378</height>
     </size>
    </property>
-   <layout class="QGridLayout" name="gridLayout" columnstretch="2,10,1,10,2">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="1,10,1,10,1">
     <item row="0" column="2">
      <spacer name="horizontalSpacer">
       <property name="orientation">
@@ -90,15 +90,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QTreeWidget" name="treeWidget_response">
-        <attribute name="headerVisible">
-         <bool>false</bool>
-        </attribute>
-        <column>
-         <property name="text">
-          <string notr="true">1</string>
-         </property>
-        </column>
+       <widget class="QListWidget" name="listWidget_response">
+        <property name="font">
+         <font>
+          <family>微软雅黑</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
        </widget>
       </item>
      </layout>
@@ -121,15 +119,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QTreeWidget" name="treeWidget_request">
-        <attribute name="headerVisible">
-         <bool>false</bool>
-        </attribute>
-        <column>
-         <property name="text">
-          <string notr="true">1</string>
-         </property>
-        </column>
+       <widget class="QListWidget" name="listWidget_request">
+        <property name="font">
+         <font>
+          <family>微软雅黑</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
        </widget>
       </item>
      </layout>
@@ -154,7 +150,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>680</width>
+     <width>825</width>
      <height>23</height>
     </rect>
    </property>

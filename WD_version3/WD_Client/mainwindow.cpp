@@ -589,6 +589,7 @@ void MainWindow::processPendingDatagrams()
             in >> resCode >> reqUser;
             double balance;
             in >> balance;
+            qDebug() << resCode << reqUser << balance;
             if(ui->lineEdit_Username->text() == reqUser){
                 ui->lineEdit_Balance->setText("￥" + QString::number(balance, 'f', 2));
                 if (ui->lineEdit_userClass->text() == "卖家")
@@ -610,6 +611,7 @@ void MainWindow::processPendingDatagrams()
                     ui->lineEdit_note->setText("需支付 " + QString::number(level * 1000) + " 代币");
                     ui->lineEdit_Level->setText(QString::number(level));
                     if(1 == level){    //普通用户升级会员，支付金额
+                        ui->lineEdit_userClass->setText("会员");
                         ui->lineEdit_Balance->setText(QString::number(balance, 'f', 2));
                         ui->label_Token->setVisible(true);
                         ui->lineEdit_Token->setVisible(true);
@@ -617,6 +619,7 @@ void MainWindow::processPendingDatagrams()
                         ui->spinBox_Token->setVisible(true);
                     }else            //会员升级，支付代币
                         ui->lineEdit_Token->setText(QString::number(token));
+                    QMessageBox::information(this, "升级成功", "升级成功");
                 }
             }
             else {
@@ -717,6 +720,7 @@ void MainWindow::sendRequest(UdpType type)
         reqUser = ui->lineEdit_Username->text();
         double money = ui->doubleSpinBox_Recharge->value();
         out << reqUser << money;
+        qDebug() << reqUser << money;
         break;
     }
     case UpgradeRequest:

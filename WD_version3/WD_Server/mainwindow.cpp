@@ -309,6 +309,7 @@ void MainWindow::processPendingDatagrams()
             out << LoginResponse;
             QString pwd;
             in >> reqUser >> pwd;
+            ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive LoginRequest from user " + reqUser);
             curUser = findUser(reqUser, pos);
             if (curUser == Q_NULLPTR) {
                 resCode = -1;
@@ -336,15 +337,16 @@ void MainWindow::processPendingDatagrams()
                 vec2Goods = getAllGoods();
                 out << resCode << reqUser << userClass << balance << level << token << vecRecord << vec2Goods;
             }    // end of else
+            ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast LoginResponse to user " + reqUser);
             break;
         }
         case RegisterRequest:
         {
-            qDebug() << "RegisterRequest";
             out << RegisterResponse;
             QString pwd, repeat;
             int userClass;
             in >> reqUser >> pwd >> repeat >> userClass;
+            ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive RegisterRequest from user" + reqUser);
             if (findUser(reqUser, pos) != Q_NULLPTR) {    // 用户已存在
                 resCode = 1;
             } else if (pwd != repeat) {    // 密码不一致
@@ -360,7 +362,7 @@ void MainWindow::processPendingDatagrams()
                 }
             }
             out << resCode << reqUser;
-            qDebug() << "RegisterResponse";
+            ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast RegisterResponse to user " + reqUser);
             break;
         }
         case BuyRequest:
@@ -369,6 +371,7 @@ void MainWindow::processPendingDatagrams()
             int id, amount;
             double pay;
             in >> reqUser >> id >> amount >> pay;
+            ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive BuyRequest from user" + reqUser);
             curUser = findUser(reqUser, pos);
             if (pay > curUser->getBalance()) {
                 resCode = -1;
@@ -404,6 +407,7 @@ void MainWindow::processPendingDatagrams()
                 dynamic_cast<Buyer *>(curUser)->appendRecord(record);
                 out << resCode << reqUser << id << curAmount << curBalance << curToken << record;
             }
+            ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast BuyResponse to user " + reqUser);
             break;
         }
         case StockRequest:
@@ -415,6 +419,7 @@ void MainWindow::processPendingDatagrams()
             QStringList newGoods;
             QDate produceDate, validityDate, reduceDate;
             in >> reqUser >> goodsClass >> goodsName >> amount >> price >> produceDate >> validityDate >> reduceDate >> rate;
+            ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive StockRequest from user " + reqUser);
             if (FOOD == goodsClass) {
                 index = 0;
                 Food food(++GOODSID, goodsName, amount, price, reqUser, produceDate, validityDate, reduceDate, rate);
@@ -433,6 +438,7 @@ void MainWindow::processPendingDatagrams()
             }
             resCode = 0;
             out << resCode << reqUser << index << newGoods;
+            ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast StockResponse to user " + reqUser);
             break;
         }
         case RechargeRequest:
@@ -440,15 +446,21 @@ void MainWindow::processPendingDatagrams()
             out << RechargeResponse;
             double money;
             in >> reqUser >> money;
+            qDebug() << reqUser << money;
+            ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive RechargeRequest from user " + reqUser);
             curUser = findUser(reqUser, pos);
             double balance = curUser->recharge(money);
-            out << reqUser << balance;
+            resCode = 0;
+            out << resCode << reqUser << balance;
+            qDebug() << resCode << reqUser << balance;
+            ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast RechargeResponse to user " + reqUser);
             break;
         }
         case UpgradeRequest:
         {
             out << UpgradeResponse;
             in >> reqUser;
+            ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive UpgradeRequest from user " + reqUser);
             int level, token;
             double balance;
             curUser = findUser(reqUser, pos);
@@ -481,6 +493,7 @@ void MainWindow::processPendingDatagrams()
                     out << resCode << reqUser << level << token << balance;
                 }
             }
+            ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast UpgradeResponse to user " + reqUser);
             break;
         }
         case ExchangeRequest:
@@ -489,11 +502,13 @@ void MainWindow::processPendingDatagrams()
             double balance;
             int token;
             in >> reqUser >> token;
+            ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive ExchangeRequest from user " + reqUser);
             curUser = findUser(reqUser, pos);
             balance = dynamic_cast<Member *>(curUser)->recharge(token / 10.0);
             token = dynamic_cast<Member *>(curUser)->changeToken(-1 * token);
             resCode = 0;
             out << resCode << reqUser << balance << token;
+            ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast ExchangeResponse to user " + reqUser);
             break;
         }
         default:
