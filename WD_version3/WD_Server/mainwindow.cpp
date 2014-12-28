@@ -342,12 +342,11 @@ void MainWindow::processPendingDatagrams()
             out << LoginResponse;
             QString pwd;
             QDateTime timeStamp;
-            in >> timeStamp >> reqUser >> pwd;
-            out << timeStamp;
+            in >> reqUser >> timeStamp >> pwd;
             ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive LoginRequest from user " + reqUser);
             if(logedList.contains(reqUser)){    //用户已登陆
                 resCode = 2;
-                out << resCode << reqUser;
+                out << resCode << reqUser << timeStamp;
             }
             else{
                 curUser = findUser(reqUser, pos);
@@ -376,7 +375,7 @@ void MainWindow::processPendingDatagrams()
                             vecRecord.append(curBuyer->getRecord(r));
                     }
                     vec2Goods = getAllGoods();
-                    out << resCode << reqUser << userClass << balance << level << token << vecRecord << vec2Goods;
+                    out << resCode << reqUser << timeStamp << userClass << balance << level << token << vecRecord << vec2Goods;
                 }    // end of else
             }
             ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast LoginResponse to user " + reqUser);
@@ -389,7 +388,6 @@ void MainWindow::processPendingDatagrams()
             int userClass;
             QDateTime timeStamp;
             in >> timeStamp >> reqUser >> pwd >> repeat >> userClass;
-            out << timeStamp;
             ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive RegisterRequest from user" + reqUser);
             if (findUser(reqUser, pos) != Q_NULLPTR) {    // 用户已存在
                 resCode = 1;
@@ -405,7 +403,7 @@ void MainWindow::processPendingDatagrams()
                     listSeller.push_back(curSeller);
                 }
             }
-            out << resCode << reqUser;
+            out << resCode << reqUser << timeStamp;
             ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast RegisterResponse to user " + reqUser);
             break;
         }

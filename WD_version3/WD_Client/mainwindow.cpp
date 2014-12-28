@@ -512,7 +512,7 @@ void MainWindow::processPendingDatagrams()
         case LoginResponse:
         {
             QDateTime timeStamp;
-            in >> timeStamp >> resCode >> reqUser;
+            in >> resCode >> reqUser >> timeStamp;
             if(resCode == 0){    //成功
                 int userClass;    //!QDatastream 无法读入枚举
                 double balance;
@@ -542,7 +542,7 @@ void MainWindow::processPendingDatagrams()
         {
             qDebug() << "RegisterResponse";
             QDateTime timeStamp;
-            in >> timeStamp >> resCode >> reqUser;
+            in >> resCode >> reqUser >> timeStamp;
             qDebug() << resCode << reqUser;
             if(resCode == 0){
                 qDebug() << "enter 0";
@@ -695,7 +695,7 @@ void MainWindow::sendRequest(UdpType type)
     {
         reqUser = ui->lineEdit_user_login->text();
         QString pwd = ui->lineEdit_pwd_login->text();
-        out << TIMESTAMP << reqUser << pwd;
+        out << reqUser << TIMESTAMP << pwd;
         break;
     }
     case RegisterRequest:
@@ -704,7 +704,7 @@ void MainWindow::sendRequest(UdpType type)
         QString pwd = ui->lineEdit_pwd_register->text();
         QString repeat = ui->lineEdit_pwd_repeat->text();
         UserClass userClass = (ui->buttonGroup->checkedButton() == ui->radioButton_buyer ? BUYER : SELLER);
-        out << TIMESTAMP << reqUser << pwd << repeat << userClass;
+        out << reqUser  << TIMESTAMP << pwd << repeat << userClass;
         qDebug() << "RegisterRequest";
         break;
     }
