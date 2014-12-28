@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    TIMESTAMP = QDateTime::currentDateTimeUtc();
     udpSocket = new QUdpSocket(this);
     // 发送地址
     serverAddr = QHostAddress::LocalHost;
@@ -62,8 +63,8 @@ void MainWindow::listAllGoods(QString key)
     for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
         treeParent = ui->treeWidget->topLevelItem(i);
         for (int p = 0; p < treeParent->childCount(); ++p) {
-            bool state = treeParent->child(p)->text(10).contains(key);
-            treeParent->child(p)->setHidden(state);
+            bool state = treeParent->child(p)->text(1).contains(key);
+            treeParent->child(p)->setHidden(!state);
         }
     }
 }
@@ -76,8 +77,8 @@ void MainWindow::listMyGoods(QString key)
         for (int p = 0; p < treeParent->childCount(); ++p) {
             QTreeWidgetItem *treeChild = treeParent->child(p);
             QString  user = ui->lineEdit_Username->text();
-            bool state = (treeChild->text(5) == user)&&(treeChild->text(10).contains(key));
-            treeParent->child(p)->setHidden(state);
+            bool state = (treeChild->text(5) == user)&&(treeChild->text(1).contains(key));
+            treeParent->child(p)->setHidden(!state);
         }
     }
 }
@@ -87,6 +88,7 @@ void MainWindow::setManagePage(QString user, UserClass userClass, double balance
     // 用户基本信息
     ui->lineEdit_Username->setText(user);
     QString strClass;
+    qDebug() << userClass;
     switch (userClass) {
     case BUYER:
         strClass = "普通买家";
@@ -95,12 +97,13 @@ void MainWindow::setManagePage(QString user, UserClass userClass, double balance
         strClass = "会员";
         break;
     case SELLER:
-        strClass == "卖家";
+        strClass = "卖家";
         break;
     default:
         strClass = "userClass Error";
         break;
     }
+    qDebug() << strClass;
     ui->lineEdit_userClass->setText(strClass);
     ui->lineEdit_Balance->setText("￥" + QString::number(balance, 'f', 2));
     // 后两行显示与否
@@ -246,11 +249,6 @@ void MainWindow::on_pushButton_login_clicked()
     sendRequest(LoginRequest);
 }
 
-void MainWindow::on_pushButton_quit_clicked()
-{
-    QApplication::quit();
-}
-
 void MainWindow::on_pushButton_now_clicked()
 {
     resetLoginPage();
@@ -282,6 +280,24 @@ void MainWindow::on_pushButton_back_clicked()
 
 /******************************  mainPage  ************************************/
 
+void MainWindow::on_pushButton_search_clicked()
+{
+    QString key = ui->lineEdit_search->text();
+    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+        listAllGoods(key);
+    else
+        listMyGoods(key);
+}
+
+void MainWindow::on_pushButton_clear_clicked()
+{
+    ui->lineEdit_search->clear();
+    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
+        listAllGoods();
+    else
+        listMyGoods();
+}
+
 void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
     if (current->parent() == Q_NULLPTR){
@@ -294,6 +310,8 @@ void MainWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTre
             emit ui->spinBox_buyer->valueChanged(ui->spinBox_buyer->value());
     }
 }
+
+//!pageBuyer
 
 void MainWindow::on_spinBox_buyer_valueChanged(int arg1)
 {
@@ -330,24 +348,7 @@ void MainWindow::on_pushButton_buy_clicked()
     sendRequest(BuyRequest);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-void MainWindow::on_pushButton_search_clicked()
-{
-    QString key = ui->lineEdit_search->text();
-    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
-        listAllGoods(key);
-    else
-        listMyGoods(key);
-}
-
-void MainWindow::on_pushButton_clear_clicked()
-{
-    ui->lineEdit_search->clear();
-    if(ui->buttonGroup_2->checkedButton() == ui->radioButton_all)
-        listAllGoods();
-    else
-        listMyGoods();
-}
+//!pageSeller
 
 void MainWindow::on_radioButton_all_clicked()
 {
@@ -396,6 +397,26 @@ void MainWindow::on_spinBox_seller_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_in_clicked()
 {
+    QDate produceDate = ui->dateEdit_produce->date();
+    QDate validityDate = ui->dateEdit_validity->date();
+    QDate reduceDate = ui->dateEdit_reduce->date();
+    QString strClass = ui->comboBox->currentText();;
+    if ("食品" == strClass) {
+        if (!(produceDate <= reduceDate && reduceDate <= validityDate)) {
+            QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 降价期 ≤ 有效期");
+            return;
+        }
+    } else if ("电子产品" == strClass) {
+        if (!(produceDate <= validityDate)) {
+            QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 有效期");
+            return;
+        }
+    } else {
+        if (!(produceDate <= validityDate)) {
+            QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 有效期");
+            return;
+        }
+    }
     sendRequest(StockRequest);
 }
 
@@ -414,7 +435,8 @@ void MainWindow::on_pushButton_Upgrade_clicked()
 
 void MainWindow::on_pushButton_Exchange_clicked()
 {
-    sendRequest(ExchangeRequest);
+    if(ui->spinBox_Token->value() != 0)
+        sendRequest(ExchangeRequest);
 }
 
 void MainWindow::on_pushButton_record_clicked()
@@ -452,6 +474,7 @@ void MainWindow::on_action_manage_triggered()
 
 void MainWindow::on_action_logout_triggered()
 {
+    sendRequest(LogoutRequest);
     resetMainPage();
     resetManagePage();
     MainWindow::setWindowState(Qt::WindowNoState);
@@ -488,7 +511,8 @@ void MainWindow::processPendingDatagrams()
         switch (type) {
         case LoginResponse:
         {
-            in >> resCode >> reqUser;
+            QDateTime timeStamp;
+            in >> timeStamp >> resCode >> reqUser;
             if(resCode == 0){    //成功
                 int userClass;    //!QDatastream 无法读入枚举
                 double balance;
@@ -496,17 +520,20 @@ void MainWindow::processPendingDatagrams()
                 QVector<QStringList> vecRecord;
                 QVector<QVector<QStringList> > vec2Goods(3);
                 in >> userClass >> balance >> level >> token >> vecRecord >> vec2Goods;
-                if(ui->lineEdit_user_login->text() == reqUser){
+                if(ui->lineEdit_user_login->text() == reqUser && timeStamp == TIMESTAMP){
+                    qDebug() << userClass;
                     setMainPage(vec2Goods, UserClass(userClass), level);    //!强制转换枚举
                     setManagePage(reqUser, UserClass(userClass), balance, level, token, vecRecord);
                     resetLoginPage();
                 }
             } else {    //失败
-                if(ui->lineEdit_user_login->text() == reqUser){
-                    if(resCode > 0)
-                        QMessageBox::warning(this, tr("登陆失败！"), tr("密码错误！"));
+                if(ui->lineEdit_user_login->text() == reqUser && timeStamp == TIMESTAMP){
+                    if(resCode == 1)
+                        QMessageBox::warning(this, tr("登陆失败"), tr("密码错误！"));
+                    else if(resCode == -1)
+                        QMessageBox::warning(this, tr("登陆失败"), tr("用户名不存在！"));
                     else
-                        QMessageBox::warning(this, tr("登陆失败！"), tr("用户名不存在！"));
+                        QMessageBox::warning(this, "登陆失败", "用户已登陆！");
                 }
             }
             break;
@@ -514,11 +541,12 @@ void MainWindow::processPendingDatagrams()
         case RegisterResponse:
         {
             qDebug() << "RegisterResponse";
-            in >> resCode >> reqUser;
+            QDateTime timeStamp;
+            in >> timeStamp >> resCode >> reqUser;
             qDebug() << resCode << reqUser;
             if(resCode == 0){
                 qDebug() << "enter 0";
-                if(ui->lineEdit_user_register->text() == reqUser){
+                if(ui->lineEdit_user_register->text() == reqUser && timeStamp == TIMESTAMP){
                     QMessageBox::information(this, "注册成功！", "恭喜你 ^_^ 注册成功！");
                     resetRegisterPage();
                     ui->stackedWidget->setCurrentWidget(ui->loginPage);
@@ -527,7 +555,7 @@ void MainWindow::processPendingDatagrams()
                 }
             } else {
                 qDebug() << "enter not0";
-                if(ui->lineEdit_user_register->text() == reqUser){
+                if(ui->lineEdit_user_register->text() == reqUser && timeStamp == TIMESTAMP){
                     if(resCode > 0)
                         QMessageBox::information(this, tr("注册失败！"), tr("用户名已存在！"));
                     else
@@ -541,9 +569,10 @@ void MainWindow::processPendingDatagrams()
             in >> resCode >> reqUser;
             if(resCode == 0) {
                 int id, amount, token;
-                double balance;
+                double balance, ownerBalance;
+                QString owner;
                 QStringList record;
-                in >> id >> amount >> balance >> token >> record;
+                in >> id >> amount >> balance >> token >> owner >> ownerBalance >> record ;
                 qDebug() << "id" << id << "amount" << amount;
                 bool notFound = true;
                 for(int i = 0; i < ui->treeWidget->topLevelItemCount() && notFound; ++i)
@@ -564,6 +593,10 @@ void MainWindow::processPendingDatagrams()
                     ui->lineEdit_Token->setText(QString::number(token));
                     addTreeRecord(record);
                     QMessageBox::information(this, "购买成功", "购买成功！");
+                }
+                else if(ui->lineEdit_Username->text() == owner) {
+                    qDebug() << owner << ownerBalance;
+                    ui->lineEdit_Balance->setText("￥" + QString::number(ownerBalance, 'f', 2));
                 }
             }
             else {
@@ -592,6 +625,7 @@ void MainWindow::processPendingDatagrams()
             qDebug() << resCode << reqUser << balance;
             if(ui->lineEdit_Username->text() == reqUser){
                 ui->lineEdit_Balance->setText("￥" + QString::number(balance, 'f', 2));
+                ui->doubleSpinBox_Recharge->setValue(0.00);
                 if (ui->lineEdit_userClass->text() == "卖家")
                     ui->doubleSpinBox_Recharge->setMinimum(-1 * balance);
                 QString msg = (balance > 0 ? "充值成功" : "提现成功");
@@ -615,6 +649,7 @@ void MainWindow::processPendingDatagrams()
                         ui->lineEdit_Balance->setText(QString::number(balance, 'f', 2));
                         ui->label_Token->setVisible(true);
                         ui->lineEdit_Token->setVisible(true);
+                        ui->lineEdit_Token->setText(0);
                         ui->pushButton_Exchange->setVisible(true);
                         ui->spinBox_Token->setVisible(true);
                     }else            //会员升级，支付代币
@@ -636,6 +671,7 @@ void MainWindow::processPendingDatagrams()
             in >> balance >> token;
             if(ui->lineEdit_Username->text() == reqUser){
                 ui->lineEdit_Balance->setText("￥" + QString::number(balance, 'f', 2));
+                ui->spinBox_Token->setValue(0);
                 ui->lineEdit_Token->setText(QString::number(token));
             }
             break;
@@ -659,7 +695,7 @@ void MainWindow::sendRequest(UdpType type)
     {
         reqUser = ui->lineEdit_user_login->text();
         QString pwd = ui->lineEdit_pwd_login->text();
-        out << reqUser << pwd;
+        out << TIMESTAMP << reqUser << pwd;
         break;
     }
     case RegisterRequest:
@@ -668,7 +704,7 @@ void MainWindow::sendRequest(UdpType type)
         QString pwd = ui->lineEdit_pwd_register->text();
         QString repeat = ui->lineEdit_pwd_repeat->text();
         UserClass userClass = (ui->buttonGroup->checkedButton() == ui->radioButton_buyer ? BUYER : SELLER);
-        out << reqUser << pwd << repeat << userClass;
+        out << TIMESTAMP << reqUser << pwd << repeat << userClass;
         qDebug() << "RegisterRequest";
         break;
     }
@@ -688,25 +724,12 @@ void MainWindow::sendRequest(UdpType type)
         QDate reduceDate = ui->dateEdit_reduce->date();
         QString strClass = ui->comboBox->currentText();
         GoodsClass goodsClass;
-        if ("食品" == strClass) {
-            if (!(produceDate <= reduceDate && reduceDate <= validityDate)) {
-                QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 降价期 ≤ 有效期");
-                break;
-            }
+        if ("食品" == strClass)
             goodsClass = FOOD;
-        } else if ("电子产品" == strClass) {
-            if (!(produceDate <= validityDate)) {
-                QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 有效期");
-                break;
-            }
+        else if ("电子产品" == strClass)
             goodsClass = ELECTRONICS;
-        } else {
-            if (!(produceDate <= validityDate)) {
-                QMessageBox::warning(this, "日期错误", "日期设置错误！\n要求：生成日期 ≤ 有效期");
-                break;
-            }
+        else
             goodsClass = DAILYNECESSITIES;
-        }
         reqUser = ui->lineEdit_Username->text();
         QString goodsName = ui->lineEdit_name->text();
         int amount = ui->spinBox_seller->value();
@@ -736,8 +759,19 @@ void MainWindow::sendRequest(UdpType type)
         out << reqUser << token;
         break;
     }
+    case LogoutRequest:
+    {
+        reqUser = ui->lineEdit_Username->text();
+        out << reqUser;
+        break;
+    }
     default:
         break;
     }
     udpSocket->writeDatagram(data, data.length(), serverAddr, serverPort);
+}
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    sendRequest(LogoutRequest);
+    event->accept();
 }

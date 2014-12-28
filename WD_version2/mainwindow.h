@@ -85,7 +85,6 @@ private slots:
 
     //!pageSeller
 
-
     void on_radioButton_all_clicked();
 
     void on_radioButton_mine_clicked();

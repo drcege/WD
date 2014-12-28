@@ -53,6 +53,8 @@ int Member::changeToken(int token)
 QDataStream &operator >>(QDataStream &in, Member &m)
 {
     in >> m.id >> m.userName >> m.password >> m.balance >> m.level >> m.token >> m.record;
+    if(in.status() != QDataStream::Ok)
+        throw QString("member.dat 已损坏");
     return in;
 }
 

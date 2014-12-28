@@ -23,7 +23,8 @@ typedef enum {
     StockRequest, StockResponse,
     RechargeRequest, RechargeResponse,
     UpgradeRequest, UpgradeResponse,
-    ExchangeRequest, ExchangeResponse
+    ExchangeRequest, ExchangeResponse,
+    LogoutRequest
 }UdpType;
 
 class MainWindow : public QMainWindow
@@ -36,12 +37,14 @@ public:
 
 protected:
     void sendRequest(UdpType type);
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::MainWindow *ui;
     QUdpSocket* udpSocket;
     QHostAddress serverAddr;
     qint16 clientPort, serverPort;
+    QDateTime TIMESTAMP;
 
     /*********************  Custom Functions *****************************/
 
@@ -65,8 +68,6 @@ private slots:
 
     void on_pushButton_login_clicked();
 
-    void on_pushButton_quit_clicked();
-
     void on_pushButton_now_clicked();
 
     /**********************  registerPage  ******************************/
@@ -78,18 +79,19 @@ private slots:
 
     /************************  mainPage  ********************************/
 
-    /////////////////////////  pageBuyer  /////////////////////////////
+    void on_pushButton_search_clicked();
+
+    void on_pushButton_clear_clicked();
+
     void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    //!pageBuyer
 
     void on_spinBox_buyer_valueChanged(int arg1);
 
     void on_pushButton_buy_clicked();
 
-    ////////////////////////  pageSeller  ////////////////////////////
-
-    void on_pushButton_search_clicked();
-
-    void on_pushButton_clear_clicked();
+    //!pageSeller
 
     void on_radioButton_all_clicked();
 

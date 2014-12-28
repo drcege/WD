@@ -58,11 +58,13 @@ QStringList Food::toStringList()
 QDataStream &operator>>(QDataStream &in, Food &f)
 {
     in >> f.id >> f.goodsName >> f.amount >> f.price >> f.owner >> f.produceDate >> f.validityDate >> f.reduceDate >> f.reduceRate;
+    if(in.status() != QDataStream::Ok)
+        throw QString("food.dat 已损坏");
     return in;
 }
 
 QDataStream &operator<<(QDataStream &out, const Food &f)
 {
-    out << f.id << f.goodsName << f.amount << f.price << f.owner << f.produceDate << f.validityDate << f.reduceDate;
+    out << f.id << f.goodsName << f.amount << f.price << f.owner << f.produceDate << f.validityDate << f.reduceDate << f.reduceRate;
     return out;
 }

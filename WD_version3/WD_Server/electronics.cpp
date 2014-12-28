@@ -52,6 +52,8 @@ QStringList Electronics::toStringList()
 QDataStream &operator>>(QDataStream &in, Electronics &e)
 {
     in >> e.id >> e.goodsName >> e.amount >> e.price >> e.owner >> e.produceDate >> e.validityDate >> e.reduceRate;
+    if(in.status() != QDataStream::Ok)
+        throw QString("elect.dat 已损坏");
     return in;
 }
 

@@ -23,7 +23,8 @@ typedef enum {
     StockRequest, StockResponse,
     RechargeRequest, RechargeResponse,
     UpgradeRequest, UpgradeResponse,
-    ExchangeRequest, ExchangeResponse
+    ExchangeRequest, ExchangeResponse,
+    LogoutRequest
 }UdpType;
 
 class MainWindow : public QMainWindow
@@ -47,6 +48,7 @@ private:
     int USERID;
     int GOODSID;
     User *curUser;
+    QSet<QString> logedList;
     QList<Buyer> listBuyer;
     QList<Member> listMember;
     QList<Seller> listSeller;

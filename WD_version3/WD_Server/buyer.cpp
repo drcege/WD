@@ -33,6 +33,8 @@ QStringList Buyer::getRecord(int i)
 QDataStream &operator>>(QDataStream &in, Buyer &b)
 {
     in >> b.id >> b.userName >> b.password >> b.balance >> b.record;
+    if(in.status() != QDataStream::Ok)
+        throw QString("buyer.dat 已损坏");
     return in;
 }
 

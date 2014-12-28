@@ -17,6 +17,8 @@ UserClass Seller::getClass()
 QDataStream &operator >>(QDataStream &in, Seller &s)
 {
     in >> s.id >> s.userName >> s.password >> s.balance;
+    if(in.status() != QDataStream::Ok)
+        throw QString("seller.dat 已损坏");
     return in;
 }
 
