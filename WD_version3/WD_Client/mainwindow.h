@@ -24,7 +24,7 @@ typedef enum {
     RechargeRequest, RechargeResponse,
     UpgradeRequest, UpgradeResponse,
     ExchangeRequest, ExchangeResponse,
-    LogoutRequest
+    LogoutRequest, ServerExit
 }UdpType;
 
 class MainWindow : public QMainWindow

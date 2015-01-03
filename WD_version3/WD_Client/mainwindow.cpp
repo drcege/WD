@@ -679,6 +679,11 @@ void MainWindow::processPendingDatagrams()
             }
             break;
         }
+        case ServerExit:
+        {
+            emit ui->action_logout->trigger();
+            break;
+        }
         default:
             break;
         }

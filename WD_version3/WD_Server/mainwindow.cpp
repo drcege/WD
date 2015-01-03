@@ -315,6 +315,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
             out << listDaily.at(i);
         file.close();
     }
+    UdpType type = ServerExit;
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+    out << type;
+    udpSocket->writeDatagram(data, data.length(), QHostAddress::Broadcast, clientPort);
     event->accept();
 }
 
