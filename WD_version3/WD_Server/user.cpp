@@ -6,6 +6,7 @@ User::User()
     this->userName = "";
     this->password = "";
     this->balance = 0.0;
+    this->status = false;
 }
 
 User::User(int id, QString userName, QString password, double balance)
@@ -14,6 +15,7 @@ User::User(int id, QString userName, QString password, double balance)
     this->userName = userName;
     this->password = password;
     this->balance = balance;
+    this->status = false;
 }
 
 User::~User()
@@ -44,4 +46,26 @@ double User::recharge(double money)
 {
     balance += money;
     return this->balance;
+}
+
+bool User::login()
+{
+    status = true;
+    return status;
+}
+
+bool User::logout()
+{
+    status = false;
+    return status;
+}
+
+bool User::isLogin()
+{
+    return status;
+}
+
+bool User::isLogout()
+{
+    return status;
 }

@@ -345,39 +345,36 @@ void MainWindow::processPendingDatagrams()
             in >> timeStamp >> reqUser >> pwd;
             out << timeStamp;
             ui->listWidget_request->addItem(QTime::currentTime().toString() + "    Receive LoginRequest from user " + reqUser);
-            if(logedList.contains(reqUser)){    //用户已登陆
+            curUser = findUser(reqUser, pos);
+            if (curUser == Q_NULLPTR) {    //用户不存在
+                resCode = -1;
+                out << resCode << reqUser;
+            } else if(curUser->isLogin()){    //用户已登录
                 resCode = 2;
                 out << resCode << reqUser;
-            }
-            else{
-                curUser = findUser(reqUser, pos);
-                if (curUser == Q_NULLPTR) {
-                    resCode = -1;
-                    out << resCode << reqUser;
-                } else if (pwd != curUser->getPassword()) {
-                    resCode = 1;
-                    out << resCode << reqUser;
-                } else {    // 登陆成功
-                    logedList.insert(reqUser);    //登记用户
-                    resCode = 0;
-                    UserClass userClass = curUser->getClass();
-                    double balance = curUser->getBalance();
-                    int level = 0, token = 0;
-                    QVector<QStringList> vecRecord;
-                    QVector<QVector<QStringList> > vec2Goods(3);
-                    if(curUser->getClass() == MEMBER){    // 会员
-                        Member* curMem = dynamic_cast<Member*>(curUser);
-                        level = curMem->getLevel();
-                        token = curMem->getToken();
-                    }
-                    if(curUser->getClass() != SELLER){
-                        Buyer *curBuyer = dynamic_cast<Buyer *>(curUser);
-                        for (int r = 0; r < curBuyer->recordCount(); ++r)
-                            vecRecord.append(curBuyer->getRecord(r));
-                    }
-                    vec2Goods = getAllGoods();
-                    out << resCode << reqUser << userClass << balance << level << token << vecRecord << vec2Goods;
-                }    // end of else
+            }else if (pwd != curUser->getPassword()) {    //密码错误
+                resCode = 1;
+                out << resCode << reqUser;
+            } else {    // 登陆成功
+                curUser->login();
+                resCode = 0;
+                UserClass userClass = curUser->getClass();
+                double balance = curUser->getBalance();
+                int level = 0, token = 0;
+                QVector<QStringList> vecRecord;
+                QVector<QVector<QStringList> > vec2Goods(3);
+                if(curUser->getClass() == MEMBER){    // 会员
+                    Member* curMem = dynamic_cast<Member*>(curUser);
+                    level = curMem->getLevel();
+                    token = curMem->getToken();
+                }
+                if(curUser->getClass() != SELLER){
+                    Buyer *curBuyer = dynamic_cast<Buyer *>(curUser);
+                    for (int r = 0; r < curBuyer->recordCount(); ++r)
+                        vecRecord.append(curBuyer->getRecord(r));
+                }
+                vec2Goods = getAllGoods();
+                out << resCode << reqUser << userClass << balance << level << token << vecRecord << vec2Goods;
             }
             ui->listWidget_response->addItem(QTime::currentTime().toString() + "    Broadcast LoginResponse to user " + reqUser);
             break;
@@ -560,7 +557,9 @@ void MainWindow::processPendingDatagrams()
         case LogoutRequest:
         {
             in >> reqUser;
-            logedList.remove(reqUser);
+            curUser = findUser(reqUser, pos);
+            if(curUser != Q_NULLPTR)
+                curUser->logout();
             break;
         }
         default:

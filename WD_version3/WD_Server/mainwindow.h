@@ -48,7 +48,6 @@ private:
     int USERID;
     int GOODSID;
     User *curUser;
-    QSet<QString> logedList;
     QList<Buyer> listBuyer;
     QList<Member> listMember;
     QList<Seller> listSeller;
