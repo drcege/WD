@@ -19,6 +19,10 @@ public:
     QString getPassword() const;
     double getBalance() const;
     void recharge(double money);
+    bool login();
+    bool logout();
+    bool isLogin();
+    bool isLogout();
     virtual userClass getClass() = 0;
 
 protected:
@@ -26,6 +30,7 @@ protected:
     QString userName;
     QString password;
     double balance;
+    bool status;
 };
 
 #endif // USER_H

@@ -233,6 +233,7 @@ void MainWindow::on_pushButton_login_clicked()
         return;
     }
     // 登陆成功
+    curUser->login();
     MainWindow::setWindowState(Qt::WindowMaximized);
     resetLoginPage();
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
@@ -646,6 +647,7 @@ void MainWindow::on_action_manage_triggered()
 
 void MainWindow::on_action_logout_triggered()
 {
+    curUser->logout();
     resetMainPage();
     resetManagePage();
     MainWindow::setWindowState(Qt::WindowNoState);
