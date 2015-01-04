@@ -57,6 +57,31 @@ void MainWindow::addTreeRecord(QStringList rec)
     ui->treeWidget_record->addTopLevelItem(item);
 }
 
+void MainWindow::listAllGoods()
+{
+    QTreeWidgetItem *treeParent;
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
+        treeParent = ui->treeWidget->topLevelItem(i);
+        for (int p = 0; p < treeParent->childCount(); ++p) {
+            treeParent->child(p)->setHidden(false);
+        }
+    }
+}
+
+void MainWindow::listMyGoods()
+{
+    QTreeWidgetItem *treeParent;
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i){
+        treeParent = ui->treeWidget->topLevelItem(i);
+        for (int p = 0; p < treeParent->childCount(); ++p) {
+            QTreeWidgetItem *treeChild = treeParent->child(p);
+            QString  user = ui->lineEdit_Username->text();
+            bool state = (treeChild->text(5) == user);
+            treeParent->child(p)->setHidden(!state);
+        }
+    }
+}
+
 void MainWindow::listAllGoods(QString key)
 {
     QTreeWidgetItem *treeParent;
@@ -209,6 +234,8 @@ void MainWindow::resetMainPage()
     ui->dateEdit_produce->setDate(QDate::currentDate());
     ui->dateEdit_reduce->setDate(QDate::currentDate());
     ui->dateEdit_validity->setDate(QDate::currentDate());
+
+    emit ui->pushButton_clear->click();
 }
 
 void MainWindow::resetManagePage()

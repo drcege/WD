@@ -50,8 +50,10 @@ private:
 
     void addTreeNode(int index, QStringList newGoods);
     void addTreeRecord(QStringList rec);
-    void listAllGoods(QString key="");
-    void listMyGoods(QString key="");
+    void listAllGoods();
+    void listMyGoods();
+    void listAllGoods(QString key);
+    void listMyGoods(QString key);
     void setManagePage(QString newUser, UserClass userClass, double balance, int level, int token, QVector<QStringList> vecRecord);
     void setMainPage(QVector<QVector<QStringList> > vec2Goods, UserClass userClass, int level);
 
