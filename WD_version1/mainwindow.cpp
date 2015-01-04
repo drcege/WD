@@ -119,19 +119,18 @@ void MainWindow::addTreeRecord(QStringList rec)
     ui->treeWidget_record->addTopLevelItem(item);
 }
 
-void MainWindow::listAllGoods(QString key)
+void MainWindow::listAllGoods()
 {
     QTreeWidgetItem *treeParent;
     for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
         treeParent = ui->treeWidget->topLevelItem(i);
         for (int p = 0; p < treeParent->childCount(); ++p) {
-            bool state = treeParent->child(p)->text(1).contains(key);
-            treeParent->child(p)->setHidden(!state);
+            treeParent->child(p)->setHidden(false);
         }
     }
 }
 
-void MainWindow::listMyGoods(QString key)
+void MainWindow::listMyGoods()
 {
     QTreeWidgetItem *treeParent;
     for (int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i) {
@@ -139,7 +138,7 @@ void MainWindow::listMyGoods(QString key)
         for (int p = 0; p < treeParent->childCount(); ++p) {
             QTreeWidgetItem *treeChild = treeParent->child(p);
             QString user = ui->lineEdit_Username->text();
-            bool state = (treeChild->text(5) == user) && (treeChild->text(1).contains(key));
+            bool state = (treeChild->text(5) == user);
             treeParent->child(p)->setHidden(!state);
         }
     }
