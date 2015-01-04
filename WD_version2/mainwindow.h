@@ -44,8 +44,10 @@ private:
     Goods *findGoods(int id, int &pos);
     void addTreeNode(int index, QStringList newGoods);
     void addTreeRecord(QStringList rec);
-    void listAllGoods(QString key="");
-    void listMyGoods(QString key="");
+    void listAllGoods();
+    void listMyGoods();
+    void listAllGoods(QString key);
+    void listMyGoods(QString key);
 
     /***********************  reset  ************************************/
     void resetLoginPage();
