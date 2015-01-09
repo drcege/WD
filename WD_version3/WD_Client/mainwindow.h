@@ -4,17 +4,13 @@
 #include <QtWidgets>
 #include <QtNetwork>
 
-#include "buyer.h"
-#include "member.h"
-#include "seller.h"
-#include "food.h"
-#include "electronics.h"
-#include "dailynecessities.h"
-
 namespace Ui
 {
 class MainWindow;
 }
+
+enum UserClass {BUYER, MEMBER, SELLER};
+enum GoodsClass {FOOD, ELECTRONICS, DAILYNECESSITIES};
 
 typedef enum {
     RegisterRequest, RegisterResponse,
