@@ -3,6 +3,6 @@ WD电商交易系统
 
 * BUPT
 * C++ OO Course Design
-* WD Electronic trading system (电商交易系统)
+* WD Electronic trading system
 * Three versions, incremental function
 
